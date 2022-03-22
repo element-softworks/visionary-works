@@ -11,6 +11,30 @@ type LoaderData = {
   message: Message | null;
 };
 
+// using authenticated session with cloudflare pages
+export const loader: LoaderFunction = async ({ context, request }) => {
+  // console.log("context.sessionStorage", context.sessionStorage);
+  //
+  // const session = await context.sessionStorage.getSession(
+  //     request.headers.get("Cookie")
+  // )
+  //
+  // const headers = {}
+  //
+  // if (!session.has("userId")) {
+  //   session.set("userId", `user:${Math.random()}`)
+  //   console.log("context.sessionStorage", context.sessionStorage, "session", session);
+  //   // @ts-ignore
+  //   headers["Set-Cookie"] = await context.sessionStorage.commitSession(session)
+  // } else {
+  //   console.log(session.get("userId"));
+  // }
+
+  // return json(null, { headers })
+
+  return json(null)
+}
+
 const Landing: React.FC = ({ children }) => {
   const theme = createTheme(landingTheme());
 
