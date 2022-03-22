@@ -13,14 +13,15 @@ import {
   useLoaderData,
 } from 'remix';
 import type { MetaFunction } from 'remix';
-import Layout from '~/routes/__landing';
-import { withEmotionCache } from '@emotion/react';
+import {ThemeProvider as EmotionThemeProvider, withEmotionCache } from '@emotion/react';
 import { ClientStyleContext, MessageContext, ServerStyleContext } from '~/helpers/contexts';
-import { Container, unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/material';
+import { Container, unstable_useEnhancedEffect as useEnhancedEffect, ThemeProvider } from '@mui/material';
 import { Message, messageSession } from './sessions';
 import { getMessage } from './utils/message.server';
 import globalStyles from '~/global.css';
 import { getSeo } from '~/seo';
+import theme from '~/theme';
+import SnackbarProvider from '~/components/Snackbar';
 
 const [seoMeta, seoLinks] = getSeo();
 
@@ -119,9 +120,16 @@ const App = () => {
 
   return (
       <Document>
-        <MessageContext.Provider value={{ message, setMessage }}>
-          <Outlet />
-        </MessageContext.Provider>
+          <ThemeProvider theme={theme}>
+              <EmotionThemeProvider theme={theme}>
+                  <SnackbarProvider>
+                      <CssBaseline />
+                      <MessageContext.Provider value={{ message, setMessage }}>
+                          <Outlet />
+                      </MessageContext.Provider>
+                  </SnackbarProvider>
+              </EmotionThemeProvider>
+          </ThemeProvider>
       </Document>
   );
 };
@@ -162,12 +170,10 @@ export const CatchBoundary = () => {
 
   return (
       <Document title={`${caught.status} ${caught.statusText}`}>
-        <Layout>
           <h1>
             {caught.status}: {caught.statusText}
           </h1>
           {message}
-        </Layout>
       </Document>
   );
 };

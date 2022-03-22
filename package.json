@@ -1,7 +1,7 @@
 {
-  "name": "remix-template-cloudflare-pages-ts",
+  "name": "element-softworks-2022",
   "private": true,
-  "description": "",
+  "description": "Remix + Cloudflare Pages + Strapi CMS",
   "license": "",
   "sideEffects": false,
   "scripts": {
