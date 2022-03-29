@@ -5,6 +5,7 @@ import { Theme } from '@emotion/react';
 import { cms } from '~/utils/cms.server';
 import { CMSDataList } from '~/models/cms';
 import { getSeo, getSeoMeta } from '~/seo';
+import { css } from '@emotion/css';
 
 type Data = {
 	caseStudies: CMSDataList<{
@@ -54,7 +55,7 @@ const Home = () => {
 
 const styles = (theme: Theme) => `
   background-color: ${theme.palette.primary.main};
-  
+
   ul {
     background-color: ${theme.palette.secondary.main};
   }

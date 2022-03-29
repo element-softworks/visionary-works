@@ -9,3 +9,25 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+@font-face {
+  font-family: 'F37Ginger';
+  font-weight: 700;
+  src: url('/fonts/F37Ginger-Bold/F37Ginger-Bold.woff2') format('woff2'),
+  url('/fonts/F37Ginger-Bold/F37Ginger-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'F37Ginger';
+  font-weight: 400;
+  font-style: italic;
+  src: url('/fonts/F37Ginger-Italic/F37Ginger-Italic.woff2') format('woff2'),
+  url('/fonts/F37Ginger-Italic/F37Ginger-Italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'F37Ginger';
+  font-weight: 400;
+  src: url('/fonts/F37Ginger-Regular/F37Ginger-Regular.woff2') format('woff2'),
+  url('/fonts/F37Ginger-Regular/F37Ginger-Regular.woff') format('woff');
+}

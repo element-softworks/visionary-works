@@ -22,8 +22,6 @@ module.exports = {
 			...option.plugins,
 		];
 		if (isServer) option.mainFields = ["browser", "module", "main"];
-		
-		console.log("option", option)
 
 		return option;
 	},

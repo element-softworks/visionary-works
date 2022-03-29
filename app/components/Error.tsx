@@ -4,10 +4,10 @@ import useStyle from "~/helpers/hooks/useStyle";
 import { Error as ErrorType } from "~/models/error";
 
 const Error: React.FC<{ error: ErrorType }> = ({ error }) => {
-  const Styles = useStyle(styles);
+  // const Styles = useStyle(styles);
 
   return (
-    <Styles>
+    // <Styles>
       <Stack spacing={1}>
         <Typography variant="h1">Error</Typography>
         <Typography variant="caption">{error?.meta?.httpCode}</Typography>
@@ -15,7 +15,7 @@ const Error: React.FC<{ error: ErrorType }> = ({ error }) => {
           {error?.errorMessage ?? JSON.stringify(error ?? "")}
         </Typography>
       </Stack>
-    </Styles>
+    // </Styles>
   );
 };
 
