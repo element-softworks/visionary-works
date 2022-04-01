@@ -35,11 +35,15 @@ const Layout: React.FC = () => {
 			<Box sx={{ py: 2 }} component="header">
 				<Container maxWidth="lg">
 					<Stack direction="row" alignItems="center">
-						<Typography component="span" sx={{ flexGrow: 1 }}>
-							<b>Visionary Works</b>
-						</Typography>
+						<Box component="span" sx={{ flexGrow: 1 }}>
+							<img
+								className="logo"
+								alt="Logo"
+								src="/visionary-works-logo-black.svg"
+							/>
+						</Box>
 						<Box component="nav">
-							<Stack direction="row" spacing={10} component="ul" alignItems="center">
+							<Stack spacing={10} direction="row" component="ul" alignItems="center">
 								<li>
 									<Link component={RouterLink} to="/about">
 										About
@@ -80,6 +84,10 @@ const Styles = styled.div`
 		left: 0;
 		right: 0;
 		z-index: 1;
+
+		.logo {
+			height: 45px;
+		}
 
 		nav {
 			margin-left: auto;

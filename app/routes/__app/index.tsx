@@ -4,6 +4,7 @@ import { cms } from '~/utils/cms.server';
 import React from 'react';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';
+import Affiliates from "~/components/Affiliates";
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
@@ -54,6 +55,7 @@ const Home: React.FC = () => {
 					<Button variant="contained">Learn More</Button>
 				</Container>
 			</Stack>
+			<Affiliates />
 		</Styles>
 	);
 };
