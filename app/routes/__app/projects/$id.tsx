@@ -18,16 +18,16 @@ type Data = {
 	}>;
 };
 
-export const meta: MetaFunction = ({ data: { caseStudy } }) => {
+export const meta: MetaFunction = ({ data }) => {
 	return getSeoMeta({
-		title: caseStudy?.data?.attributes?.title ?? 'Case Study',
+		title: data?.projects?.data?.attributes?.title ?? 'Project',
 	});
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-	const caseStudy = await cms<Data>(`case-studies/${params.id}`);
+	const projects = await cms<Data>(`projects/${params.id}`);
 
-	return json({ caseStudy });
+	return json({ projects });
 };
 
 const Home = () => {

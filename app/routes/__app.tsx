@@ -33,10 +33,11 @@ const Layout: React.FC = () => {
 
 	return (
 		<Styles>
+
 			<Box sx={{ py: 2 }} component="header">
-				<Container>
+				<Container maxWidth="lg">
 					<Typography>
-						<b>Element Softworks</b>
+						<b>Visionary Works</b>
 					</Typography>
 				</Container>
 			</Box>

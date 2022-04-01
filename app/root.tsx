@@ -13,13 +13,19 @@ import {
 	useLoaderData,
 } from 'remix';
 import type { MetaFunction } from 'remix';
-import { ThemeProvider as EmotionThemeProvider, withEmotionCache } from '@emotion/react';
+import {
+	ThemeProvider as EmotionThemeProvider,
+	withEmotionCache,
+	Global,
+	css,
+} from '@emotion/react';
 import { ClientStyleContext, ServerStyleContext } from '~/helpers/contexts';
 import {
 	Container,
 	unstable_useEnhancedEffect as useEnhancedEffect,
 	ThemeProvider,
 	CssBaseline,
+	lighten,
 } from '@mui/material';
 import { Message, messageSession } from './sessions';
 import { getMessage } from './utils/message.server';
@@ -124,6 +130,21 @@ const App = () => {
 				<EmotionThemeProvider theme={theme}>
 					<SnackbarProvider message={message}>
 						<CssBaseline />
+						<Global
+							styles={css`
+								a {
+									color: ${theme.palette.secondary.main};
+									text-decoration-color: ${lighten(
+										theme.palette.secondary.main,
+										0.3
+									)};
+
+									&:hover {
+										text-decoration-color: ${theme.palette.secondary.main};
+									}
+								}
+							`}
+						/>
 						{/*<MessageContext.Provider value={{ message, setMessage }}>*/}
 						<Outlet />
 						{/*</MessageContext.Provider>*/}

@@ -4,8 +4,7 @@ import useStyle from '~/helpers/hooks/useStyle';
 import { Theme } from '@emotion/react';
 import { cms } from '~/utils/cms.server';
 import { CMSDataList } from '~/models/cms';
-import { getSeo, getSeoMeta } from '~/seo';
-import { css } from '@emotion/css';
+import { getSeoMeta } from '~/seo';
 
 type Data = {
 	caseStudies: CMSDataList<{
@@ -21,7 +20,7 @@ type Data = {
 
 export const meta: MetaFunction = () =>
 	getSeoMeta({
-		title: 'Case Studies',
+		title: 'Projects',
 	});
 
 export const loader: LoaderFunction = async ({ params }) => {

@@ -1,10 +1,11 @@
-import { json, Link, LoaderFunction, MetaFunction, useLoaderData } from 'remix';
-import { Box, Stack, Typography, useTheme } from '@mui/material';
-import useStyle from '~/helpers/hooks/useStyle';
-import { Theme } from '@emotion/react';
+import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
+import { Box, Button, Container, Link, Stack, Typography } from '@mui/material';
 import { cms } from '~/utils/cms.server';
 import React from 'react';
-import HeroImage from '~/components/HeroGraphic';
+import styled from '@emotion/styled';
+import { getSeoMeta } from '~/seo';
+
+export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
 export const loader: LoaderFunction = async () => {
 	const caseStudies = await cms('case-studies');
@@ -16,40 +17,99 @@ export const loader: LoaderFunction = async () => {
 
 const Home: React.FC = () => {
 	const { caseStudies } = useLoaderData();
-	const Styles = useStyle(styles);
 	console.log({ caseStudies });
 
 	return (
 		<Styles>
-			<Stack justifyContent="center" alignItems="center" className="hero">
-				<HeroImage />
-				<Typography variant="h1">Creative software agency</Typography>
+			<Stack justifyContent="center" className="hero">
+				<Container>
+					<Typography gutterBottom variant="h1">
+						<span>Visionary</span>
+						<span>
+							<span className="hero-gradient hero-gradient-one">Innovative</span>
+						</span>
+						<span>
+							<span className="hero-gradient hero-gradient-two">Software</span>
+						</span>
+					</Typography>
+					<Typography gutterBottom>
+						Visionary Works develops software for small-medium business to large-scale
+						enterprise. Do you need a new evolution in your company? Have a new project
+						that you need planned and built? Our highly-skilled team can scale a product
+						lifecycle from idea-generation, to{' '}
+						<a href="https://visionary-creative.co.uk" target="__blank">
+							design
+						</a>
+						,{' '}
+						<Link component={RouterLink} to="/services/web-development#development">
+							development
+						</Link>{' '}
+						and{' '}
+						<Link component={RouterLink} to="/services/web-development#deployment">
+							deployment
+						</Link>
+						.
+					</Typography>
+					<Box mt={8} />
+					<Button variant="contained">Learn More</Button>
+				</Container>
 			</Stack>
 		</Styles>
 	);
 };
 
-const styles = (theme: Theme) => `
-  .hero {
-    background: ${theme.palette.primary.main};
-    height: 70vh;
-    min-height: 900px;
-    background-image: linear-gradient(90deg,#ebc000 1px,#facc00 0);
-    background-size: 8.3333333333vw;
-    
-    svg {
-        max-height: 250px;
-        max-width: 250px;
-    }
-    
-    ${theme.breakpoints.up('sm')} {
-        clip-path: polygon(0 0,100% 0,100% 100%,0 calc(100% - 7vw));
-        
-        svg {
-            max-height: 400px;
-            max-width: 400px;
-        }
-    }
+const Styles = styled.div`
+	.hero {
+		background-color: ${({ theme }) => theme.palette.common.white};
+		height: 100vh;
+		min-height: 900px;
+
+		h1 {
+			> span {
+				display: block;
+
+				.hero-gradient {
+					background-size: 100% 100%;
+					background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+					//background-blend-mode: hue, hard-light, hard-light, hard-light, lighten, normal;
+					// FF doesn't have a prefix
+					background-clip: text;
+					text-fill-color: transparent;
+
+					animation: gradient-loop 4s infinite alternate;
+					background-image: ${({ theme }) => theme.palette.primary.gradient};
+
+					&.hero-gradient-one {
+					}
+					&.hero-gradient-two {
+					}
+				}
+			}
+		}
+
+		@keyframes gradient-loop {
+			from {
+				/* radial-gradient(farthest-corner at top right, ..) */
+				background-position: left top;
+				background-size: 200% 100%;
+			}
+			//49.9% {
+			//	background-position: left top;
+			//}
+			50% {
+				/* radial-gradient(farthest-corner at top center, ..) */
+				background-size: 100% 100%;
+			}
+			//50.1% {
+			//	background-position: right top;
+			//}
+			to {
+				/* radial-gradient(farthest-corner at top left, ..) */
+				background-position: right top;
+				background-size: 200% 100%;
+			}
+		}
+	}
 `;
 
 export default Home;
