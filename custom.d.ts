@@ -13,3 +13,9 @@ declare module '@mui/material/styles/createPalette' {
 		gradient?: string;
 	}
 }
+
+declare module '@mui/material/Button' {
+	interface ButtonPropsVariantOverrides {
+		inverse: true;
+	}
+}

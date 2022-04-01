@@ -81,23 +81,51 @@ theme.components = {
 				text-transform: none;
 				letter-spacing: 0.075rem;
 				padding: 0.5rem 1.75rem;
-				background-image: ${theme.palette.primary.gradient};
-				background-size: 300%;
-				background-position: left top;
-				transition: ${theme.transitions.create([
-					'background-position',
-					'background-size',
-					'box-shadow',
-				])};
-
-				&:hover {
-					background-size: 150%;
-				}
 			`,
 			contained: css`
 				color: ${theme.palette.common.white};
 			`,
 		},
+		variants: [
+			{
+				props: { variant: 'contained', color: 'primary' },
+				style: css`
+					background-image: ${theme.palette.primary.gradient};
+					background-size: 300%;
+					background-position: left top;
+					transition: ${theme.transitions.create([
+						'background-position',
+						'background-size',
+						'box-shadow',
+					])};
+
+					&:hover {
+						background-size: 150%;
+					}
+				`,
+			},
+			{
+				props: { variant: 'inverse' },
+				style:
+					theme?.palette?.mode === 'light'
+						? {
+								backgroundColor: theme.palette.common.black,
+								color: theme.palette.common.white,
+								'&:hover, &:focus': {
+									backgroundColor: grey['900'],
+									color: theme.palette.common.white,
+								},
+						  }
+						: {
+								backgroundColor: theme.palette.common.white,
+								color: theme.palette.common.black,
+								'&:hover, &:focus': {
+									backgroundColor: grey['200'],
+									color: theme.palette.common.black,
+								},
+						  },
+			},
+		],
 	},
 };
 
