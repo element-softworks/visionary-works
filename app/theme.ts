@@ -15,6 +15,9 @@ const theme = createTheme({
 		background: {
 			paper: grey[100],
 		},
+		common: {
+			black: '#06040F',
+		},
 	},
 	breakpoints: {
 		values: {
@@ -32,7 +35,11 @@ const theme = createTheme({
 			fontWeight: 700,
 		},
 		h2: {
-			fontSize: '2.5rem',
+			fontSize: '4.375rem',
+			fontWeight: 700,
+		},
+		h3: {
+			fontSize: '3.75rem',
 			fontWeight: 700,
 		},
 		h4: {

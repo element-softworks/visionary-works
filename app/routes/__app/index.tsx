@@ -1,10 +1,10 @@
 import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
-import { Box, Button, Container, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
 import { cms } from '~/utils/cms.server';
 import React from 'react';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';
-import Affiliates from "~/components/Affiliates";
+import Affiliates from '~/components/Affiliates';
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
@@ -56,6 +56,43 @@ const Home: React.FC = () => {
 				</Container>
 			</Stack>
 			<Affiliates />
+			<Box mt={8} />
+			<Box className="intro">
+				<Container sx={{ py: 8 }}>
+					<Grid container>
+						<Grid item xs={12} lg={8}>
+							<Typography sx={{ mb: 8 }} variant="h3">
+								We get it, you’re trying to scale your company, and user{' '}
+								<Box component="span" sx={{ color: 'primary.main' }}>
+									expectations
+								</Box>{' '}
+								got a lot more complex.
+							</Typography>
+							<Typography>
+								We are an innovative creative agency that specialises in bespoke
+								software development, we can generate ideas and motion them into
+								production-grade websites, iOS apps, Android apps and desktop
+								applications.
+							</Typography>
+						</Grid>
+					</Grid>
+				</Container>
+			</Box>
+			<Box className="services">
+				<Container sx={{ py: 8 }}>
+					<Grid container>
+						<Grid item xs={12} lg={5}>
+							<img alt="Web Development" src="/services-web.jpeg" />
+						</Grid>
+					</Grid>
+
+					<Grid container>
+						<Grid item xs={12} lg={5}>
+							<img alt="App Development" src="/services-app.jpeg" />
+						</Grid>
+					</Grid>
+				</Container>
+			</Box>
 		</Styles>
 	);
 };
@@ -111,6 +148,19 @@ const Styles = styled.div`
 				background-size: 200% 100%;
 			}
 		}
+	}
+
+	.intro {
+		position: relative;
+		background-color: ${({ theme }) => theme.palette.common.black};
+		color: ${({ theme }) => theme.palette.common.white};
+		padding: ${({ theme }) => theme.spacing(12, 0)};
+	}
+
+	.services {
+		background-color: ${({ theme }) => theme.palette.common.black};
+		color: ${({ theme }) => theme.palette.common.white};
+		padding: ${({ theme }) => theme.spacing(12, 0)};
 	}
 `;
 

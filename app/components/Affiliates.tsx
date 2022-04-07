@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Stack } from '@mui/material';
 import styled from '@emotion/styled';
 
@@ -38,9 +38,7 @@ const Affiliates: React.FC = () => {
 		},
 	];
 
-	useEffect(() => {
-
-	}, []);
+	useEffect(() => {}, []);
 
 	return (
 		<Styles>
@@ -66,31 +64,6 @@ const Styles = styled.div`
 		li {
 			flex: 0 0 150px;
 			margin-left: ${({ theme }) => theme.spacing(10)};
-
-			&:nth-child(1) {
-				background: red;
-			}
-			&:nth-child(2) {
-				background: orange;
-			}
-			&:nth-child(3) {
-				background: yellow;
-			}
-			&:nth-child(4) {
-				background: green;
-			}
-			&:nth-child(5) {
-				background: blue;
-			}
-			&:nth-child(6) {
-				background: indigo;
-			}
-			&:nth-child(7) {
-				background: violet;
-			}
-			&:nth-child(8) {
-				background: black;
-			}
 
 			img {
 				width: 100%;
