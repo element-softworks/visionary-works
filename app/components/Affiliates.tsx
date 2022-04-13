@@ -54,13 +54,15 @@ const Affiliates: React.FC = () => {
 };
 
 const Styles = styled.div`
+	max-width: 100%;
+	overflow: hidden;
 	ul {
 		list-style: none;
 		justify-content: flex-start;
 		flex-wrap: nowrap;
 		white-space: nowrap;
 		animation: loop linear 4s infinite;
-
+		
 		li {
 			flex: 0 0 150px;
 			margin-left: ${({ theme }) => theme.spacing(10)};

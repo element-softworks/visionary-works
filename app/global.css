@@ -11,8 +11,8 @@ body {
 }
 
 p {
-	max-width: 600px;
-	max-width: 65ch;
+	/*max-width: 600px;*/
+	/*max-width: 65ch;*/
 }
 
 @font-face {
