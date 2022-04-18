@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Container, Grid, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, CssBaseline, Grid, Link, Stack, Typography } from "@mui/material";
 import { json, LoaderFunction, Outlet, Link as RouterLink } from "remix";
 import useStyle from "~/helpers/hooks/useStyle";
 import { Theme } from "@emotion/react";
@@ -32,15 +32,18 @@ export const loader: LoaderFunction = async ({ context, request }) => {
 const Layout: React.FC = () => {
 	return (
 		<Styles>
-			<Box sx={{ py: 2 }} component="header">
-				<Container maxWidth="lg">
+			<CssBaseline />
+			<Box component="header">
+				<Container maxWidth="lg" disableGutters>
 					<Stack direction="row" alignItems="center">
 						<Box component="span" sx={{ flexGrow: 1 }}>
-							<img
-								className="logo"
-								alt="Logo"
-								src="/visionary-works-logo-black.svg"
-							/>
+							<Link component={RouterLink} to="/">
+								<img
+									className="logo"
+									alt="Logo"
+									src="/visionary-works-logo-black.svg"
+								/>
+							</Link>
 						</Box>
 						<Box component="nav">
 							<Stack spacing={10} direction="row" component="ul" alignItems="center">
@@ -50,12 +53,12 @@ const Layout: React.FC = () => {
 									</Link>
 								</li>
 								<li>
-									<Link className="mobile-hidden" component={RouterLink} to="/about">
+									<Link className="mobile-hidden" component={RouterLink} to="/projects">
 										Projects
 									</Link>
 								</li>
 								<li>
-									<Link className="mobile-hidden" component={RouterLink} to="/about">
+									<Link className="mobile-hidden" component={RouterLink} to="/blog">
 										Blog
 									</Link>
 								</li>
@@ -75,11 +78,11 @@ const Layout: React.FC = () => {
 			</Box>
 			<footer>
 				<Container>
-					<Grid container sx={{mb: 2}}>
-						<Grid item sm={6} sx={{mb: 10}}>
+					<Grid container sx={{ mb: 2 }}>
+						<Grid item sm={6} sx={{ mb: 10 }}>
 							<Typography variant="h5" component="a" href="mailto:hello@visionary-works.co.uk">
 								hello@visionary-works.co.uk
-							</Typography><br/>
+							</Typography><br />
 							<Typography variant="h5" component="a" href="tel:01206455355">
 								01206 455355
 							</Typography>
@@ -90,13 +93,13 @@ const Layout: React.FC = () => {
 					<Grid container>
 						<Grid item sm={6}>
 							<Typography>
-								Company No. 09486419 VAT No. GB279997505<br/>
+								Company No. 09486419 VAT No. GB279997505<br />
 								Element Softworks Ltd. Registered company in England and Wales 2015-2022 ©
 							</Typography>
 						</Grid>
 						<Grid item sm={6}>
 							<Typography align="right">
-								Terms and Conditions<br/>
+								Terms and Conditions<br />
 								Privacy Policy
 							</Typography>
 						</Grid>
@@ -150,11 +153,12 @@ const Styles = styled.div`
 		background-color: #191919;
 		padding: ${({ theme }) => theme.spacing(12, 0)};
 		color: ${({ theme }) => theme.palette.common.white};
-		
+
 		a {
 			color: ${({ theme }) => theme.palette.common.white};
 			text-decoration: none;
 			opacity: 1;
+
 			&:hover {
 				opacity: 0.7;
 			}
