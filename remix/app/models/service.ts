@@ -1,3 +1,5 @@
+import { CMSData, CMSImage } from "~/models/cms";
+
 type Service = {
 	slug: string;
 	title: string;

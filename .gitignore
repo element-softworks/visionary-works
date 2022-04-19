@@ -12,3 +12,5 @@ node_modules
 /remix/.cache
 /remix/public/build
 /remix/functions
+
+remix/functions/

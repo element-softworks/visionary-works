@@ -51,7 +51,7 @@ const styles = (theme: Theme) => `
   padding: 400px 0;
   
   ul {
-    background-color: ${theme.palette.secondary.main};
+    // background-color: ${theme.palette.secondary.main};
   }
 `;
 

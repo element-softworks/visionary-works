@@ -9,7 +9,7 @@ const token = `9af5ba667433f853a4338be8ba6d7d9f1f1a399848ed4108b350ca29645328e0e
 
 const cms = async <Data = unknown>(endpoint: string) => {
 	const url = `${`http://localhost:1337/`}api${
-		endpoint?.charAt(0) === '/' ? endpoint : `/${endpoint}`
+		endpoint?.charAt(0) === '/' ? endpoint : `/${endpoint}?populate=*`
 	}`;
 	const response = await fetch(url, {
 		headers: {
