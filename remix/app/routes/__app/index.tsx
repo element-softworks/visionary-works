@@ -11,6 +11,7 @@ import mobile from "~/images/mobile.png";
 import wave from "~/images/wave.svg";
 import projects from "~/images/projects.png";
 import Testimonials from "~/components/Testimonials";
+import Team from "~/components/Team";
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Works" });
 
@@ -143,6 +144,7 @@ const Home: React.FC = () => {
 			</Box>
 
 			<Testimonials testimonials={testimonials} />
+			<Team />
 		</Styles>
 	);
 };
