@@ -5,7 +5,7 @@ import * as build from '@remix-run/dev/server-build';
 const handleRequest = createPagesFunctionHandler({
 	build,
 	mode: process.env.NODE_ENV,
-	getLoadContext: (context) => {
+	getLoadContext: ({ data, env }) => {
 		const sessionStorage = createCloudflareKVSessionStorage({
 			cookie: {
 				name: '__session',
@@ -13,10 +13,10 @@ const handleRequest = createPagesFunctionHandler({
 				secure: true,
 				sameSite: 'strict',
 			},
-			kv: context.env.sessionStorage,
+			kv: env.sessionStorage,
 		});
 
-		return { sessionStorage };
+		return { sessionStorage, env };
 	},
 });
 
