@@ -10,20 +10,21 @@ import monitor from "~/images/monitor.png";
 import mobile from "~/images/mobile.png";
 import wave from "~/images/wave.svg";
 import projects from "~/images/projects.png";
+import Testimonials from "~/components/Testimonials";
+import Team from "~/components/Team";
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Works" });
 
 export const loader: LoaderFunction = async () => {
 	const caseStudies = await cms("case-studies");
+	const testimonials = await cms("testimonials");
 
-	console.log({ caseStudiesLoader: caseStudies });
-
-	return json({ caseStudies });
+	return json({ caseStudies, testimonials });
 };
 
 const Home: React.FC = () => {
-	const { caseStudies } = useLoaderData();
-	console.log({ caseStudies });
+	const { testimonials } = useLoaderData();
+	console.log({ testimonials });
 
 	return (
 		<Styles>
@@ -141,6 +142,9 @@ const Home: React.FC = () => {
 					</Grid>
 				</Container>
 			</Box>
+
+			<Testimonials testimonials={testimonials} />
+			<Team />
 		</Styles>
 	);
 };

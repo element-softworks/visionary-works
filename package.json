@@ -1,0 +1,7 @@
+{
+	"name": "visionary-works-wrapper",
+	"version": "0.1.0",
+	"scripts": {
+		"postinstall": "npm install --prefix cms && npm install --prefix remix"
+	}
+}
