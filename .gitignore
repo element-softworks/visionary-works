@@ -7,3 +7,7 @@ node_modules
 .idea
 /build
 .DS_STORE
+
+
+/remix/.cache
+/remix/public/build
