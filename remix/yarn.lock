@@ -5898,6 +5898,11 @@ remix-esbuild-override@^3.0.2:
   resolved "https://registry.yarnpkg.com/remix-esbuild-override/-/remix-esbuild-override-3.0.2.tgz#1e1bf43de48c5b685774f3af71241c10bafeb87c"
   integrity sha512-LmL1moauiNTVZheUOXos8QIlj+yNRyJVwpNAPtlF0BpmB1WWpvAiIYwdf7ewiJRnOKTFDqEExVtwB+4iUDN83Q==
 
+remix-pages-context@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/remix-pages-context/-/remix-pages-context-0.0.6.tgz#6c008d1816acb71317bb8133d40ebfb481c58e8d"
+  integrity sha512-BqRIDVhWzSHPx4yHL82a6NmlM0BXUmzITddQU8ZHqlFyKeJRb9EYMgVmqTbV3uIPBWaxDYx+44rzFwqlpiwgzA==
+
 remix-seo@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/remix-seo/-/remix-seo-0.1.0.tgz#0f98dc1f07c311deb53da66589ef8567339a3a44"
