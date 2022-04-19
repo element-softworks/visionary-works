@@ -1,28 +1,22 @@
 // remix.config.js
-const path = require("node:path");
-const alias = require("esbuild-plugin-alias");
+const { withEsbuildOverride } = require('remix-esbuild-override');
+const GlobalsPolyfills = require('@esbuild-plugins/node-globals-polyfill').default;
 
-/**
- * @type {import('remix-esbuild-override').AppConfig}
- */
-module.exports = {
-	serverBuildTarget: "cloudflare-pages",
-	server: "./server.js",
-	devServerBroadcastDelay: 1000,
-	ignoredRouteFiles: [".*"],
-	esbuildOverride: (option, { isServer }) => {
-		option.jsxFactory = "jsx";
-		option.inject = [path.resolve(__dirname, "reactShims.ts")];
+withEsbuildOverride((option, { isServer }) => {
+	if (isServer)
 		option.plugins = [
-			alias({
-				through: require.resolve("no-op"),
-				"html-tokenize": require.resolve("no-op"),
-				multipipe: require.resolve("no-op"),
+			GlobalsPolyfills({
+				buffer: true,
 			}),
 			...option.plugins,
 		];
-		if (isServer) option.mainFields = ["browser", "module", "main"];
 
-		return option;
-	},
+	return option;
+});
+
+module.exports = {
+	serverBuildTarget: 'cloudflare-pages',
+	server: './server.js',
+	devServerBroadcastDelay: 1000,
+	ignoredRouteFiles: ['.*']
 };

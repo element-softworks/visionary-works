@@ -12,6 +12,7 @@ import {
 	useCatch,
 	useLoaderData,
 } from 'remix';
+import { setPagesContext } from "remix-pages-context";
 import type { MetaFunction } from 'remix';
 import {
 	ThemeProvider as EmotionThemeProvider,
@@ -104,7 +105,9 @@ type Data = {
 	message: Message | null;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request, context }) => {
+	setPagesContext(context);
+
 	const session = await messageSession.getSession(request.headers.get('Cookie'));
 	const message = await getMessage(request);
 

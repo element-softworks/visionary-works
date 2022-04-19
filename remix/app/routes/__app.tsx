@@ -34,7 +34,7 @@ const Layout: React.FC = () => {
 		<Styles>
 			<CssBaseline />
 			<Box component="header">
-				<Container maxWidth="lg" disableGutters>
+				<Container maxWidth="lg">
 					<Stack direction="row" alignItems="center">
 						<Box component="span" sx={{ flexGrow: 1 }}>
 							<Link component={RouterLink} to="/">
@@ -48,7 +48,7 @@ const Layout: React.FC = () => {
 						<Box component="nav">
 							<Stack spacing={10} direction="row" component="ul" alignItems="center">
 								<li>
-									<Link className="mobile-hidden" component={RouterLink} to="/about">
+									<Link style={{ color: 'green' }} className="mobile-hidden" component={RouterLink} to="/about">
 										About
 									</Link>
 								</li>
