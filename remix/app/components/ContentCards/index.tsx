@@ -5,7 +5,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';
 import { CMSDataList } from '~/models/cms';
-import { Testimonial } from '~/models/testimonial';
+import { Testimonial } from '~/models/collection/testimonial';
 import ContentCard from '~/components/ContentCard';
 
 type Data = {
