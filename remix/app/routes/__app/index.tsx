@@ -87,7 +87,7 @@ const Home: React.FC = () => {
 	const highlighted = intro?.highlighted;
 	const services = intro?.services;
 
-	console.log({services}, 2);
+	console.log({ services }, 2);
 
 	console.log('scrollY', scrollY);
 	console.log('$intro?.current?.offsetTop', $intro?.current?.offsetTop);
@@ -148,7 +148,7 @@ const Home: React.FC = () => {
 							className="intro-feature-text"
 							style={{
 								left: '-5vw',
-								transform: `translateX(${
+								transform: `translateX(-${
 									(scrollY ?? 0) -
 									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
 								}px) translateZ(0)`,
@@ -160,7 +160,7 @@ const Home: React.FC = () => {
 							className="intro-feature-text"
 							style={{
 								left: '25vw',
-								transform: `translateX(-${
+								transform: `translateX(${
 									(scrollY ?? 0) -
 									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
 								}px) translateZ(0)`,

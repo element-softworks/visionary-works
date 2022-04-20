@@ -1693,7 +1693,7 @@
     "@strapi/utils" "4.1.8"
     sendmail "^1.6.1"
 
-"@strapi/provider-upload-aws-s3@^4.1.8":
+"@strapi/provider-upload-aws-s3@^4.1.7":
   version "4.1.8"
   resolved "https://registry.yarnpkg.com/@strapi/provider-upload-aws-s3/-/provider-upload-aws-s3-4.1.8.tgz#37e8d903db206e6e7efef76196798ad6eadfa29f"
   integrity sha512-D3RtHwHiXN5li1DXTvcaiI4weftnyO+Z7IOTBtLaOUGYA/WOm5QadtyXiOhGmQDohBkMH3MNniY2LJVl4Ou78A==
@@ -1709,7 +1709,7 @@
     "@strapi/utils" "4.1.8"
     fs-extra "10.0.0"
 
-"@strapi/strapi@4.1.8":
+"@strapi/strapi@^4.1.7":
   version "4.1.8"
   resolved "https://registry.yarnpkg.com/@strapi/strapi/-/strapi-4.1.8.tgz#a09432c9388a6af3900f2b58acd5034b48f2dbd0"
   integrity sha512-RNlOBNfFV1jtd/GyiVuLJJ3e8qd3xRPVOIIi9If92tS2I0bbIXQJm3jmmRdYnFweGiPSdGKLTcqoIwajsG35Pg==

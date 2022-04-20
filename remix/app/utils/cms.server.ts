@@ -13,11 +13,20 @@ const cms = async <Data = unknown>(endpoint: string, populate?: string) => {
 		endpoint?.charAt(0) === '/' ? endpoint : `/${endpoint}?populate=${populate || '*'}`
 	}`;
 
-	const response = await fetch(`${url}?populate=*`);
+	const response = await fetch(`${url}?populate=*`, {
+		headers: new Headers({
+			'Cache-Control': 'max-age=3600',
+			...(ctx?.env?.CMS_TOKEN
+				? {
+						Authorization: `Bearer ${ctx?.env?.CMS_TOKEN}`,
+				  }
+				: {}),
+		}),
+	});
 	const data: CMSData<Data> = await response.json();
 
-	console.log({error: data.error}, url);
-	if (ctx.env.BYPASS_CMS_CONNECTION === 'true') {
+	console.log({ error: data.error }, url);
+	if (data?.error && ctx.env.BYPASS_CMS_CONNECTION === 'true') {
 		return { data: { attributes: {} } };
 	}
 
