@@ -1,66 +1,203 @@
-import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from "remix";
-import { Box, Button, Container, Grid, Link, Stack, Typography } from "@mui/material";
-import { cms } from "~/utils/cms.server";
-import React from "react";
-import styled from "@emotion/styled";
-import { getSeoMeta } from "~/seo";
-import Affiliates from "~/components/Affiliates";
-import notepad from "~/images/notepad.png";
-import monitor from "~/images/monitor.png";
-import mobile from "~/images/mobile.png";
-import wave from "~/images/wave.svg";
-import projects from "~/images/projects.png";
-import Testimonials from "~/components/ContentCards";
-import Team from "~/components/Team";
-import reactStringReplace from "react-string-replace";
+import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
+import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
+import { cms } from '~/utils/cms.server';
+import React, { useEffect, useRef, useState } from 'react';
+import styled from '@emotion/styled';
+import { getSeoMeta } from '~/seo';
+import Affiliates from '~/components/Affiliates';
+import notepad from '~/images/notepad.png';
+import monitor from '~/images/monitor.png';
+import mobile from '~/images/mobile.png';
+import wave from '~/images/wave.svg';
+import projects from '~/images/projects.png';
+import Testimonials from '~/components/ContentCards';
+import Team from '~/components/Team';
+import reactStringReplace from 'react-string-replace';
+import { React } from '@remix-run/dev/compiler/shims/react';
 
-export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Works" });
+export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
 export const loader: LoaderFunction = async () => {
-	const caseStudies = await cms("case-studies");
-	const testimonials = await cms("testimonials");
-	const homepage = await cms("homepage", "hero.logos&populate=intro.services");
+	const caseStudies = await cms('case-studies');
+	const testimonials = await cms('testimonials');
+	const page = await cms('homepage', 'hero.logos&populate=intro.services');
 
-	return json({ caseStudies, testimonials, homepage });
+	return json({ caseStudies, testimonials, page });
 };
 
 const Home: React.FC = () => {
-	const { testimonials, homepage } = useLoaderData();
-	console.log({ testimonials, homepage });
+	const {
+		testimonials,
+		page: {
+			data: {
+				attributes: { hero, intro },
+			},
+		},
+	} = useLoaderData();
 
-	const firstWord = homepage?.data?.attributes?.hero?.title?.split(" ")?.[0];
-	const highlighted = homepage?.data?.attributes?.intro?.highlighted;
-	const services = homepage?.data?.attributes?.intro?.services;
+	const [windowHeight, setWindowHeight] = useState<number | null>(null);
+	const [scrollY, setScrollY] = useState<number | null>(null);
+	const [introY, setIntroY] = useState<number | null>(null);
+	const [introContentY, setIntroContentY] = useState<number | null>(null);
+	const [introContentHeight, setIntroContentHeight] = useState<number | null>(null);
+	const [introContentOffsetTop, setIntroContentOffsetTop] = useState<number | null>(null);
+	const $intro = useRef<HTMLDivElement>(null);
+	const $introContent = useRef<HTMLDivElement>(null);
+
+	console.log('introY', introY);
+
+	const handleScroll = () => {
+		setIntroContentY($introContent?.current?.getBoundingClientRect?.()?.top ?? 0);
+		setWindowHeight(window.innerHeight);
+		setScrollY(window.scrollY);
+		setIntroY($intro?.current?.getBoundingClientRect?.()?.top ?? 0);
+		setIntroContentHeight($introContent?.current?.offsetHeight ?? 0);
+		setIntroContentOffsetTop($introContent?.current?.offsetTop ?? 0);
+	};
+
+	const handleResize = () => {
+		setIntroContentY($introContent?.current?.getBoundingClientRect?.()?.top ?? 0);
+		setWindowHeight(window.innerHeight);
+		setScrollY(window.scrollY);
+		setIntroY($intro?.current?.getBoundingClientRect?.()?.top ?? 0);
+		setIntroContentHeight($introContent?.current?.offsetHeight ?? 0);
+		setIntroContentOffsetTop($introContent?.current?.offsetTop ?? 0);
+	};
+
+	useEffect(() => {
+		window.addEventListener('scroll', handleScroll);
+		window.addEventListener('resize', handleResize);
+		handleScroll();
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
+
+	const percentScrolled = (scrollY ?? 0) / (windowHeight ?? 0);
+	const introContentPercentScrolled = (introContentY ?? 0) / (introContentHeight ?? 0);
+	// const introFeatureOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
+
+	const distanceToTop = introContentY ?? 0;
+	const elementHeight = $intro?.current?.offsetHeight ?? 0;
+	const scrollTop = scrollY ?? 0;
+
+	const introFeatureOpacity = 1 - (scrollTop - distanceToTop) / elementHeight + 0.3;
+
+	const firstWord = hero?.title?.split(' ')?.[0];
+	const highlighted = intro?.highlighted;
+	const services = intro?.services;
+
+	console.log('scrollY', scrollY);
+	console.log('$intro?.current?.offsetTop', $intro?.current?.offsetTop);
+	console.log(
+		'(scrollY ?? 0) - ($intro?.current?.offsetTop ?? 0)',
+		(scrollY ?? 0) - ($intro?.current?.offsetTop ?? 0)
+	);
+
 	return (
 		<Styles>
 			<Stack justifyContent="center" className="hero">
 				<Container>
 					<Typography gutterBottom variant="h1" align="center">
 						<span>{firstWord}</span>
-						{homepage?.data?.attributes?.hero?.title?.replace(firstWord, "")}
+						{hero?.title?.replace(firstWord, '')}
 					</Typography>
 					<Typography gutterBottom variant="h2" align="center">
-						{homepage?.data?.attributes?.hero?.subtitle}
+						{hero?.subtitle}
 					</Typography>
 					<Box mt={8} />
-					<Button variant="contained" disableElevation>{homepage?.data?.attributes?.hero?.cta}</Button>
+					<Button variant="contained" disableElevation>
+						{hero?.cta}
+					</Button>
 				</Container>
 			</Stack>
-			<Affiliates logos={homepage?.data?.attributes?.hero?.logos?.data} />
+			<Affiliates logos={hero?.logos?.data} />
 			<Box mt={8} />
-			<Box className="intro">
-				<Container sx={{ py: 8 }}>
+			<Box
+				className="intro"
+				ref={$intro}
+				style={{ paddingTop: !!windowHeight ? windowHeight * 3 : undefined }}
+			>
+				<div
+					className="intro-feature-wrapper"
+					style={{
+						position:
+							typeof introY === 'number' &&
+							introY <= 0 &&
+							introContentPercentScrolled >= 0
+								? 'fixed'
+								: 'absolute',
+						top:
+							introContentPercentScrolled <= 0 &&
+							typeof introContentOffsetTop === 'number'
+								? introContentOffsetTop
+								: 0,
+						// top: introY !== null && introY <= 0 ? `${Math.abs(introY)}px` : undefined,
+					}}
+				>
+					<div
+						className="intro-feature"
+						style={{
+							height: windowHeight ?? undefined,
+							opacity: introFeatureOpacity,
+						}}
+					>
+						<span
+							className="intro-feature-text"
+							style={{
+								left: '-5vw',
+								transform: `translateX(${
+									(scrollY ?? 0) -
+									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
+								}px) translateZ(0)`,
+							}}
+						>
+							Visionary
+						</span>
+						<span
+							className="intro-feature-text"
+							style={{
+								left: '25vw',
+								transform: `translateX(-${
+									(scrollY ?? 0) -
+									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
+								}px) translateZ(0)`,
+							}}
+						>
+							Revolutionary
+						</span>
+						<span
+							className="intro-feature-text"
+							style={{
+								left: '45vw',
+								transform: `translateX(${
+									(scrollY ?? 0) -
+									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
+								}px) translateZ(0)`,
+							}}
+						>
+							Innovative
+						</span>
+					</div>
+				</div>
+
+				<Container
+					className="intro-content"
+					sx={{ py: 12 }}
+					ref={$introContent}
+					style={{ minHeight: windowHeight ?? undefined }}
+				>
 					<Grid container>
 						<Grid item xs={12} lg={8}>
 							<Typography sx={{ mb: 8 }} variant="h3">
-								{reactStringReplace(homepage?.data?.attributes?.intro?.title, highlighted, (match, i) => (
-									<Box component="span" sx={{ color: "primary.main" }}>
+								{reactStringReplace(intro?.title, highlighted, (match, i) => (
+									<Box component="span" sx={{ color: 'primary.main' }}>
 										{highlighted}
-									</Box>))}
+									</Box>
+								))}
 							</Typography>
-							<Typography>
-								{homepage?.data?.attributes?.intro?.subtitle}
-							</Typography>
+							<Typography>{intro?.subtitle}</Typography>
 						</Grid>
 						<Grid item lg={4}>
 							<img alt="Web Development" src={notepad} className="image-notepad" />
@@ -69,32 +206,42 @@ const Home: React.FC = () => {
 				</Container>
 			</Box>
 			<Box className="services">
-				{services?.map((service: any, i: number) => <><Container>
-						<Grid container alignItems="center" key={i}>
-							{!service.right && <Grid item lg={6}>
-								<img alt={`${service?.title} icon`} src={i === 1 ? mobile : monitor}
-								     className="image-notepad" />
-							</Grid>}
-							<Grid item xs={12} lg={6}>
-								<Typography sx={{ mb: 2 }} variant="h3">
-									{service?.title}
-								</Typography>
-								<Typography>
-									{service.description}
-								</Typography>
+				{services?.map((service: any, i: number) => (
+					<React.Fragment key={i}>
+						<Container>
+							<Grid container alignItems="center" key={i}>
+								{!service.right && (
+									<Grid item lg={6}>
+										<img
+											alt={`${service?.title} icon`}
+											src={i === 1 ? mobile : monitor}
+											className="image-notepad"
+										/>
+									</Grid>
+								)}
+								<Grid item xs={12} lg={6}>
+									<Typography sx={{ mb: 2 }} variant="h3">
+										{service?.title}
+									</Typography>
+									<Typography>{service.description}</Typography>
+								</Grid>
+								{service.right && (
+									<Grid item lg={6}>
+										<img
+											alt={`${service?.title} icon`}
+											src={i === 1 ? mobile : monitor}
+										/>
+									</Grid>
+								)}
 							</Grid>
-							{service.right && <Grid item lg={6}>
-								<img alt={`${service?.title} icon`} src={i === 1 ? mobile : monitor} />
-							</Grid>}
-						</Grid>
-					</Container>
-						{services[services.length - 1]?.title !== service?.title && <Box className="image-wave">
-							<img alt="Wave" src={wave} className="image-wave" />
-						</Box>
-						}
-					</>
-				)}
-
+						</Container>
+						{services[services.length - 1]?.title !== service?.title && (
+							<Box className="image-wave">
+								<img alt="Wave" src={wave} className="image-wave" />
+							</Box>
+						)}
+					</React.Fragment>
+				))}
 			</Box>
 
 			<Box className="projects">
@@ -104,9 +251,7 @@ const Home: React.FC = () => {
 							<Typography sx={{ mb: 2 }} variant="h3">
 								Projects
 							</Typography>
-							<Typography>
-								A selection of our favourite projects.
-							</Typography>
+							<Typography>A selection of our favourite projects.</Typography>
 						</Grid>
 
 						<Grid item lg={12}>
@@ -126,9 +271,7 @@ const Home: React.FC = () => {
 							<Typography sx={{ mb: 2 }} variant="h3">
 								Checkout our latest news
 							</Typography>
-							<Typography>
-								A selection of our favourite projects.
-							</Typography>
+							<Typography>A selection of our favourite projects.</Typography>
 						</Grid>
 
 						<Grid item lg={12}>
@@ -213,8 +356,15 @@ const Styles = styled.div`
 		position: relative;
 		background-color: #191919;
 		color: ${({ theme }) => theme.palette.common.white};
-		padding: ${({ theme }) => theme.spacing(12, 0)};
+		padding: ${({ theme }) => theme.spacing(14, 0)};
 		align-items: center;
+	  	padding-top: ${700 * 4}px;
+	  	overflow: hidden;
+	  
+		  .intro-content {
+		    position: relative;
+		    z-index: 1;
+		  }
 
 		p {
 			max-width: 600px;
@@ -222,6 +372,46 @@ const Styles = styled.div`
 
 		.image-notepad {
 			max-width: 100%;
+		}
+	  
+		.intro-feature-wrapper {
+			position: absolute;
+			top: 0;
+		}
+	  
+		.intro-feature {
+			position: absolute;
+			opacity: 1;
+		  	top: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		  
+		  	.intro-feature-text {
+				font-size: 15rem;
+				display: block;
+				color: black;
+				-webkit-text-fill-color: ${({ theme }) =>
+					theme.palette.common.black}; /* Will override color (regardless of order) */
+				-webkit-text-stroke-width: 3px;
+				-webkit-text-stroke-color: white;
+				letter-spacing: -2px;
+				line-height: .9;
+				position: relative;
+			  
+				// color: ${({ theme }) => theme.palette.common.black};
+			    // text-shadow: -3px -3px 0 white, 3px -3px 0 white, -3px 3px 0 white, 3px 3px 0 white;
+				//
+				// /* Real outline for modern browsers */
+				// @supports((text-stroke: 3px white) or (-webkit-text-stroke: 3px white)) {
+				//     .outline {
+				//         color: transparent;
+				// 		-webkit-text-stroke: 3px white;
+				// 		text-stroke: 3px white;
+				// 		text-shadow: none;
+				//     }
+				// }
+		    }
 		}
 	}
 

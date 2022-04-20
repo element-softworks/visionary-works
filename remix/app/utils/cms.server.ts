@@ -1,5 +1,5 @@
 import { CMSData } from '~/models/cms';
-import { getPagesContext } from "remix-pages-context";
+import { getPagesContext } from 'remix-pages-context';
 
 /*const LOCAL_URL = 'http://localhost:1337';
 const PROD_URL = 'https://element-softworks-cms.herokuapp.com';
@@ -12,14 +12,25 @@ const cms = async <Data = unknown>(endpoint: string, populate?: string) => {
 	const url = `${basename}/api${
 		endpoint?.charAt(0) === '/' ? endpoint : `/${endpoint}?populate=${populate || '*'}`
 	}`;
-	const response = await fetch(url, {
-		headers: {
-			Authorization: `Bearer ${ctx.env.CMS_TOKEN}`
-		}
-	});
 
-	console.log({url});
+	const response = await fetch(`${url}?populate=*`);
 	const data: CMSData<Data> = await response.json();
+
+	if (ctx.env.BYPASS_CMS_CONNECTION === 'true') {
+		return { data: { attributes: {} } };
+	}
+
+	if (data?.error && ctx.env.BYPASS_CMS_CONNECTION !== 'true') {
+		if (data?.error?.name === 'NotFoundError') {
+			throw {
+				...(data?.error ?? {}),
+				message: `CMS data for ${url} could not be found.`,
+			};
+		}
+
+		throw data.error;
+	}
+
 	return data;
 };
 

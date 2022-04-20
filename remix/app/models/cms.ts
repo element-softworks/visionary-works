@@ -11,6 +11,11 @@ export interface CMSData<Data = unknown> {
 			total: number;
 		}
 	};
+	error?: {
+		status: number;
+		name: string;
+		message: string;
+	};
 }
 
 export interface CMSDataList<Data = unknown> {
