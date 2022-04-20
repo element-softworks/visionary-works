@@ -6,14 +6,18 @@ const PROD_URL = 'https://element-softworks-cms.herokuapp.com';
 // const cmsUrl = process.env.CMS_URL;
 const isProd = NODE_ENV === 'production';*/
 
-const cms = async <Data = unknown>(endpoint: string, populate?: string) => {
+const cms = async <Data = unknown>(endpoint: string, populate?: string[]) => {
 	const ctx = getPagesContext();
 	const basename = ctx.env.CMS_URL ?? `http://localhost:1337`;
 	const url = `${basename}/api${
-		endpoint?.charAt(0) === '/' ? endpoint : `/${endpoint}?populate=${populate || '*'}`
+		endpoint?.charAt(0) === '/'
+			? endpoint
+			: `/${endpoint}?populate=${populate?.join('&populate=') ?? '*'}`
 	}`;
 
-	const response = await fetch(`${url}?populate=*`, {
+	console.log('url', url);
+
+	const response = await fetch(url, {
 		headers: new Headers({
 			'Cache-Control': 'max-age=3600',
 			...(ctx?.env?.CMS_TOKEN
