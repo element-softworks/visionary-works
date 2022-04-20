@@ -3,11 +3,11 @@ import { Card, Avatar, Stack, CardMedia, CardContent, Typography, CardActions, B
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
-import { Testimonial as TestimonialType } from "~/models/testimonial";
+import { Testimonial } from "~/models/testimonial";
 
 import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
 
-const Testimonial: React.FC<{ testimonial: TestimonialType }> = ({ testimonial }) => {
+const ContentCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }) => {
 	const theme = useTheme();
 
 	return (
@@ -66,4 +66,4 @@ const Styles = styled.div`
 	}
 `;
 
-export default Testimonial;
+export default ContentCard;

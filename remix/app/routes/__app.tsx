@@ -150,7 +150,7 @@ const Styles = styled.div`
 	}
 
 	footer {
-		background-color: #191919;
+		background-color: #111111;
 		padding: ${({ theme }) => theme.spacing(12, 0)};
 		color: ${({ theme }) => theme.palette.common.white};
 

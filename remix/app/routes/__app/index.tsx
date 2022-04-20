@@ -10,7 +10,7 @@ import monitor from "~/images/monitor.png";
 import mobile from "~/images/mobile.png";
 import wave from "~/images/wave.svg";
 import projects from "~/images/projects.png";
-import Testimonials from "~/components/Testimonials";
+import Testimonials from "~/components/ContentCards";
 import Team from "~/components/Team";
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Works" });
@@ -18,47 +18,36 @@ export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Wo
 export const loader: LoaderFunction = async () => {
 	const caseStudies = await cms("case-studies");
 	const testimonials = await cms("testimonials");
+	const homepage = await cms("homepage", "hero.logos");
 
-	return json({ caseStudies, testimonials });
+	return json({ caseStudies, testimonials, homepage });
 };
 
 const Home: React.FC = () => {
-	const { testimonials } = useLoaderData();
-	console.log({ testimonials });
+	const { testimonials, homepage } = useLoaderData();
+	console.log({ testimonials, homepage });
 
+	const firstWord = homepage?.data?.attributes?.hero?.title?.split(' ')?.[0];
 	return (
 		<Styles>
 			<Stack justifyContent="center" className="hero">
 				<Container>
 					<Typography gutterBottom variant="h1" align="center">
-						<span>Innovative</span>
-						Web Development<br />Agency in Essex
+						<span>{firstWord}</span>
+						{homepage.data.attributes.hero.title?.replace(firstWord, '')}
+
 					</Typography>
 					<Typography gutterBottom variant="h2" align="center">
-						Visionary Works develops software for small-medium business to large-scale enterprise. Do you
-						need a new evolution in your company? We use innovative technology to evolve your company and
-						save you money.
-
-						{/*Our highly-skilled team can scale a product*/}
-						{/*lifecycle from idea-generation, to{" "}*/}
-						{/*<a href="https://visionary-creative.co.uk" target="__blank">*/}
-						{/*	design*/}
-						{/*</a>*/}
-						{/*,{" "}*/}
-						{/*<Link component={RouterLink} to="/services/web-development#development">*/}
-						{/*	development*/}
-						{/*</Link>{" "}*/}
-						{/*and{" "}*/}
-						{/*<Link component={RouterLink} to="/services/web-development#deployment">*/}
-						{/*	deployment*/}
-						{/*</Link>*/}
-						{/*.*/}
+						{homepage.data.attributes.hero.subtitle}
 					</Typography>
 					<Box mt={8} />
-					<Button variant="contained" disableElevation>Learn More</Button>
+					<Button variant="contained" disableElevation>{homepage.data.attributes.hero.cta}</Button>
 				</Container>
 			</Stack>
-			<Affiliates />
+			{homepage?.data?.attributes?.hero?.logos?.data?.map((logo: any, i: number) => {
+				return <div>{logo?.attributes?.url}<br/></div>
+			})}
+			<Affiliates logos={homepage?.data?.attributes?.hero?.logos?.data}/>
 			<Box mt={8} />
 			<Box className="intro">
 				<Container sx={{ py: 8 }}>
@@ -145,6 +134,25 @@ const Home: React.FC = () => {
 
 			<Testimonials testimonials={testimonials} />
 			<Team />
+
+			<Box className="news">
+				<Container>
+					<Grid container alignItems="center">
+						<Grid item xs={12} lg={6}>
+							<Typography sx={{ mb: 2 }} variant="h3">
+								Checkout our latest news
+							</Typography>
+							<Typography>
+								A selection of our favourite projects.
+							</Typography>
+						</Grid>
+
+						<Grid item lg={12}>
+							<img alt="Web Development" src={projects} className="project-images" />
+						</Grid>
+					</Grid>
+				</Container>
+			</Box>
 		</Styles>
 	);
 };
@@ -157,6 +165,9 @@ const Styles = styled.div`
 
 		h1 {
 			color: #4D4D4D;
+			max-width: 1000px;
+			margin: auto;
+			display: block;
 			> span {
 				display: block;
 
@@ -257,6 +268,15 @@ const Styles = styled.div`
 	
 	.projects {
 		padding: ${({ theme }) => theme.spacing(12, 0)};
+		.project-images {
+			max-width: 100%;
+		}
+	}
+	
+	.news {
+		background: #191919;
+		padding: ${({ theme }) => theme.spacing(12, 0)};
+		color: white;
 		.project-images {
 			max-width: 100%;
 		}

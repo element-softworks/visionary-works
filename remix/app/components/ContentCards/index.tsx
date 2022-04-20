@@ -5,11 +5,11 @@ import React from "react";
 import styled from "@emotion/styled";
 import { getSeoMeta } from "~/seo";
 import { CMSDataList } from "~/models/cms";
-import { Testimonial as TestimonialType } from "~/models/testimonial";
-import Testimonial from "~/components/Testimonial";
+import { Testimonial } from "~/models/testimonial";
+import ContentCard from "~/components/ContentCard";
 
 type Data = {
-	testimonials: CMSDataList<TestimonialType[]>;
+	testimonials: CMSDataList<Testimonial[]>;
 };
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Works2" });
@@ -23,7 +23,7 @@ export const loader: LoaderFunction = async () => {
 	return json({ testimonials });
 };
 
-const Testimonials: React.FC<{ testimonials: CMSDataList<TestimonialType> }> = ({ testimonials }) => {
+const ContentCards: React.FC<{ testimonials: CMSDataList<Testimonial> }> = ({ testimonials }) => {
 	// const test = useLoaderData();
 	console.log({ testimonials });
 
@@ -33,7 +33,7 @@ const Testimonials: React.FC<{ testimonials: CMSDataList<TestimonialType> }> = (
 				<Grid container spacing={2}>
 					{testimonials?.data?.map((testimonial, i) =>
 						<Grid item sm={6} key={i}>
-							<Testimonial testimonial={testimonial.attributes} />
+							<ContentCard testimonial={testimonial.attributes} />
 						</Grid>
 					)}
 				</Grid>
@@ -46,4 +46,4 @@ const Styles = styled.div`
 	margin: ${({ theme }) => theme.spacing(2, 0)}
 `;
 
-export default Testimonials;
+export default ContentCards;
