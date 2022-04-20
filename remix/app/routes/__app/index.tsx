@@ -77,19 +77,17 @@ const Home: React.FC = () => {
 	const introContentPercentScrolled = (introContentY ?? 0) / (introContentHeight ?? 0);
 	// const introFeatureOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
 
-	const distanceToTop = introContentY ?? 0;
-	const elementHeight = $intro?.current?.offsetHeight ?? 0;
-	const scrollTop = scrollY ?? 0;
-
-	const introFeatureOpacity = 1 - (scrollTop - distanceToTop) / elementHeight + 0.3;
-
+	const introFeatureOpacity =
+		1 - ((scrollY ?? 0) - (introContentY ?? 0)) / ($intro?.current?.offsetHeight ?? 0) + 0.2;
+	const introFeatureFill =
+		1 -
+		(($intro?.current?.offsetHeight + windowHeight ?? 0) - (scrollY ?? 0)) /
+			($intro?.current?.offsetHeight ?? 0);
 	const firstWord = hero?.title?.split(' ')?.[0];
 	const highlighted = intro?.highlighted;
 	const services = intro?.services;
 
-	console.log({ services }, 2);
-
-	console.log('scrollY', scrollY);
+	console.log('introFeatureFill', introFeatureFill);
 	console.log('$intro?.current?.offsetTop', $intro?.current?.offsetTop);
 	console.log(
 		'(scrollY ?? 0) - ($intro?.current?.offsetTop ?? 0)',
@@ -145,40 +143,48 @@ const Home: React.FC = () => {
 							opacity: introFeatureOpacity,
 						}}
 					>
-						<div style={{ transform: `translateX(-5vw)` }}>
+						<div style={{ transform: `translateX(0%)` }}>
 							<span
 								className="intro-feature-text"
 								style={{
 									transform: `translateX(${
-										(scrollY ?? 0) -
-										(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
+										((scrollY ?? 0) -
+											(($introContent?.current?.offsetTop ?? 0) +
+												(windowHeight ?? 0))) *
+										0.165
 									}px) translateZ(0)`,
 								}}
 							>
 								Visionary
 							</span>
 						</div>
-						<div style={{ transform: `translateX(25vw)` }}>
+						<div style={{ transform: `translateX(0%)` }}>
 							<span
 								className="intro-feature-text"
 								style={{
-									transform: `translateX(${-Math.abs(
-										(scrollY ?? 0) -
-											(($intro?.current?.offsetTop ?? 0) +
-												(windowHeight ?? 0))
-									)}px) translateZ(0)`,
+									transform: `translateX(${
+										(($introContent?.current?.offsetTop ?? 0) +
+											(windowHeight ?? 0) -
+											(scrollY ?? 0)) *
+										0.165
+									}px) translateZ(0)`,
+									color: `rgba(255, 255, 255, ${introFeatureFill})`,
+									'-webkit-text-fill-color': `rgba(255, 255, 255, ${introFeatureFill})`,
 								}}
 							>
 								Revolutionary
 							</span>
 						</div>
-						<div style={{ transform: `translateX(45vw)` }}>
+						<div style={{ transform: `translateX(0%)` }}>
 							<span
 								className="intro-feature-text"
 								style={{
+									marginLeft: 'auto',
 									transform: `translateX(${
-										(scrollY ?? 0) -
-										(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
+										((scrollY ?? 0) -
+											(($introContent?.current?.offsetTop ?? 0) +
+												(windowHeight ?? 0))) *
+										0.165
 									}px) translateZ(0)`,
 								}}
 							>
@@ -393,6 +399,10 @@ const Styles = styled.div`
 			flex-direction: column;
 			justify-content: center;
 		  	will-change: opacity;
+		  
+		   > * {
+			 display: inline-flex;
+		   }
 		  
 		  	.intro-feature-text {
 				font-size: 15rem;
