@@ -13,16 +13,15 @@ import projects from '~/images/projects.png';
 import Testimonials from '~/components/ContentCards';
 import Team from '~/components/Team';
 import reactStringReplace from 'react-string-replace';
-import { React } from '@remix-run/dev/compiler/shims/react';
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
 export const loader: LoaderFunction = async () => {
-	const caseStudies = await cms('case-studies');
+	// const caseStudies = await cms('case-studies');
 	const testimonials = await cms('testimonials');
 	const page = await cms('homepage', 'hero.logos&populate=intro.services');
 
-	return json({ caseStudies, testimonials, page });
+	return json({ testimonials, page });
 };
 
 const Home: React.FC = () => {
@@ -87,6 +86,8 @@ const Home: React.FC = () => {
 	const firstWord = hero?.title?.split(' ')?.[0];
 	const highlighted = intro?.highlighted;
 	const services = intro?.services;
+
+	console.log({services}, 2);
 
 	console.log('scrollY', scrollY);
 	console.log('$intro?.current?.offsetTop', $intro?.current?.offsetTop);
