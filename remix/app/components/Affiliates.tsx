@@ -10,7 +10,7 @@ const Affiliates: React.FC<{logos: {attributes: { name: string, url: string }}[]
 			<Stack spacing={20} direction="row" component="ul">
 				{logos?.map((logo , i) => (
 					<li key={i}>
-						<img alt={logo.attributes?.name} src={`${ process.env.NODE_ENV === "production" ? 'https://api.visionary-works.co.uk' : 'http://localhost:1337'}${logo.attributes?.url}`} />
+						<img alt={logo.attributes?.name} src={logo.attributes?.url} />
 					</li>
 				))}
 			</Stack>

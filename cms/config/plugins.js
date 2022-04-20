@@ -1,11 +1,6 @@
-module.exports = ({ env }) => {
-  console.log(env("AWS_ACCESS_KEY_ID"));
-  console.log(env("AWS_ACCESS_SECRET"));
-  console.log(env("AWS_REGION"));
-  console.log(env("AWS_BUCKET"));
-  return {
-    // ...
-    upload: {
+module.exports = ({ env }) => ({
+  upload: {
+    config: {
       provider: "aws-s3",
       providerOptions: {
         accessKeyId: env("AWS_ACCESS_KEY_ID"),
@@ -16,5 +11,5 @@ module.exports = ({ env }) => {
         }
       }
     }
-  };
-};
+  }
+});

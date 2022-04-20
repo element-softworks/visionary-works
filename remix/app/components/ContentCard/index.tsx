@@ -16,7 +16,7 @@ const ContentCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }) =>
 				<CardMedia
 					component="img"
 					sx={{ width: 300, height: 450 }}
-					image={`http://localhost:1337${testimonial?.image?.data?.attributes?.url}`}
+					image={testimonial?.image?.data?.attributes?.url}
 					alt="Live from space album cover"
 				/>
 				<Box sx={{ display: "flex", flexDirection: "column" }}>
