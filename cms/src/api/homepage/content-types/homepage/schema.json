@@ -17,15 +17,10 @@
       "repeatable": false,
       "component": "homepage.hero"
     },
-    "test": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
-      "type": "media",
-      "multiple": false
+    "intro": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.intro-of-services"
     }
   }
 }

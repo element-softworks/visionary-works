@@ -12,13 +12,14 @@ import wave from "~/images/wave.svg";
 import projects from "~/images/projects.png";
 import Testimonials from "~/components/ContentCards";
 import Team from "~/components/Team";
+import reactStringReplace from "react-string-replace";
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Works" });
 
 export const loader: LoaderFunction = async () => {
 	const caseStudies = await cms("case-studies");
 	const testimonials = await cms("testimonials");
-	const homepage = await cms("homepage", "hero.logos");
+	const homepage = await cms("homepage", "hero.logos&populate=intro.services");
 
 	return json({ caseStudies, testimonials, homepage });
 };
@@ -27,44 +28,38 @@ const Home: React.FC = () => {
 	const { testimonials, homepage } = useLoaderData();
 	console.log({ testimonials, homepage });
 
-	const firstWord = homepage?.data?.attributes?.hero?.title?.split(' ')?.[0];
+	const firstWord = homepage?.data?.attributes?.hero?.title?.split(" ")?.[0];
+	const highlighted = homepage?.data?.attributes?.intro?.highlighted;
+	const services = homepage?.data?.attributes?.intro?.services;
 	return (
 		<Styles>
 			<Stack justifyContent="center" className="hero">
 				<Container>
 					<Typography gutterBottom variant="h1" align="center">
 						<span>{firstWord}</span>
-						{homepage.data.attributes.hero.title?.replace(firstWord, '')}
-
+						{homepage?.data?.attributes?.hero?.title?.replace(firstWord, "")}
 					</Typography>
 					<Typography gutterBottom variant="h2" align="center">
-						{homepage.data.attributes.hero.subtitle}
+						{homepage?.data?.attributes?.hero?.subtitle}
 					</Typography>
 					<Box mt={8} />
-					<Button variant="contained" disableElevation>{homepage.data.attributes.hero.cta}</Button>
+					<Button variant="contained" disableElevation>{homepage?.data?.attributes?.hero?.cta}</Button>
 				</Container>
 			</Stack>
-			{homepage?.data?.attributes?.hero?.logos?.data?.map((logo: any, i: number) => {
-				return <div>{logo?.attributes?.url}<br/></div>
-			})}
-			<Affiliates logos={homepage?.data?.attributes?.hero?.logos?.data}/>
+			<Affiliates logos={homepage?.data?.attributes?.hero?.logos?.data} />
 			<Box mt={8} />
 			<Box className="intro">
 				<Container sx={{ py: 8 }}>
 					<Grid container>
 						<Grid item xs={12} lg={8}>
 							<Typography sx={{ mb: 8 }} variant="h3">
-								We get it, you’re trying to scale your company, and user{" "}
-								<Box component="span" sx={{ color: "primary.main" }}>
-									expectations
-								</Box>{" "}
-								got a lot more complex.
+								{reactStringReplace(homepage?.data?.attributes?.intro?.title, highlighted, (match, i) => (
+									<Box component="span" sx={{ color: "primary.main" }}>
+										{highlighted}
+									</Box>))}
 							</Typography>
 							<Typography>
-								We are an innovative creative agency that specialises in bespoke
-								software development, we can generate ideas and motion them into
-								production-grade websites, iOS apps, Android apps and desktop
-								applications.
+								{homepage?.data?.attributes?.intro?.subtitle}
 							</Typography>
 						</Grid>
 						<Grid item lg={4}>
@@ -74,45 +69,34 @@ const Home: React.FC = () => {
 				</Container>
 			</Box>
 			<Box className="services">
-				<Container>
-					<Grid container alignItems="center">
-						<Grid item lg={6}>
-							<img alt="Web Development" src={monitor} className="image-notepad" />
+				{services?.map((service: any, i: number) => <><Container>
+						<Grid container alignItems="center" key={i}>
+							{!service.right && <Grid item lg={6}>
+								<img alt={`${service?.title} icon`} src={i === 1 ? mobile : monitor}
+								     className="image-notepad" />
+							</Grid>}
+							<Grid item xs={12} lg={6}>
+								<Typography sx={{ mb: 2 }} variant="h3">
+									{service?.title}
+								</Typography>
+								<Typography>
+									{service.description}
+								</Typography>
+							</Grid>
+							{service.right && <Grid item lg={6}>
+								<img alt={`${service?.title} icon`} src={i === 1 ? mobile : monitor} />
+							</Grid>}
 						</Grid>
-						<Grid item xs={12} lg={6}>
-							<Typography sx={{ mb: 2 }} variant="h3">
-								Web Development
-							</Typography>
-							<Typography>
-								Nullam id dolor id nibh ultricies vehicula ut id elit. Vivamus sagittis lacus vel augue
-								laoreet rutrum faucibus dolor auctor.
-							</Typography>
-						</Grid>
-					</Grid>
-				</Container>
-			</Box>
-			<Box className="image-wave">
-				<img alt="Web Development" src={wave} />
-			</Box>
-			<Box className="services">
-				<Container>
-					<Grid container alignItems="center">
-						<Grid item xs={12} lg={6}>
-							<Typography sx={{ mb: 2 }} variant="h3">
-								App Development
-							</Typography>
-							<Typography>
-								Nullam id dolor id nibh ultricies vehicula ut id elit. Vivamus sagittis lacus vel augue
-								laoreet rutrum faucibus dolor auctor.
-							</Typography>
-						</Grid>
+					</Container>
+						{services[services.length - 1]?.title !== service?.title && <Box className="image-wave">
+							<img alt="Wave" src={wave} className="image-wave" />
+						</Box>
+						}
+					</>
+				)}
 
-						<Grid item lg={6}>
-							<img alt="Web Development" src={mobile} className="image-notepad" />
-						</Grid>
-					</Grid>
-				</Container>
 			</Box>
+
 			<Box className="projects">
 				<Container>
 					<Grid container alignItems="center">
@@ -168,6 +152,7 @@ const Styles = styled.div`
 			max-width: 1000px;
 			margin: auto;
 			display: block;
+
 			> span {
 				display: block;
 
@@ -260,23 +245,26 @@ const Styles = styled.div`
 		max-width: 100%;
 		overflow-x: hidden;
 		background-color: #191919;
+
 		img {
 			max-width: 150%;
 			margin: ${({ theme }) => theme.spacing(-2, -6)}
 		}
 	}
-	
+
 	.projects {
 		padding: ${({ theme }) => theme.spacing(12, 0)};
+
 		.project-images {
 			max-width: 100%;
 		}
 	}
-	
+
 	.news {
 		background: #191919;
 		padding: ${({ theme }) => theme.spacing(12, 0)};
 		color: white;
+
 		.project-images {
 			max-width: 100%;
 		}
