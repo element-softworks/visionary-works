@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_homepage_services",
+  "info": {
+    "displayName": "Service",
+    "icon": "broom",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "right": {
+      "type": "boolean"
+    }
+  }
+}

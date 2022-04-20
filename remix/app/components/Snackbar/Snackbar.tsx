@@ -26,7 +26,7 @@ export const SnackbarContext = createContext<{
   closeSnackbar: () => void;
 }>({ openSnackbar: () => null, closeSnackbar: () => null });
 
-const Snackbar: React.FC<{ message?: Message | null }> = ({ children }) => {
+const Snackbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useTheme();
   // Current open state
   const [open, setOpen] = useState(false);

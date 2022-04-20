@@ -1,13 +1,14 @@
 const path = require("path");
+const fs = require("fs");
 
 module.exports = ({ env }) => {
-  console.log(env("DATABASE_URL"))
+  console.log("DB", env("DATABASE_URL"));
+
   if (!!env("DATABASE_URL")) {
     const parse = require("pg-connection-string").parse;
     const config = parse(env("DATABASE_URL"));
 
-    console.log({ config });
-    return {
+    const connection = {
       connection: {
         client: "postgres",
         connection: {
@@ -16,14 +17,16 @@ module.exports = ({ env }) => {
           database: config.database,
           user: config.user,
           password: config.password,
-          ssl: {
-            rejectUnauthorized: false
-          }
+          ssl: false
         },
-        debug: true
+        debug: false
       }
     };
+    console.log({ connection: connection.connection });
+
+    return connection;
   }
+
 
   return {
     connection: {
@@ -34,4 +37,5 @@ module.exports = ({ env }) => {
       useNullAsDefault: true
     }
   };
-};
+}
+;

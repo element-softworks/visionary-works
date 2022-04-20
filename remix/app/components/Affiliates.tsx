@@ -2,50 +2,17 @@ import React, { useEffect } from 'react';
 import { Stack } from '@mui/material';
 import styled from '@emotion/styled';
 
-const Affiliates: React.FC = () => {
-	const affiliates: { image: string; name: string }[] = [
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-	];
-
+const Affiliates: React.FC<{ logos: { attributes: { name: string; url: string } }[] }> = ({
+	logos,
+}) => {
 	useEffect(() => {}, []);
 
 	return (
 		<Styles>
 			<Stack spacing={20} direction="row" component="ul">
-				{[...affiliates, ...affiliates]?.map(({ image, name }, i) => (
+				{logos?.map((logo, i) => (
 					<li key={i}>
-						<img src={image} alt={name} />
+						<img alt={logo.attributes?.name} src={logo.attributes?.url} />
 					</li>
 				))}
 			</Stack>
@@ -56,19 +23,23 @@ const Affiliates: React.FC = () => {
 const Styles = styled.div`
 	max-width: 100%;
 	overflow: hidden;
+
 	ul {
 		list-style: none;
-		justify-content: flex-start;
 		flex-wrap: nowrap;
 		white-space: nowrap;
 		animation: loop linear 4s infinite;
-		
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
 		li {
 			flex: 0 0 150px;
 			margin-left: ${({ theme }) => theme.spacing(10)};
 
 			img {
 				width: 100%;
+				max-height: 50px;
 			}
 
 			svg {
