@@ -13,13 +13,21 @@ import projects from '~/images/projects.png';
 import Testimonials from '~/components/ContentCards';
 import Team from '~/components/Team';
 import reactStringReplace from 'react-string-replace';
+import { CMSData, CMSDataList } from "~/models/cms";
+import { Homepage } from "~/models/single/homepage";
+import { Testimonial } from "~/models/collection/testimonial";
+
+type Data = {
+	page: CMSData<Homepage>;
+	testimonials: CMSDataList<Testimonial>;
+};
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
 export const loader: LoaderFunction = async () => {
 	// const caseStudies = await cms('case-studies');
-	const testimonials = await cms('testimonials');
-	const page = await cms('homepage', ['hero.logos', 'intro.services']);
+	const testimonials = await cms<Data["testimonials"]>('testimonials');
+	const page = await cms<Data["page"]>('homepage', ['hero.logos', 'intro.services']);
 
 	console.log({page});
 	return json({ testimonials, page });
@@ -33,7 +41,7 @@ const Home: React.FC = () => {
 				attributes: { hero, intro },
 			},
 		},
-	} = useLoaderData();
+	} = useLoaderData<Data>();
 
 	const [windowHeight, setWindowHeight] = useState<number | null>(null);
 	const [scrollY, setScrollY] = useState<number | null>(null);

@@ -46,29 +46,27 @@ export interface CMSMediaDetail {
 }
 
 export interface CMSMedia {
-	data: {
-		id: number,
-		attributes: {
-			name: string;
-			alternativeText: string;
-			caption: string;
-			width: number;
-			height: number;
-			formats: {
-				thumbnail: CMSMediaDetail;
-				medium: CMSMediaDetail;
-				small: CMSMediaDetail;
-			} | null;
-			hash: string;
-			ext: string;
-			mime: string;
-			size: number;
-			url: string;
-			previewUrl: any;
-			provider: 'aws-s3' | string;
-			provider_metadata: any;
-			createdAt: string;
-			updatedAt: string;
-		}
-	};
+	id: number,
+	attributes: {
+		name: string;
+		alternativeText: string;
+		caption: string;
+		width: number;
+		height: number;
+		formats: {
+			thumbnail: CMSMediaDetail;
+			medium: CMSMediaDetail;
+			small: CMSMediaDetail;
+		} | null;
+		hash: string;
+		ext: string;
+		mime: string;
+		size: number;
+		url: string;
+		previewUrl: any;
+		provider: "aws-s3" | string;
+		provider_metadata: any;
+		createdAt: string;
+		updatedAt: string;
+	}
 }
