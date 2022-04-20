@@ -2,50 +2,15 @@ import React, { useEffect } from 'react';
 import { Stack } from '@mui/material';
 import styled from '@emotion/styled';
 
-const Affiliates: React.FC = () => {
-	const affiliates: { image: string; name: string }[] = [
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-		{
-			image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-			name: 'Affiliate Name',
-		},
-	];
-
+const Affiliates: React.FC<{logos: {attributes: { name: string, url: string }}[]}> = ({ logos }) => {
 	useEffect(() => {}, []);
 
 	return (
 		<Styles>
 			<Stack spacing={20} direction="row" component="ul">
-				{[...affiliates, ...affiliates]?.map(({ image, name }, i) => (
+				{logos?.map((logo , i) => (
 					<li key={i}>
-						<img src={image} alt={name} />
+						<img alt={logo.attributes?.name} src={`${ process.env.NODE_ENV === "production" ? 'https://api.visionary-works.co.uk' : 'http://localhost:1337'}${logo.attributes?.url}`} />
 					</li>
 				))}
 			</Stack>
@@ -69,6 +34,7 @@ const Styles = styled.div`
 
 			img {
 				width: 100%;
+				max-height: 50px;
 			}
 
 			svg {
