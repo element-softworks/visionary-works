@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Wo
 export const loader: LoaderFunction = async () => {
 	// const caseStudies = await cms('case-studies');
 	const testimonials = await cms('testimonials');
-	const page = await cms('homepage', 'hero.logos&populate=intro.services');
+	const page = await cms('homepage', ['hero.logos', 'intro.services']);
 
 	console.log({page});
 	return json({ testimonials, page });
@@ -78,19 +78,17 @@ const Home: React.FC = () => {
 	const introContentPercentScrolled = (introContentY ?? 0) / (introContentHeight ?? 0);
 	// const introFeatureOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
 
-	const distanceToTop = introContentY ?? 0;
-	const elementHeight = $intro?.current?.offsetHeight ?? 0;
-	const scrollTop = scrollY ?? 0;
-
-	const introFeatureOpacity = 1 - (scrollTop - distanceToTop) / elementHeight + 0.3;
-
+	const introFeatureOpacity =
+		1 - ((scrollY ?? 0) - (introContentY ?? 0)) / ($intro?.current?.offsetHeight ?? 0) + 0.2;
+	const introFeatureFill =
+		1 -
+		(($intro?.current?.offsetHeight + windowHeight ?? 0) - (scrollY ?? 0)) /
+			($intro?.current?.offsetHeight ?? 0);
 	const firstWord = hero?.title?.split(' ')?.[0];
 	const highlighted = intro?.highlighted;
 	const services = intro?.services;
 
-	console.log({ services }, 2);
-
-	console.log('scrollY', scrollY);
+	console.log('introFeatureFill', introFeatureFill);
 	console.log('$intro?.current?.offsetTop', $intro?.current?.offsetTop);
 	console.log(
 		'(scrollY ?? 0) - ($intro?.current?.offsetTop ?? 0)',
@@ -130,11 +128,12 @@ const Home: React.FC = () => {
 							introContentPercentScrolled >= 0
 								? 'fixed'
 								: 'absolute',
-						top:
+						transform: `translateY(${
 							introContentPercentScrolled <= 0 &&
 							typeof introContentOffsetTop === 'number'
 								? introContentOffsetTop
-								: 0,
+								: 0
+						})`,
 						// top: introY !== null && introY <= 0 ? `${Math.abs(introY)}px` : undefined,
 					}}
 				>
@@ -145,42 +144,54 @@ const Home: React.FC = () => {
 							opacity: introFeatureOpacity,
 						}}
 					>
-						<span
-							className="intro-feature-text"
-							style={{
-								left: '-5vw',
-								transform: `translateX(-${
-									(scrollY ?? 0) -
-									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
-								}px) translateZ(0)`,
-							}}
-						>
-							Visionary
-						</span>
-						<span
-							className="intro-feature-text"
-							style={{
-								left: '25vw',
-								transform: `translateX(${
-									(scrollY ?? 0) -
-									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
-								}px) translateZ(0)`,
-							}}
-						>
-							Revolutionary
-						</span>
-						<span
-							className="intro-feature-text"
-							style={{
-								left: '45vw',
-								transform: `translateX(${
-									(scrollY ?? 0) -
-									(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
-								}px) translateZ(0)`,
-							}}
-						>
-							Innovative
-						</span>
+						<div style={{ transform: `translateX(0%)` }}>
+							<span
+								className="intro-feature-text"
+								style={{
+									transform: `translateX(${
+										((scrollY ?? 0) -
+											(($introContent?.current?.offsetTop ?? 0) +
+												(windowHeight ?? 0))) *
+										0.165
+									}px) translateZ(0)`,
+								}}
+							>
+								Visionary
+							</span>
+						</div>
+						<div style={{ transform: `translateX(0%)` }}>
+							<span
+								className="intro-feature-text"
+								style={{
+									transform: `translateX(${
+										(($introContent?.current?.offsetTop ?? 0) +
+											(windowHeight ?? 0) -
+											(scrollY ?? 0)) *
+										0.165
+									}px) translateZ(0)`,
+									color: `rgba(255, 255, 255, ${introFeatureFill})`,
+									'-webkit-text-fill-color': `rgba(255, 255, 255, ${introFeatureFill})`,
+								}}
+							>
+								Revolutionary
+							</span>
+						</div>
+						<div style={{ transform: `translateX(0%)` }}>
+							<span
+								className="intro-feature-text"
+								style={{
+									marginLeft: 'auto',
+									transform: `translateX(${
+										((scrollY ?? 0) -
+											(($introContent?.current?.offsetTop ?? 0) +
+												(windowHeight ?? 0))) *
+										0.165
+									}px) translateZ(0)`,
+								}}
+							>
+								Innovative
+							</span>
+						</div>
 					</div>
 				</div>
 
@@ -388,31 +399,25 @@ const Styles = styled.div`
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+		  	will-change: opacity;
+		  
+		   > * {
+			 display: inline-flex;
+		   }
 		  
 		  	.intro-feature-text {
 				font-size: 15rem;
 				display: block;
+				color: white;
+				will-change: transform;
+				letter-spacing: -2px;
+				line-height: .9;
+				position: relative;
 				color: black;
 				-webkit-text-fill-color: ${({ theme }) =>
 					theme.palette.common.black}; /* Will override color (regardless of order) */
 				-webkit-text-stroke-width: 3px;
 				-webkit-text-stroke-color: white;
-				letter-spacing: -2px;
-				line-height: .9;
-				position: relative;
-			  
-				// color: ${({ theme }) => theme.palette.common.black};
-			    // text-shadow: -3px -3px 0 white, 3px -3px 0 white, -3px 3px 0 white, 3px 3px 0 white;
-				//
-				// /* Real outline for modern browsers */
-				// @supports((text-stroke: 3px white) or (-webkit-text-stroke: 3px white)) {
-				//     .outline {
-				//         color: transparent;
-				// 		-webkit-text-stroke: 3px white;
-				// 		text-stroke: 3px white;
-				// 		text-shadow: none;
-				//     }
-				// }
 		    }
 		}
 	}
