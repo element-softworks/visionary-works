@@ -21,6 +21,7 @@ export const loader: LoaderFunction = async () => {
 	const testimonials = await cms('testimonials');
 	const page = await cms('homepage', 'hero.logos&populate=intro.services');
 
+	console.log({page});
 	return json({ testimonials, page });
 };
 
