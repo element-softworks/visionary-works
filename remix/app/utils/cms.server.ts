@@ -16,8 +16,8 @@ const cms = async <Data = unknown>(endpoint: string, populate?: string) => {
 	const response = await fetch(`${url}?populate=*`);
 	const data: CMSData<Data> = await response.json();
 
-	console.log({error: data.error}, url);
-	if (ctx.env.BYPASS_CMS_CONNECTION === 'true') {
+	console.log({ error: data.error }, url);
+	if (data?.error && ctx.env.BYPASS_CMS_CONNECTION === 'true') {
 		return { data: { attributes: {} } };
 	}
 
