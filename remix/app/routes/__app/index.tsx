@@ -11,7 +11,7 @@ import wave from '~/images/wave.svg';
 import projects from '~/images/projects.png';
 import Testimonials from '~/components/ContentCards';
 import Team from '~/components/Team';
-import Intro from "~/components/Home/Intro";
+import Intro from '~/components/Home/Intro';
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
 						<Container>
 							<Grid container alignItems="center" key={i}>
 								{!service.right && (
-									<Grid item lg={6}>
+									<Grid item xs={12} md={6}>
 										<img
 											alt={`${service?.title} icon`}
 											src={i === 1 ? mobile : monitor}
@@ -76,7 +76,7 @@ const Home: React.FC = () => {
 									<Typography>{service.description}</Typography>
 								</Grid>
 								{service.right && (
-									<Grid item lg={6}>
+									<Grid item md={6}>
 										<img
 											alt={`${service?.title} icon`}
 											src={i === 1 ? mobile : monitor}

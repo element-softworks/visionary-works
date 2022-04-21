@@ -43,6 +43,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 		1 -
 		((windowHeight ?? 0) - ((scrollY ?? 0) - (introContentOffsetTop ?? 0))) /
 			(introContentOffsetTop ?? 0);
+	const introSpeed = 0.165;
 
 	console.log({
 		introContentY,
@@ -90,9 +91,9 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 								style={{
 									transform: `translateX(${
 										((scrollY ?? 0) -
-											(($introContent?.current?.offsetTop ?? 0) +
+											((introContentOffsetTop ?? 0) +
 												(windowHeight ?? 0))) *
-										0.165
+										introSpeed
 									}px) translateZ(0)`,
 								}}
 							>
@@ -104,10 +105,10 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 								className="intro-feature-text"
 								style={{
 									transform: `translateX(${
-										(($introContent?.current?.offsetTop ?? 0) +
+										((introContentOffsetTop ?? 0) +
 											(windowHeight ?? 0) -
 											(scrollY ?? 0)) *
-										0.165
+										introSpeed
 									}px) translateZ(0)`,
 									color: `rgba(255, 255, 255, ${introFeatureFill})`,
 									WebkitTextFillColor: `rgba(255, 255, 255, ${introFeatureFill})`,
@@ -123,9 +124,9 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 									marginLeft: 'auto',
 									transform: `translateX(${
 										((scrollY ?? 0) -
-											(($introContent?.current?.offsetTop ?? 0) +
+											((introContentOffsetTop ?? 0) +
 												(windowHeight ?? 0))) *
-										0.165
+										introSpeed
 									}px) translateZ(0)`,
 								}}
 							>
@@ -142,7 +143,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 					style={{ minHeight: windowHeight ?? undefined }}
 				>
 					<Grid container ref={$introContent}>
-						<Grid item xs={12} lg={8}>
+						<Grid item xs={12} md={8}>
 							<Typography sx={{ mb: 8 }} variant="h3">
 								{reactStringReplace(title, highlighted, (match, i) => (
 									<Box component="span" sx={{ color: 'primary.main' }}>
@@ -152,9 +153,14 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 							</Typography>
 							<Typography>{subtitle}</Typography>
 						</Grid>
-						<Grid item lg={4}>
+						<Box
+							component={Grid}
+							item
+							md={4}
+							sx={{ display: { xs: 'none', md: 'block' } }}
+						>
 							<img alt="Web Development" src={notepad} className="image-notepad" />
-						</Grid>
+						</Box>
 					</Grid>
 				</Container>
 			</Box>
@@ -192,23 +198,33 @@ const Styled = styled.div`
 		.intro-feature-wrapper {
 			position: absolute;
 			top: 0;
+			left: 0;
+			right: 0;
+			width: 100%;
 		}
 
 		.intro-feature {
 			position: absolute;
 			opacity: 1;
 			top: 0;
+			left: 0;
+			right: 0;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			will-change: opacity;
 
 			> * {
-				display: inline-flex;
+				display: flex;
+
+				&:nth-child(2) {
+					justify-content: flex-end;
+				}
 			}
 
 			.intro-feature-text {
-				font-size: 15rem;
+				font-size: 13vw;
+				font-size: calc(10vh + 8vw);
 				display: block;
 				color: white;
 				will-change: transform;
