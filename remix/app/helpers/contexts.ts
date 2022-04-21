@@ -17,8 +17,6 @@ export const ServerStyleContext = createContext<ServerStyleContextData[]>([]);
 
 export const MessageContext = createContext<{
 	message: Message | null;
-	setMessage: (message: Message) => void;
 }>({
 	message: null,
-	setMessage: () => null,
 });

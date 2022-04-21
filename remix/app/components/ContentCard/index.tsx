@@ -3,7 +3,7 @@ import { Card, Avatar, Stack, CardMedia, CardContent, Typography, CardActions, B
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
-import { Testimonial } from "~/models/testimonial";
+import { Testimonial } from "~/models/collection/testimonial";
 
 import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
 
@@ -16,7 +16,7 @@ const ContentCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }) =>
 				<CardMedia
 					component="img"
 					sx={{ width: 300, height: 450 }}
-					image={`http://localhost:1337${testimonial?.image?.data?.attributes?.url}`}
+					image={testimonial?.image?.data?.attributes?.url}
 					alt="Live from space album cover"
 				/>
 				<Box sx={{ display: "flex", flexDirection: "column" }}>

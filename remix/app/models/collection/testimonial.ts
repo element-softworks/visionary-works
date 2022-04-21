@@ -1,8 +1,8 @@
-import { CMSData, CMSImage } from "~/models/cms";
+import { CMSData, CMSMedia } from "~/models/cms";
 
 export type Testimonial = {
 	feedback: string;
-	image: CMSImage;
+	image: CMSMedia;
 	company: string;
 	name: string;
 };

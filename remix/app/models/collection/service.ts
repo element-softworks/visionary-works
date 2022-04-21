@@ -1,4 +1,4 @@
-import { CMSData, CMSImage } from "~/models/cms";
+import { CMSData, CMSMedia } from "~/models/cms";
 
 type Service = {
 	slug: string;

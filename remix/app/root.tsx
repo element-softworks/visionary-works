@@ -12,7 +12,7 @@ import {
 	useCatch,
 	useLoaderData,
 } from 'remix';
-import { setPagesContext } from "remix-pages-context";
+import { setPagesContext } from 'remix-pages-context';
 import type { MetaFunction } from 'remix';
 import {
 	ThemeProvider as EmotionThemeProvider,
@@ -27,6 +27,7 @@ import {
 	ThemeProvider,
 	CssBaseline,
 	lighten,
+	Typography,
 } from '@mui/material';
 import { Message, messageSession } from './sessions';
 import { getMessage } from './utils/message.server';
@@ -34,6 +35,7 @@ import globalStyles from '~/global.css';
 import { getSeo } from '~/seo';
 import theme from '~/theme';
 import SnackbarProvider from '~/components/Snackbar';
+import { MessageContext } from '~/helpers/contexts';
 
 const [seoMeta, seoLinks] = getSeo();
 
@@ -131,27 +133,28 @@ const App = () => {
 		<Document>
 			<ThemeProvider theme={theme}>
 				<EmotionThemeProvider theme={theme}>
-					<SnackbarProvider message={message}>
-						<CssBaseline />
-						<Global
-							styles={css`
-								a {
-									color: ${theme.palette.secondary.main};
-									text-decoration-color: ${lighten(
-										theme.palette.secondary.main,
-										0.3
-									)};
+					<MessageContext.Provider value={{ message }}>
+						<SnackbarProvider>
+							<CssBaseline />
+							<Global
+								styles={css`
+									a {
+										color: ${theme.palette.secondary.main};
+										text-decoration-color: ${lighten(
+											theme.palette.secondary.main,
+											0.3
+										)};
 
-									&:hover {
-										text-decoration-color: ${theme.palette.secondary.main};
+										&:hover {
+											text-decoration-color: ${theme.palette.secondary.main};
+										}
 									}
-								}
-							`}
-						/>
-						{/*<MessageContext.Provider value={{ message, setMessage }}>*/}
-						<Outlet />
-						{/*</MessageContext.Provider>*/}
-					</SnackbarProvider>
+								`}
+							/>
+
+							<Outlet />
+						</SnackbarProvider>
+					</MessageContext.Provider>
 				</EmotionThemeProvider>
 			</ThemeProvider>
 		</Document>
@@ -164,11 +167,17 @@ export const ErrorBoundary = ({ error }: { error: Error }) => {
 
 	return (
 		<Document title="Error!">
-			<div className="error">
-				<Container>
-					<p>[ErrorBoundary]: There was an error: {error.message}</p>
-				</Container>
-			</div>
+			<ThemeProvider theme={theme}>
+				<EmotionThemeProvider theme={theme}>
+					<CssBaseline />
+					<div className="error">
+						<Container>
+							<Typography variant="h1">{error?.name}</Typography>
+							<Typography>{error.message}</Typography>
+						</Container>
+					</div>
+				</EmotionThemeProvider>
+			</ThemeProvider>
 		</Document>
 	);
 };
@@ -178,14 +187,13 @@ export const CatchBoundary = () => {
 	const caught = useCatch();
 
 	let message;
+
 	switch (caught.status) {
 		case 401:
-			message = (
-				<p>Oops! Looks like you tried to visit a page that you do not have access to.</p>
-			);
+			message = 'Oops! Looks like you tried to visit a page that you do not have access to.';
 			break;
 		case 404:
-			message = <p>Oops! Looks like you tried to visit a page that does not exist.</p>;
+			message = 'Oops! Looks like you tried to visit a page that does not exist.';
 			break;
 
 		default:
@@ -194,10 +202,17 @@ export const CatchBoundary = () => {
 
 	return (
 		<Document title={`${caught.status} ${caught.statusText}`}>
-			<h1>
-				{caught.status}: {caught.statusText}
-			</h1>
-			{message}
+			<ThemeProvider theme={theme}>
+				<EmotionThemeProvider theme={theme}>
+					<CssBaseline />
+					<div className="error">
+						<Typography variant="h1">
+							{caught.status}: {caught.statusText}
+						</Typography>
+						<Typography>{message}</Typography>
+					</div>
+				</EmotionThemeProvider>
+			</ThemeProvider>
 		</Document>
 	);
 };

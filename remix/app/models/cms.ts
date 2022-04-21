@@ -11,6 +11,11 @@ export interface CMSData<Data = unknown> {
 			total: number;
 		}
 	};
+	error?: {
+		status: number;
+		name: string;
+		message: string;
+	};
 }
 
 export interface CMSDataList<Data = unknown> {
@@ -28,7 +33,7 @@ export interface CMSDataList<Data = unknown> {
 	};
 }
 
-export interface CMSImageDetail {
+export interface CMSMediaDetail {
 	name: string;
 	hash: string;
 	ext: string;
@@ -40,7 +45,7 @@ export interface CMSImageDetail {
 	url: string;
 }
 
-export interface CMSImage {
+export interface CMSMedia {
 	data: {
 		id: number,
 		attributes: {
@@ -50,17 +55,17 @@ export interface CMSImage {
 			width: number;
 			height: number;
 			formats: {
-				thumbnail: CMSImageDetail;
-				medium: CMSImageDetail;
-				small: CMSImageDetail;
-			},
+				thumbnail: CMSMediaDetail;
+				medium: CMSMediaDetail;
+				small: CMSMediaDetail;
+			} | null;
 			hash: string;
 			ext: string;
 			mime: string;
 			size: number;
 			url: string;
 			previewUrl: any;
-			provider: string;
+			provider: 'aws-s3' | string;
 			provider_metadata: any;
 			createdAt: string;
 			updatedAt: string;
