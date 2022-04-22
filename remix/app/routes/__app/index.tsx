@@ -1,7 +1,7 @@
 import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
 import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
 import { cms } from '~/utils/cms.server';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';
 import Affiliates from '~/components/Affiliates';
@@ -9,9 +9,10 @@ import monitor from '~/images/monitor.png';
 import mobile from '~/images/mobile.png';
 import wave from '~/images/wave.svg';
 import projects from '~/images/projects.png';
-import Testimonials from '~/components/ContentCards';
+import ContentCards from '~/components/ContentCards';
 import Team from '~/components/Team';
 import Intro from '~/components/Home/Intro';
+import Slider from '~/components/Slider';
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
@@ -22,7 +23,7 @@ export const loader: LoaderFunction = async () => {
 	return json({ testimonials, page });
 };
 
-const Home: React.FC = () => {
+const Testimonials: React.FC = () => {
 	const {
 		testimonials,
 		page: {
@@ -31,7 +32,7 @@ const Home: React.FC = () => {
 			},
 		},
 	} = useLoaderData();
-
+	const [step, setStep] = useState(0);
 	const firstWord = hero?.title?.split(' ')?.[0];
 	const services = intro?.services;
 
@@ -111,7 +112,9 @@ const Home: React.FC = () => {
 				</Container>
 			</Box>
 
-			<Testimonials testimonials={testimonials} />
+			<Slider step={step} onNextStep={(newStep) => setStep(newStep)}>
+				<ContentCards testimonials={testimonials} />
+			</Slider>
 			<Team />
 
 			<Box className="news">
@@ -247,4 +250,4 @@ const Styles = styled.div`
 	}
 `;
 
-export default Home;
+export default Testimonials;

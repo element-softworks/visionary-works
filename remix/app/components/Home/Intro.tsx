@@ -43,15 +43,11 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 		1 -
 		((windowHeight ?? 0) - ((scrollY ?? 0) - (introContentOffsetTop ?? 0))) /
 			(introContentOffsetTop ?? 0);
+	const introContentOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
 	const introSpeed = 0.165;
 
 	console.log({
-		introContentY,
-		windowHeight,
-		introContentHeight,
-		introContentOffsetTop,
-		'(windowHeight - introContentHeight)': windowHeight - introContentHeight,
-		calc: introContentY - (windowHeight - introContentHeight) / 2,
+		introContentOpacity,
 	});
 
 	return (
@@ -91,8 +87,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 								style={{
 									transform: `translateX(${
 										((scrollY ?? 0) -
-											((introContentOffsetTop ?? 0) +
-												(windowHeight ?? 0))) *
+											((introContentOffsetTop ?? 0) + (windowHeight ?? 0))) *
 										introSpeed
 									}px) translateZ(0)`,
 								}}
@@ -124,8 +119,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 									marginLeft: 'auto',
 									transform: `translateX(${
 										((scrollY ?? 0) -
-											((introContentOffsetTop ?? 0) +
-												(windowHeight ?? 0))) *
+											((introContentOffsetTop ?? 0) + (windowHeight ?? 0))) *
 										introSpeed
 									}px) translateZ(0)`,
 								}}
@@ -140,7 +134,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 					className="intro-content"
 					sx={{ py: 12 }}
 					ref={$introContentWrapper}
-					style={{ minHeight: windowHeight ?? undefined }}
+					style={{ minHeight: windowHeight ?? undefined, opacity: introContentOpacity }}
 				>
 					<Grid container ref={$introContent}>
 						<Grid item xs={12} md={8}>
