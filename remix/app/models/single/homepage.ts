@@ -23,4 +23,19 @@ export type Homepage = {
 		highlighted: string;
 		services: Service[];
 	}
+	projectTitle: string;
+	projectDescription: string;
+	team: {
+		title: string;
+		image: { data: CMSMedia };
+		description: string;
+		button: string;
+	}
+	newsTitle: string;
+	faqTitle: string;
+	faqImage: { data: CMSMedia };
+	faq: {
+		question: string;
+		answer: string;
+	}[]
 };

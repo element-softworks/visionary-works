@@ -38,17 +38,13 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 
 	const introContentPercentScrolled = (introContentY ?? 0) / (introContentHeight ?? 0);
 	const introFeatureOpacity =
-		1 - ((scrollY ?? 0) - (introContentY ?? 0)) / (introHeight ?? 0) + 0.2;
+		1 - ((scrollY ?? 0) - (introContentY ?? 0)) / (introHeight ?? 0) + 0.2 ?? 0;
 	const introFeatureFill =
 		1 -
 		((windowHeight ?? 0) - ((scrollY ?? 0) - (introContentOffsetTop ?? 0))) /
 			(introContentOffsetTop ?? 0);
 	const introContentOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
 	const introSpeed = 0.165;
-
-	console.log({
-		introContentOpacity,
-	});
 
 	return (
 		<Styled>
@@ -134,7 +130,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 					className="intro-content"
 					sx={{ py: 12 }}
 					ref={$introContentWrapper}
-					style={{ minHeight: windowHeight ?? undefined, opacity: introContentOpacity }}
+					style={{ minHeight: windowHeight ?? undefined, opacity: isNaN(introContentOpacity) ? 0 : introContentOpacity }}
 				>
 					<Grid container ref={$introContent}>
 						<Grid item xs={12} md={8}>
@@ -172,6 +168,7 @@ const Styled = styled.div`
 		padding: ${({ theme }) => theme.spacing(14, 0)};
 		align-items: center;
 		padding-top: ${700 * 4}px;
+		padding-bottom: 0;
 		overflow: hidden;
 
 		.intro-content {

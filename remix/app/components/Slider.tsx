@@ -12,7 +12,7 @@ const Slider: React.FC<{
 	const $next = useRef(null);
 	const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 	const theme = useTheme();
-	const md = useMediaQuery(theme.breakpoints.up('md');
+	const md = useMediaQuery(theme.breakpoints.up('md'));
 
 	return (
 		<Styles>
@@ -31,7 +31,7 @@ const Slider: React.FC<{
 				// onSlideChangeTransitionStart={(swiper) => swiper.slideTo()}
 			>
 				{React.Children.map(children, (child, i) => (
-					<SwiperSlide>{child}</SwiperSlide>
+					<SwiperSlide key={i}>{child}</SwiperSlide>
 				))}
 
 				<IconButton

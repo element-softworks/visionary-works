@@ -45,8 +45,20 @@ export interface CMSMediaDetail {
 	url: string;
 }
 
+export interface CMSAuthor {
+	id: number;
+	attributes: {
+		firstname: string;
+		lastname: string;
+		username: string;
+		preferedLanguage: string;
+		createdAt: string;
+		updatedAt: string;
+	}
+}
+
 export interface CMSMedia {
-	id: number,
+	id: number;
 	attributes: {
 		name: string;
 		alternativeText: string;
