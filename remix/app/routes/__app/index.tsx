@@ -9,10 +9,10 @@ import monitor from '~/images/monitor.png';
 import mobile from '~/images/mobile.png';
 import wave from '~/images/wave.svg';
 import projects from '~/images/projects.png';
-import ContentCards from '~/components/ContentCards';
 import Team from '~/components/Team';
 import Intro from '~/components/Home/Intro';
 import Slider from '~/components/Slider';
+import ContentCard from '~/components/ContentCard';
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
 
@@ -35,6 +35,8 @@ const Testimonials: React.FC = () => {
 	const [step, setStep] = useState(0);
 	const firstWord = hero?.title?.split(' ')?.[0];
 	const services = intro?.services;
+
+	console.log({ testimonials });
 
 	return (
 		<Styles>
@@ -112,8 +114,10 @@ const Testimonials: React.FC = () => {
 				</Container>
 			</Box>
 
-			<Slider step={step} onNextStep={(newStep) => setStep(newStep)}>
-				<ContentCards testimonials={testimonials} />
+			<Slider>
+				{testimonials?.data?.map((t) => (
+					<ContentCard testimonial={t?.attributes} />
+				))}
 			</Slider>
 			<Team />
 

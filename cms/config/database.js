@@ -2,8 +2,6 @@ const path = require("path");
 const fs = require("fs");
 
 module.exports = ({ env }) => {
-  console.log("DB", env("DATABASE_URL"));
-
   if (!!env("DATABASE_URL")) {
     const parse = require("pg-connection-string").parse;
     const config = parse(env("DATABASE_URL"));
