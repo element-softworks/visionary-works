@@ -16,23 +16,30 @@ import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import wave2 from "~/images/wave2.svg";
+import { Homepage } from "~/models/single/homepage";
 
-const Team: React.FC<{}> = ({}) => {
+const TeamSection: React.FC<{team: Homepage["team"]}> = ({team}) => {
 	const theme = useTheme();
 
 	return (
 		<Styles>
 			<Container>
-
-				<Box className="image-wave2">
-					<img alt="wave" src={wave2} />
-				</Box>
-				<Grid container>
-					<Grid item xs={6}>
-						<Typography component="h2">
-							Ready to start your
-							next big project?
+				<Grid container alignItems="center">
+					<Grid item xs={5}>
+						<Typography component="h2" className="team-title">
+							{team?.title}
 						</Typography>
+						<Typography component="p" className="team-paragraph">
+							{team?.description}
+						</Typography>
+						<Button variant="contained" disableElevation>
+							{team?.button}
+						</Button>
+					</Grid>
+					<Grid item xs={1}>
+					</Grid>
+					<Grid item xs={6}>
+						<img alt="Team photo" className="team-image" src={team?.image?.data?.attributes?.url} />
 					</Grid>
 				</Grid>
 			</Container>
@@ -47,15 +54,19 @@ const Styles = styled.div`
 		font-weight: bold;
 		line-height: 1.3;
 	}
-
-	.image-wave2 {
+	
+	.team-title {
+		font-size: 3.5rem;
+		margin-top: ${({ theme }) => theme.spacing(2)};
+	}
+	.team-image {
 		max-width: 100%;
-		overflow-x: hidden;
-		img {
-			max-width: 150%;
-			margin: ${({ theme }) => theme.spacing(-2, -6)}
-		}
+	}
+	
+	.team-paragraph {
+		max-width: 390px;
+		margin: ${({ theme }) => theme.spacing(3, 0)};
 	}
 `;
 
-export default Team;
+export default TeamSection;

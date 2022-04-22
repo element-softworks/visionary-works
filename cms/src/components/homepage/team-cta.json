@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_homepage_team_ctas",
+  "info": {
+    "displayName": "Team CTA",
+    "icon": "smile-beam",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "button": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

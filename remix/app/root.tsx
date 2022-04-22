@@ -36,6 +36,9 @@ import { getSeo } from '~/seo';
 import theme from '~/theme';
 import SnackbarProvider from '~/components/Snackbar';
 import { MessageContext } from '~/helpers/contexts';
+import swiperStyles from 'swiper/css';
+
+console.log('swiperStyles', swiperStyles);
 
 const [seoMeta, seoLinks] = getSeo();
 
@@ -47,6 +50,10 @@ export const links: LinksFunction = () => {
 		{
 			rel: 'stylesheet',
 			href: globalStyles,
+		},
+		{
+			rel: 'stylesheet',
+			href: swiperStyles,
 		},
 	];
 };

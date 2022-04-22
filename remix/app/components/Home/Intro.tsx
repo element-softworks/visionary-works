@@ -38,20 +38,13 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 
 	const introContentPercentScrolled = (introContentY ?? 0) / (introContentHeight ?? 0);
 	const introFeatureOpacity =
-		1 - ((scrollY ?? 0) - (introContentY ?? 0)) / (introHeight ?? 0) + 0.2;
+		1 - ((scrollY ?? 0) - (introContentY ?? 0)) / (introHeight ?? 0) + 0.2 ?? 0;
 	const introFeatureFill =
 		1 -
 		((windowHeight ?? 0) - ((scrollY ?? 0) - (introContentOffsetTop ?? 0))) /
 			(introContentOffsetTop ?? 0);
-
-	console.log({
-		introContentY,
-		windowHeight,
-		introContentHeight,
-		introContentOffsetTop,
-		'(windowHeight - introContentHeight)': windowHeight - introContentHeight,
-		calc: introContentY - (windowHeight - introContentHeight) / 2,
-	});
+	const introContentOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
+	const introSpeed = 0.165;
 
 	return (
 		<Styled>
@@ -90,9 +83,8 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 								style={{
 									transform: `translateX(${
 										((scrollY ?? 0) -
-											(($introContent?.current?.offsetTop ?? 0) +
-												(windowHeight ?? 0))) *
-										0.165
+											((introContentOffsetTop ?? 0) + (windowHeight ?? 0))) *
+										introSpeed
 									}px) translateZ(0)`,
 								}}
 							>
@@ -104,10 +96,10 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 								className="intro-feature-text"
 								style={{
 									transform: `translateX(${
-										(($introContent?.current?.offsetTop ?? 0) +
+										((introContentOffsetTop ?? 0) +
 											(windowHeight ?? 0) -
 											(scrollY ?? 0)) *
-										0.165
+										introSpeed
 									}px) translateZ(0)`,
 									color: `rgba(255, 255, 255, ${introFeatureFill})`,
 									WebkitTextFillColor: `rgba(255, 255, 255, ${introFeatureFill})`,
@@ -123,9 +115,8 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 									marginLeft: 'auto',
 									transform: `translateX(${
 										((scrollY ?? 0) -
-											(($introContent?.current?.offsetTop ?? 0) +
-												(windowHeight ?? 0))) *
-										0.165
+											((introContentOffsetTop ?? 0) + (windowHeight ?? 0))) *
+										introSpeed
 									}px) translateZ(0)`,
 								}}
 							>
@@ -139,10 +130,10 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 					className="intro-content"
 					sx={{ py: 12 }}
 					ref={$introContentWrapper}
-					style={{ minHeight: windowHeight ?? undefined }}
+					style={{ minHeight: windowHeight ?? undefined, opacity: isNaN(introContentOpacity) ? 0 : introContentOpacity }}
 				>
 					<Grid container ref={$introContent}>
-						<Grid item xs={12} lg={8}>
+						<Grid item xs={12} md={8}>
 							<Typography sx={{ mb: 8 }} variant="h3">
 								{reactStringReplace(title, highlighted, (match, i) => (
 									<Box component="span" sx={{ color: 'primary.main' }}>
@@ -152,9 +143,14 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 							</Typography>
 							<Typography>{subtitle}</Typography>
 						</Grid>
-						<Grid item lg={4}>
+						<Box
+							component={Grid}
+							item
+							md={4}
+							sx={{ display: { xs: 'none', md: 'block' } }}
+						>
 							<img alt="Web Development" src={notepad} className="image-notepad" />
-						</Grid>
+						</Box>
 					</Grid>
 				</Container>
 			</Box>
@@ -172,6 +168,7 @@ const Styled = styled.div`
 		padding: ${({ theme }) => theme.spacing(14, 0)};
 		align-items: center;
 		padding-top: ${700 * 4}px;
+		padding-bottom: 0;
 		overflow: hidden;
 
 		.intro-content {
@@ -192,23 +189,33 @@ const Styled = styled.div`
 		.intro-feature-wrapper {
 			position: absolute;
 			top: 0;
+			left: 0;
+			right: 0;
+			width: 100%;
 		}
 
 		.intro-feature {
 			position: absolute;
 			opacity: 1;
 			top: 0;
+			left: 0;
+			right: 0;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			will-change: opacity;
 
 			> * {
-				display: inline-flex;
+				display: flex;
+
+				&:nth-child(2) {
+					justify-content: flex-end;
+				}
 			}
 
 			.intro-feature-text {
-				font-size: 15rem;
+				font-size: 13vw;
+				font-size: calc(10vh + 8vw);
 				display: block;
 				color: white;
 				will-change: transform;

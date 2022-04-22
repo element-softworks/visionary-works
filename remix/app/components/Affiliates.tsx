@@ -39,7 +39,9 @@ const Styles = styled.div`
 
 			img {
 				width: 100%;
-				max-height: 50px;
+				max-height: 80px;
+				min-width: 200px;
+				padding: 0 40px;
 			}
 
 			svg {

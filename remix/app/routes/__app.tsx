@@ -1,9 +1,9 @@
-import React from "react";
-import { Box, Button, Container, CssBaseline, Grid, Link, Stack, Typography } from "@mui/material";
-import { json, LoaderFunction, Outlet, Link as RouterLink } from "remix";
-import useStyle from "~/helpers/hooks/useStyle";
-import { Theme } from "@emotion/react";
-import styled from "@emotion/styled";
+import React from 'react';
+import { Box, Button, Container, CssBaseline, Grid, Link, Stack, Typography } from '@mui/material';
+import { json, LoaderFunction, Outlet, Link as RouterLink } from 'remix';
+import useStyle from '~/helpers/hooks/useStyle';
+import { Theme } from '@emotion/react';
+import styled from '@emotion/styled';
 
 // using authenticated session with cloudflare pages
 export const loader: LoaderFunction = async ({ context, request }) => {
@@ -38,33 +38,46 @@ const Layout: React.FC = () => {
 					<Stack direction="row" alignItems="center">
 						<Box component="span" sx={{ flexGrow: 1 }}>
 							<Link component={RouterLink} to="/">
-								<img
-									className="logo"
-									alt="Logo"
-									src="/visionary-works-logo-black.svg"
-								/>
+								<img className="logo" alt="Logo" src="/logo-draft.svg" />
 							</Link>
 						</Box>
 						<Box component="nav">
 							<Stack spacing={10} direction="row" component="ul" alignItems="center">
 								<li>
-									<Link style={{ color: 'green' }} className="mobile-hidden" component={RouterLink} to="/about">
+									<Link
+										style={{ color: 'green' }}
+										className="mobile-hidden"
+										component={RouterLink}
+										to="/about"
+									>
 										About
 									</Link>
 								</li>
 								<li>
-									<Link className="mobile-hidden" component={RouterLink} to="/projects">
+									<Link
+										className="mobile-hidden"
+										component={RouterLink}
+										to="/projects"
+									>
 										Projects
 									</Link>
 								</li>
 								<li>
-									<Link className="mobile-hidden" component={RouterLink} to="/blog">
+									<Link
+										className="mobile-hidden"
+										component={RouterLink}
+										to="/blog"
+									>
 										Blog
 									</Link>
 								</li>
 								<li>
-									<Button className="mobile-hidden" variant="inverse" component={RouterLink}
-									        to="/contact">
+									<Button
+										className="mobile-hidden"
+										variant="inverse"
+										component={RouterLink}
+										to="/contact"
+									>
 										Contact
 									</Button>
 								</li>
@@ -80,26 +93,33 @@ const Layout: React.FC = () => {
 				<Container>
 					<Grid container sx={{ mb: 2 }}>
 						<Grid item sm={6} sx={{ mb: 10 }}>
-							<Typography variant="h5" component="a" href="mailto:hello@visionary-works.co.uk">
+							<Typography
+								variant="h5"
+								component="a"
+								href="mailto:hello@visionary-works.co.uk"
+							>
 								hello@visionary-works.co.uk
-							</Typography><br />
+							</Typography>
+							<br />
 							<Typography variant="h5" component="a" href="tel:01206455355">
 								01206 455355
 							</Typography>
 						</Grid>
-						<Grid item sm={6}>
-						</Grid>
+						<Grid item sm={6}></Grid>
 					</Grid>
 					<Grid container>
 						<Grid item sm={6}>
 							<Typography>
-								Company No. 09486419 VAT No. GB279997505<br />
-								Element Softworks Ltd. Registered company in England and Wales 2015-2022 ©
+								Company No. 09486419 VAT No. GB279997505
+								<br />
+								Element Softworks Ltd. Registered company in England and Wales
+								2015-2022 ©
 							</Typography>
 						</Grid>
 						<Grid item sm={6}>
 							<Typography align="right">
-								Terms and Conditions<br />
+								Terms and Conditions
+								<br />
 								Privacy Policy
 							</Typography>
 						</Grid>
@@ -125,27 +145,27 @@ const Styles = styled.div`
 		nav {
 			margin-left: auto;
 
-
 			@media (max-width: 600px) {
 				.mobile-hidden {
 					display: none;
 				}
-			},
-		ul {
-			list-style: none;
+			}
+			,
+			ul {
+				list-style: none;
 
-			li:not(:last-of-type) {
-				a {
-					text-decoration: none;
-					color: ${({ theme }) => theme.palette.text.primary};
-					transition: ${({ theme }) => theme.transitions.create(["color"])};
+				li:not(:last-of-type) {
+					a {
+						text-decoration: none;
+						color: ${({ theme }) => theme.palette.text.primary};
+						transition: ${({ theme }) => theme.transitions.create(['color'])};
 
-					&:hover {
-						color: ${({ theme }) => theme.palette.secondary.main};
+						&:hover {
+							color: ${({ theme }) => theme.palette.secondary.main};
+						}
 					}
 				}
 			}
-		}
 		}
 	}
 

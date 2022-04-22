@@ -15,8 +15,6 @@ const cms = async <Data = unknown>(endpoint: string, populate?: string[]) => {
 			: `/${endpoint}?populate=${populate?.join('&populate=') ?? '*'}`
 	}`;
 
-	console.log('url', url);
-
 	const response = await fetch(url, {
 		headers: new Headers({
 			'Cache-Control': 'max-age=3600',
