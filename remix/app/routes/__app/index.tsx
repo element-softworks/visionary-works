@@ -1,21 +1,18 @@
 import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
 import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
 import { cms } from '~/utils/cms.server';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';
 import Affiliates from '~/components/Affiliates';
-import notepad from '~/images/notepad.png';
 import monitor from '~/images/monitor.png';
 import mobile from '~/images/mobile.png';
 import wave from '~/images/wave.svg';
 import projects from '~/images/projects.png';
-import Testimonials from '~/components/ContentCards';
 import Team from '~/components/Team';
-import reactStringReplace from 'react-string-replace';
-import { CMSData, CMSDataList } from "~/models/cms";
-import { Homepage } from "~/models/single/homepage";
-import { Testimonial } from "~/models/collection/testimonial";
+import Intro from '~/components/Home/Intro';
+import Slider from '~/components/Slider';
+import ContentCard from '~/components/ContentCard';
 
 type Data = {
 	page: CMSData<Homepage>;
@@ -29,11 +26,10 @@ export const loader: LoaderFunction = async () => {
 	const testimonials = await cms<Data["testimonials"]>('testimonials');
 	const page = await cms<Data["page"]>('homepage', ['hero.logos', 'intro.services']);
 
-	console.log({page});
 	return json({ testimonials, page });
 };
 
-const Home: React.FC = () => {
+const Testimonials: React.FC = () => {
 	const {
 		testimonials,
 		page: {
@@ -41,69 +37,12 @@ const Home: React.FC = () => {
 				attributes: { hero, intro },
 			},
 		},
-	} = useLoaderData<Data>();
-
-	const [windowHeight, setWindowHeight] = useState<number | null>(null);
-	const [scrollY, setScrollY] = useState<number | null>(null);
-	const [introY, setIntroY] = useState<number | null>(null);
-	const [introContentY, setIntroContentY] = useState<number | null>(null);
-	const [introContentHeight, setIntroContentHeight] = useState<number | null>(null);
-	const [introContentOffsetTop, setIntroContentOffsetTop] = useState<number | null>(null);
-	const $intro = useRef<HTMLDivElement>(null);
-	const $introContent = useRef<HTMLDivElement>(null);
-
-	console.log('introY', introY);
-
-	const handleScroll = () => {
-		setIntroContentY($introContent?.current?.getBoundingClientRect?.()?.top ?? 0);
-		setWindowHeight(window.innerHeight);
-		setScrollY(window.scrollY);
-		setIntroY($intro?.current?.getBoundingClientRect?.()?.top ?? 0);
-		setIntroContentHeight($introContent?.current?.offsetHeight ?? 0);
-		setIntroContentOffsetTop($introContent?.current?.offsetTop ?? 0);
-	};
-
-	const handleResize = () => {
-		setIntroContentY($introContent?.current?.getBoundingClientRect?.()?.top ?? 0);
-		setWindowHeight(window.innerHeight);
-		setScrollY(window.scrollY);
-		setIntroY($intro?.current?.getBoundingClientRect?.()?.top ?? 0);
-		setIntroContentHeight($introContent?.current?.offsetHeight ?? 0);
-		setIntroContentOffsetTop($introContent?.current?.offsetTop ?? 0);
-	};
-
-	useEffect(() => {
-		window.addEventListener('scroll', handleScroll);
-		window.addEventListener('resize', handleResize);
-		handleScroll();
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		};
-	}, []);
-
-	const percentScrolled = (scrollY ?? 0) / (windowHeight ?? 0);
-	const introContentPercentScrolled = (introContentY ?? 0) / (introContentHeight ?? 0);
-	// const introFeatureOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
-
-	const distanceToTop = introContentY ?? 0;
-	const elementHeight = $intro?.current?.offsetHeight ?? 0;
-	const scrollTop = scrollY ?? 0;
-
-	const introFeatureOpacity = 1 - (scrollTop - distanceToTop) / elementHeight + 0.3;
-
+	} = useLoaderData();
+	const [step, setStep] = useState(0);
 	const firstWord = hero?.title?.split(' ')?.[0];
-	const highlighted = intro?.highlighted;
 	const services = intro?.services;
 
-	console.log({ services }, 2);
-
-	console.log('scrollY', scrollY);
-	console.log('$intro?.current?.offsetTop', $intro?.current?.offsetTop);
-	console.log(
-		'(scrollY ?? 0) - ($intro?.current?.offsetTop ?? 0)',
-		(scrollY ?? 0) - ($intro?.current?.offsetTop ?? 0)
-	);
+	console.log({ testimonials });
 
 	return (
 		<Styles>
@@ -124,109 +63,14 @@ const Home: React.FC = () => {
 			</Stack>
 			<Affiliates logos={hero?.logos?.data} />
 			<Box mt={8} />
-			<Box
-				className="intro"
-				ref={$intro}
-				style={{ paddingTop: !!windowHeight ? windowHeight * 3 : undefined }}
-			>
-				<div
-					className="intro-feature-wrapper"
-					style={{
-						position:
-							typeof introY === 'number' &&
-							introY <= 0 &&
-							introContentPercentScrolled >= 0
-								? 'fixed'
-								: 'absolute',
-						transform: `translateY(${
-							introContentPercentScrolled <= 0 &&
-							typeof introContentOffsetTop === 'number'
-								? introContentOffsetTop
-								: 0
-						})`,
-						// top: introY !== null && introY <= 0 ? `${Math.abs(introY)}px` : undefined,
-					}}
-				>
-					<div
-						className="intro-feature"
-						style={{
-							height: windowHeight ?? undefined,
-							opacity: introFeatureOpacity,
-						}}
-					>
-						<div style={{ transform: `translateX(-5vw)` }}>
-							<span
-								className="intro-feature-text"
-								style={{
-									transform: `translateX(${
-										(scrollY ?? 0) -
-										(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
-									}px) translateZ(0)`,
-								}}
-							>
-								Visionary
-							</span>
-						</div>
-						<div style={{ transform: `translateX(25vw)` }}>
-							<span
-								className="intro-feature-text"
-								style={{
-									transform: `translateX(${-Math.abs(
-										(scrollY ?? 0) -
-											(($intro?.current?.offsetTop ?? 0) +
-												(windowHeight ?? 0))
-									)}px) translateZ(0)`,
-								}}
-							>
-								Revolutionary
-							</span>
-						</div>
-						<div style={{ transform: `translateX(45vw)` }}>
-							<span
-								className="intro-feature-text"
-								style={{
-									transform: `translateX(${
-										(scrollY ?? 0) -
-										(($intro?.current?.offsetTop ?? 0) + (windowHeight ?? 0))
-									}px) translateZ(0)`,
-								}}
-							>
-								Innovative
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<Container
-					className="intro-content"
-					sx={{ py: 12 }}
-					ref={$introContent}
-					style={{ minHeight: windowHeight ?? undefined }}
-				>
-					<Grid container>
-						<Grid item xs={12} lg={8}>
-							<Typography sx={{ mb: 8 }} variant="h3">
-								{reactStringReplace(intro?.title, highlighted, (match, i) => (
-									<Box component="span" sx={{ color: 'primary.main' }}>
-										{highlighted}
-									</Box>
-								))}
-							</Typography>
-							<Typography>{intro?.subtitle}</Typography>
-						</Grid>
-						<Grid item lg={4}>
-							<img alt="Web Development" src={notepad} className="image-notepad" />
-						</Grid>
-					</Grid>
-				</Container>
-			</Box>
+			<Intro data={intro} />
 			<Box className="services">
 				{services?.map((service: any, i: number) => (
 					<React.Fragment key={i}>
 						<Container>
 							<Grid container alignItems="center" key={i}>
 								{!service.right && (
-									<Grid item lg={6}>
+									<Grid item xs={12} md={6}>
 										<img
 											alt={`${service?.title} icon`}
 											src={i === 1 ? mobile : monitor}
@@ -241,7 +85,7 @@ const Home: React.FC = () => {
 									<Typography>{service.description}</Typography>
 								</Grid>
 								{service.right && (
-									<Grid item lg={6}>
+									<Grid item md={6}>
 										<img
 											alt={`${service?.title} icon`}
 											src={i === 1 ? mobile : monitor}
@@ -276,7 +120,11 @@ const Home: React.FC = () => {
 				</Container>
 			</Box>
 
-			<Testimonials testimonials={testimonials} />
+			<Slider>
+				{testimonials?.data?.map((t) => (
+					<ContentCard testimonial={t?.attributes} />
+				))}
+			</Slider>
 			<Team />
 
 			<Box className="news">
@@ -366,61 +214,7 @@ const Styles = styled.div`
 			}
 		}
 	}
-
-	.intro {
-		position: relative;
-		background-color: #191919;
-		color: ${({ theme }) => theme.palette.common.white};
-		padding: ${({ theme }) => theme.spacing(14, 0)};
-		align-items: center;
-	  	padding-top: ${700 * 4}px;
-	  	overflow: hidden;
-	  
-		  .intro-content {
-		    position: relative;
-		    z-index: 1;
-		  }
-
-		p {
-			max-width: 600px;
-		}
-
-		.image-notepad {
-			max-width: 100%;
-		}
-	  
-		.intro-feature-wrapper {
-			position: absolute;
-			top: 0;
-		}
-	  
-		.intro-feature {
-			position: absolute;
-			opacity: 1;
-		  	top: 0;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-		  	will-change: opacity;
-		  
-		  	.intro-feature-text {
-				font-size: 15rem;
-				display: block;
-				color: white;
-				will-change: transform;
-				letter-spacing: -2px;
-				line-height: .9;
-				position: relative;
-				color: black;
-				-webkit-text-fill-color: ${({ theme }) =>
-					theme.palette.common.black}; /* Will override color (regardless of order) */
-				-webkit-text-stroke-width: 3px;
-				-webkit-text-stroke-color: white;
-		    }
-		}
-	}
-
-
+  
 	.services {
 		position: relative;
 		background-color: #191919;
@@ -466,4 +260,4 @@ const Styles = styled.div`
 	}
 `;
 
-export default Home;
+export default Testimonials;
