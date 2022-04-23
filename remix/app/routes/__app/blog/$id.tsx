@@ -11,9 +11,12 @@ import { useRemark } from "react-remark";
 import React, { useEffect } from "react";
 import parseISO from "date-fns/parseISO";
 import { format } from "date-fns";
+import ContentCard from "~/components/ContentCard";
+import ContentCardSmall from "~/components/ContentCardSmall";
 
 type Data = {
 	blog: CMSData<Blog>;
+	blogs: CMSDataList<Blog>;
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -25,22 +28,32 @@ export const meta: MetaFunction = ({ data }) => {
 export const loader: LoaderFunction = async ({ params }) => {
 	// const blog = await cms<Data>(`slugify/slugs/blog/${params.id}`);
 	const blog: any = await cms<Data>(`blogs`, ["*"], `?filters[slug]=${params.id}`);
+	const blogs: any = await cms<Data>(`blogs`, ["*"]);
 
 	// const firstBlog = blog?.data?.[0]
 	return json({
 		blog: {
 			data: blog?.data?.[0]
+		},
+		// blogs: {
+		// 	data: blogs?.data?.filter((blog: Blog) => {
+		// 		console.log( blog?.attributes?.slug, params?.id);
+		// 		return blog?.attributes?.slug !== params?.id
+		// 	})
+		// }
+		blogs: {
+			data: blogs?.data?.slice(0, 2)
 		}
 	});
 };
 
 const Home = () => {
-	const { blog } = useLoaderData<Data>();
+	const { blog, blogs } = useLoaderData<Data>();
 	const Styles = useStyle(styles);
 	const theme = useTheme();
 	const [reactContent, setMarkdownSource] = useRemark();
 
-	console.log("blog", blog);
+	console.log("blog", blogs);
 
 	useEffect(() => {
 		setMarkdownSource(blog?.data?.attributes?.content);
@@ -66,6 +79,17 @@ const Home = () => {
 
 				<Box className="blog-content">
 					{reactContent}
+				</Box>
+
+				<Box className="blog-related">
+					<Typography variant="h3" className="blog-related-title">
+						Related Posts
+					</Typography>
+					<Grid container spacing={2}>
+						{blogs?.data?.map((blog) => <Grid item md={4}>
+							<ContentCardSmall blog={blog?.attributes} />
+						</Grid>)}
+					</Grid>
 				</Box>
 			</Container>
 		</Styles>
@@ -99,6 +123,11 @@ const styles = (theme: Theme) => `
 	
     .blog-content {
         margin-bottom: 60px;
+    }
+    
+    .blog-related-title {
+        font-size: 2rem;
+        margin-bottom: 10px;
     }
 `;
 
