@@ -2,16 +2,13 @@ import React, { useEffect } from "react";
 import {
 	Card,
 	Avatar,
-	Stack,
 	CardMedia,
 	CardContent,
 	Typography,
-	CardActions,
 	Button,
-	IconButton
+	Box
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import { Testimonial } from "~/models/collection/testimonial";
 import { Link as RouterLink } from 'remix';
