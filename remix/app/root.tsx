@@ -38,7 +38,7 @@ import SnackbarProvider from '~/components/Snackbar';
 import { MessageContext } from '~/helpers/contexts';
 import swiperStyles from 'swiper/css';
 
-console.log('swiperStyles', swiperStyles);
+// console.log('swiperStyles', swiperStyles);
 
 const [seoMeta, seoLinks] = getSeo();
 

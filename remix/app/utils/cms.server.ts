@@ -6,28 +6,28 @@ const PROD_URL = 'https://element-softworks-cms.herokuapp.com';
 // const cmsUrl = process.env.CMS_URL;
 const isProd = NODE_ENV === 'production';*/
 
-const cms = async <Data = unknown>(endpoint: string, populate?: string[]) => {
+const cms = async <Data = unknown>(endpoint: string, populate?: string[] | null) => {
 	const ctx = getPagesContext();
 	const basename = ctx.env.CMS_URL ?? `http://localhost:1337`;
 	const url = `${basename}/api${
 		endpoint?.charAt(0) === '/'
 			? endpoint
-			: `/${endpoint}?populate=${populate?.join('&populate=') ?? '*'}`
+			: `/${endpoint}${populate === null ? '' : `?populate=${populate?.join('&populate=') ?? '*'}`}`
 	}`;
 
 	const response = await fetch(url, {
 		headers: new Headers({
 			'Cache-Control': 'max-age=3600',
-			...(ctx?.env?.CMS_TOKEN
-				? {
-						Authorization: `Bearer ${ctx?.env?.CMS_TOKEN}`,
-				  }
-				: {}),
+			// ...(ctx?.env?.CMS_TOKEN
+			// 	? {
+			// 			Authorization: `Bearer ${ctx?.env?.CMS_TOKEN}`,
+			// 	  }
+			// 	: {}),
 		}),
 	});
 	const data: CMSData<Data> = await response.json();
 
-	console.log({ error: data.error }, url);
+	console.log({ error: !!data.error ? data.error : 'No error'}, url);
 	if (data?.error && ctx.env.BYPASS_CMS_CONNECTION === 'true') {
 		return { data: { attributes: {} } };
 	}

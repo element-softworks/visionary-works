@@ -50,6 +50,7 @@ const Testimonials: React.FC = () => {
 					faqTitle,
 					faqImage,
 					faq,
+					blogReadMore,
 				}
 			}
 		},
@@ -154,7 +155,7 @@ const Testimonials: React.FC = () => {
 				</Container>
 				<Slider>
 					{blogs?.data?.map((t, i) => (
-						<ContentCard blog={t?.attributes} key={i} />
+						<ContentCard blog={t?.attributes} key={i} readMore={blogReadMore} />
 					))}
 				</Slider>
 

@@ -132,11 +132,11 @@ const Layout: React.FC = () => {
 
 const Styles = styled.div`
 	header {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 1;
+		//position: absolute;
+		//top: 0;
+		//left: 0;
+		//right: 0;
+		//z-index: 1;
 
 		.logo {
 			height: 45px;
