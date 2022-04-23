@@ -17,7 +17,7 @@ import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
 import { Blog } from "~/models/collection/blog";
 import { format } from "date-fns";
 
-const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string }> = ({ blog, readMore }) => {
+const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string; type?: 'blog' | 'projects' }> = ({ blog, readMore, type = "blog" }) => {
 	const theme = useTheme();
 
 	return (
@@ -48,7 +48,7 @@ const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string }> = ({ blog, r
 
 							{!!blog?.content &&
 								<Button className="card-content-button" variant="contained" disableElevation
-								        component={RouterLink} to={`/blog/${blog?.slug}`}>
+								        component={RouterLink} to={`/${type}/${blog?.slug}`}>
 									{readMore ?? "Read More"}
 								</Button>}
 
