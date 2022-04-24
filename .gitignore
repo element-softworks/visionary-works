@@ -14,3 +14,5 @@ node_modules
 /remix/functions
 
 remix/functions/
+
+remix/yarn-error.log
