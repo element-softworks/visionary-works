@@ -15,12 +15,23 @@
     "title": {
       "type": "string"
     },
-    "description": {
+    "content": {
       "type": "richtext"
     },
     "shortName": {
       "type": "uid",
       "targetField": "title"
+    },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

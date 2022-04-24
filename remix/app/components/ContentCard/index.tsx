@@ -2,23 +2,22 @@ import React, { useEffect } from "react";
 import {
 	Card,
 	Avatar,
-	Stack,
 	CardMedia,
 	CardContent,
 	Typography,
-	CardActions,
 	Button,
-	IconButton
+	Box
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import { Testimonial } from "~/models/collection/testimonial";
+import { Link as RouterLink } from 'remix';
 
 import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
 import { Blog } from "~/models/collection/blog";
+import { format } from "date-fns";
 
-const ContentCard: React.FC<{ testimonial?: Testimonial; blog?: Blog }> = ({ testimonial, blog }) => {
+const ContentCard: React.FC<{ testimonial?: Testimonial; blog?: Blog; readMore?: string }> = ({ testimonial, blog, readMore}) => {
 	const theme = useTheme();
 
 	return (
@@ -40,6 +39,11 @@ const ContentCard: React.FC<{ testimonial?: Testimonial; blog?: Blog }> = ({ tes
 							{!!blog?.content && <Typography variant="body1" className="card-content-text">
 								{blog ? blog?.content : testimonial?.feedback}
 							</Typography>}
+
+							{!!blog?.content && <Button className="card-content-button" variant="contained" disableElevation component={RouterLink} to={`/blog/${blog?.slug}`}>
+								{readMore ?? 'More'}
+							</Button>}
+
 						</div>
 
 						<Box className="card-content-author">
@@ -48,7 +52,7 @@ const ContentCard: React.FC<{ testimonial?: Testimonial; blog?: Blog }> = ({ tes
 							</Avatar>
 							<Typography variant="subtitle1" color="text.secondary" component="p">
 								{blog ? `${blog?.author?.data?.attributes?.firstname} ${blog?.author?.data?.attributes?.lastname}` : testimonial?.name}<br />
-								{blog ? blog?.publishedAt : testimonial?.company}
+								{blog ? format(new Date(blog?.publishedAt), "PPPP"): testimonial?.company}
 							</Typography>
 						</Box>
 					</CardContent>
@@ -95,6 +99,10 @@ const Styles = styled.div`
 				p {
 					margin-left: 10px;
 				}
+			}
+			
+			.card-content-button {
+				margin-top: 10px;
 			}
 		}
 	}

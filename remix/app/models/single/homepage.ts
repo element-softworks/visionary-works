@@ -38,4 +38,5 @@ export type Homepage = {
 		question: string;
 		answer: string;
 	}[]
+	blogReadMore: string;
 };

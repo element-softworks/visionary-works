@@ -56,6 +56,14 @@ export interface CMSAuthor {
 		updatedAt: string;
 	}
 }
+export interface CMSTag {
+	id: number;
+	attributes: {
+		name: string;
+		createdAt: string;
+		updatedAt: string;
+	}
+}
 
 export interface CMSMedia {
 	id: number;
