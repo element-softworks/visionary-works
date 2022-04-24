@@ -18,7 +18,7 @@
     "content": {
       "type": "richtext"
     },
-    "shortName": {
+    "slug": {
       "type": "uid",
       "targetField": "title"
     },
@@ -32,6 +32,35 @@
         "videos",
         "audios"
       ]
+    },
+    "tag": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tag.tag"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "contentTitle": {
+      "type": "string"
+    },
+    "bulletpointTitle": {
+      "type": "string"
+    },
+    "bulletpoint": {
+      "displayName": "bulletpoint",
+      "type": "component",
+      "repeatable": true,
+      "component": "service.bulletpoint"
+    },
+    "faqTitle": {
+      "type": "string"
+    },
+    "faqs": {
+      "displayName": "faqs",
+      "type": "component",
+      "repeatable": true,
+      "component": "service.faqs"
     }
   }
 }

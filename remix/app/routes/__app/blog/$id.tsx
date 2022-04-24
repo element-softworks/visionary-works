@@ -69,7 +69,7 @@ const Home = () => {
 
 					<Box className="blog-tags">
 						{blog?.data?.attributes?.tags?.data?.map((tag, i) => {
-							return <Chip label={tag?.attributes?.name} />;
+							return <Chip key={i} label={tag?.attributes?.name} />;
 						})}
 					</Box>
 				</Box>
@@ -86,8 +86,8 @@ const Home = () => {
 						Related Posts
 					</Typography>
 					<Grid container spacing={2}>
-						{blogs?.data?.map((blog) => <Grid item md={4}>
-							<ContentCardSmall blog={blog?.attributes} />
+						{blogs?.data?.map((blog, i) => <Grid item md={4}>
+							<ContentCardSmall key={i} blog={blog?.attributes} />
 						</Grid>)}
 					</Grid>
 				</Box>

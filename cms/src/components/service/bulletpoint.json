@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_service_bulletpoints",
+  "info": {
+    "displayName": "bulletpoint",
+    "icon": "list",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}
