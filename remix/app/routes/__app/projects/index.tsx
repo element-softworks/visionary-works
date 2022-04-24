@@ -52,8 +52,8 @@ const ProjectPage = () => {
 						Latest Posts
 					</Typography>
 					<Grid container spacing={2}>
-						{projects?.data?.map((project) => <Grid item md={4}>
-							<ContentCardSmall blog={project?.attributes} type="projects" />
+						{projects?.data?.map((project, i) => <Grid item md={4}>
+							<ContentCardSmall key={i} blog={project?.attributes} type="projects" />
 						</Grid>)}
 					</Grid>
 				</Box>

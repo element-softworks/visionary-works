@@ -56,8 +56,8 @@ const AboutPage = () => {
 					<Typography variant="h3" className="about-related-title">
 					</Typography>
 					<Grid container spacing={2}>
-						{services?.data?.map((service) => <Grid item md={4}>
-							<ContentCardSmall blog={service?.attributes} type="services" />
+						{services?.data?.map((service, i) => <Grid item md={4}>
+							<ContentCardSmall key={i} blog={service?.attributes} type="services" />
 						</Grid>)}
 					</Grid>
 				</Box>
