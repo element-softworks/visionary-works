@@ -17,7 +17,7 @@ import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
 import { Blog } from "~/models/collection/blog";
 import { format } from "date-fns";
 
-const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string; type?: 'blog' | 'projects' }> = ({ blog, readMore, type = "blog" }) => {
+const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string; type?: 'blog' | 'projects' | 'services' }> = ({ blog, readMore, type = "blog" }) => {
 	const theme = useTheme();
 
 	return (
