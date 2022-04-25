@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
-import {IconButton, useMediaQuery, useTheme} from '@mui/material';
+import { IconButton, useMediaQuery, useTheme } from '@mui/material';
 import { ArrowForward, ArrowRight } from '@mui/icons-material';
 import { Swiper as SwiperClass } from 'swiper/types';
 
@@ -13,13 +13,15 @@ const Slider: React.FC<{
 	const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 	const theme = useTheme();
 	const md = useMediaQuery(theme.breakpoints.up('md'));
+	const lg = useMediaQuery(theme.breakpoints.up('lg'));
 
 	return (
 		<Styles>
 			<Swiper
 				className="swiper-container"
 				spaceBetween={100}
-				slidesPerView={md ? 1.5 : 1.25}
+				// slidesPerView={lg ? "auto" : md ? 1.5 : 1.25}
+				slidesPerView="auto"
 				centeredSlides={md}
 				loop
 				autoplay
@@ -76,11 +78,12 @@ const Styles = styled.div`
 		.swiper-slide {
 			position: relative;
 			width: 70%;
+			max-width: 1000px;
 			//height: calc(432 * (16rem / 750));
 			overflow: hidden;
 			opacity: 0.3;
 			transition: opacity 0.5s ease-out;
-
+			
 			&.swiper-slide-active {
 				opacity: 1;
 			}

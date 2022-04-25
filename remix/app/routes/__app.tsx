@@ -167,6 +167,7 @@ const Layout: React.FC = () => {
 							<Typography
 								align="right"
 								variant="h5"
+								className="footer-address"
 							>
 								Visionary Works<br />
 								Innovation Centre<br />
@@ -243,10 +244,9 @@ const Styles = styled.div`
 	}
 
 	footer {
-		background-color: #111111;
-		padding: ${({ theme }) => theme.spacing(12, 0, 10)};
+		background-color: #000;
+		padding: ${({ theme }) => theme.spacing(12, 0, 8)};
 		color: ${({ theme }) => theme.palette.common.white};
-
 
 		h5 {
 			font-weight: 400;
@@ -255,6 +255,10 @@ const Styles = styled.div`
 			&.footer-title {
 				font-weight: 700;
 				color: ${({ theme }) => theme.palette.primary.main};
+			}
+			
+			&.footer-address {
+				font-size: 1.3rem;
 			}
 		}
 
@@ -278,7 +282,9 @@ const Styles = styled.div`
 		}
 
 		&.footer-second {
-			background: #222;
+			background: #000;
+			padding: 30px;
+			border-top: 3px solid #191919;
 		}
 	}
 `;

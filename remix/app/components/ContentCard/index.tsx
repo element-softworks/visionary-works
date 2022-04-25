@@ -75,7 +75,7 @@ const Styles = styled.div`
 			justify-content: space-between;
 
 			h5 {
-				font-size: 1.5rem;
+				font-size: 1.3rem;
 				font-weight: bold;
 			}
 
