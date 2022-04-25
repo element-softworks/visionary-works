@@ -13,13 +13,15 @@ const Slider: React.FC<{
 	const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 	const theme = useTheme();
 	const md = useMediaQuery(theme.breakpoints.up('md'));
+	const lg = useMediaQuery(theme.breakpoints.up('lg'));
 
 	return (
 		<Styles>
 			<Swiper
 				className="swiper-container"
 				spaceBetween={100}
-				slidesPerView={md ? 1.5 : 1.25}
+				// slidesPerView={lg ? "auto" : md ? 1.5 : 1.25}
+				slidesPerView={"auto"}
 				centeredSlides={md}
 				loop
 				autoplay
@@ -75,7 +77,7 @@ const Styles = styled.div`
 
 		.swiper-slide {
 			position: relative;
-			width: 70%;
+			//width: 40%;
 			//height: calc(432 * (16rem / 750));
 			overflow: hidden;
 			opacity: 0.3;
