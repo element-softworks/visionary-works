@@ -63,7 +63,6 @@ const ContentCard: React.FC<{ testimonial?: Testimonial; blog?: Blog; readMore?:
 };
 
 const Styles = styled.div`
-	max-width: 800px;
 	.card {
 		display: flex;
 		border-radius: 15px;
