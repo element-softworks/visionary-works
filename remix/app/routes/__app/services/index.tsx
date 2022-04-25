@@ -1,72 +1,100 @@
-import { json, Link, LoaderFunction, MetaFunction, useLoaderData } from "remix";
-import { Container, CssBaseline, useTheme } from "@mui/material";
+import { json, LoaderFunction, MetaFunction, useLoaderData } from "remix";
+import { Typography, Chip, useTheme, Container, Grid, Box } from "@mui/material";
 import useStyle from "~/helpers/hooks/useStyle";
 import { Theme } from "@emotion/react";
 import { cms } from "~/utils/cms.server";
-import { CMSDataList } from "~/models/cms";
+import { CMSData, CMSDataList } from "~/models/cms";
 import { getSeoMeta } from "~/seo";
-import React from "react";
+import { Service } from "~/models/collection/service";
+import Header from "~/components/Header";
+import { useRemark } from "react-remark";
+import React, { useEffect } from "react";
+import parseISO from "date-fns/parseISO";
+import { format } from "date-fns";
+import ContentCard from "~/components/ContentCard";
+import ContentCardSmall from "~/components/ContentCardSmall";
 
 type Data = {
-	services: CMSDataList<{
-		body: string;
-		createdAt: string;
-		endDate: string;
-		publishedAt: string;
-		startDate: string;
-		title: string;
-		updatedAt: string;
-	}>;
+	service: CMSData<Service>;
+	services: CMSDataList<Service>;
 };
 
-export const meta: MetaFunction = () =>
-	getSeoMeta({
-		title: "Projects"
+export const meta: MetaFunction = ({ data }) => {
+	return getSeoMeta({
+		title: data?.services?.data?.attributes?.title ?? "Service"
 	});
+};
 
 export const loader: LoaderFunction = async ({ params }) => {
-	const services = await cms<Data>("services");
+	const services: any = await cms<Data>(`services`, ["*"]);
 
-	console.log({ serviceLoader: services.data });
-
-	return json({ services });
+	return json({
+		services
+	});
 };
 
-const Home = () => {
+const ServicePage = () => {
 	const { services } = useLoaderData<Data>();
 	const Styles = useStyle(styles);
 	const theme = useTheme();
+	const [reactContent, setMarkdownSource] = useRemark();
 
 	console.log("services", services);
 
 	return (
 		<Styles>
-			<CssBaseline />
 			<Container>
-				<h1 style={{ padding: theme.spacing(8) }}>Our Services</h1>
-				Test:
-				<ul>
-					{services?.data?.map((c) => (
-						<li key={c.id}>
-							<Link to={`/services/${c?.id}`}>{c?.attributes?.title} - link</Link>
-						</li>
-					))}
-				</ul>
-
+				<Box className="service-header">
+					<Typography className="service-title" variant="h1">Services</Typography>
+				</Box>
+				<Box className="service-related">
+					<Typography variant="h3" className="service-related-title">
+						Latest Posts
+					</Typography>
+					<Grid container spacing={2}>
+						{services?.data?.map((service, i) => <Grid item md={4}>
+							<ContentCardSmall key={i} blog={service?.attributes} type="services" />
+						</Grid>)}
+					</Grid>
+				</Box>
 			</Container>
 		</Styles>
 	);
 };
 
 const styles = (theme: Theme) => `
-  background-color: ${theme.palette.primary.main};
-
-	h1 {
-		margin: 0;
+	.service-header {
+		text-align: center;
+		padding: 100px 0;
+		
+		.service-title {
+			padding: 20px 0;
+		}
+		.service-tags {
+			display: flex; justifyContent: "center";
+			margin: auto;
+			display: block;
+			
+			.MuiChip-root {
+				margin: 10px 10px 20px;
+			}
+		} 
 	}
-    ul {
-        // background-color: ${theme.palette.secondary.main};
+	
+	.service-image {
+		max-width: 100%;
+		margin-bottom: 50px;
+		border-radius: 5px;
+	} 
+	
+    .service-content {
+        margin-bottom: 60px;
+    }
+    
+    .service-related-title {
+        font-size: 2rem;
+        margin-bottom: 10px;
     }
 `;
 
-export default Home;
+export default ServicePage;

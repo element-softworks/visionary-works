@@ -21,6 +21,43 @@
       "type": "component",
       "repeatable": false,
       "component": "homepage.intro-of-services"
+    },
+    "team": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.team-cta"
+    },
+    "faq": {
+      "displayName": "News",
+      "type": "component",
+      "repeatable": true,
+      "component": "homepage.news"
+    },
+    "newsTitle": {
+      "type": "string"
+    },
+    "projectTitle": {
+      "type": "string"
+    },
+    "projectDescription": {
+      "type": "string"
+    },
+    "faqTitle": {
+      "type": "string"
+    },
+    "faqImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "blogReadMore": {
+      "type": "string"
     }
   }
 }

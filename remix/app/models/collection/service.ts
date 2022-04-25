@@ -1,19 +1,15 @@
-import { CMSData, CMSMedia } from "~/models/cms";
+import { CMSAuthor, CMSData, CMSMedia, CMSTag } from "~/models/cms";
 
-type Service = {
-	slug: string;
+export type Service = {
 	title: string;
+	subtitle: string;
+	content: any;
+	slug: string;
+	createdAt: string;
+	updatedAt: string;
+	publishedAt: string;
+	coverImage: {data: CMSMedia};
+	author: {data: CMSAuthor};
+	tag: {data: CMSTag};
 };
 
-export async function getServices(): Promise<Array<Service>> {
-	return [
-		{
-			slug: "my-first-post",
-			title: "My First Service",
-		},
-		{
-			slug: "90s-mixtape",
-			title: "A Mixtape I Made Just For You",
-		},
-	];
-}

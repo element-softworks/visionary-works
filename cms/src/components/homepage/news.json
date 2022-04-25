@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_homepage_news",
+  "info": {
+    "displayName": "FAQ",
+    "icon": "question",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "question": {
+      "type": "string"
+    },
+    "answer": {
+      "type": "string"
+    }
+  }
+}

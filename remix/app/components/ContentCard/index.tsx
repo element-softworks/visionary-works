@@ -1,13 +1,23 @@
 import React, { useEffect } from "react";
-import { Card, Avatar, Stack, CardMedia, CardContent, Typography, CardActions, Button, IconButton } from "@mui/material";
+import {
+	Card,
+	Avatar,
+	CardMedia,
+	CardContent,
+	Typography,
+	Button,
+	Box
+} from "@mui/material";
 import styled from "@emotion/styled";
-import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import { Testimonial } from "~/models/collection/testimonial";
+import { Link as RouterLink } from 'remix';
 
 import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
+import { Blog } from "~/models/collection/blog";
+import { format } from "date-fns";
 
-const ContentCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }) => {
+const ContentCard: React.FC<{ testimonial?: Testimonial; blog?: Blog; readMore?: string }> = ({ testimonial, blog, readMore}) => {
 	const theme = useTheme();
 
 	return (
@@ -16,21 +26,34 @@ const ContentCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }) =>
 				<CardMedia
 					component="img"
 					sx={{ width: 300, height: 450 }}
-					image={testimonial?.image?.data?.attributes?.url}
+					image={!!blog ? blog?.coverImage?.data?.attributes?.url : testimonial?.image?.data?.attributes?.url}
 					alt="Live from space album cover"
 				/>
 				<Box sx={{ display: "flex", flexDirection: "column" }}>
 					<CardContent className={"card-content"}>
-						<Typography component="h5">
-							{testimonial.feedback}
-						</Typography>
+						<div>
+							<Typography component="h5">
+								{blog ? blog?.title : testimonial?.feedback}
+							</Typography>
+
+							{!!blog?.content && <Typography variant="body1" className="card-content-text">
+								{blog ? blog?.content : testimonial?.feedback}
+							</Typography>}
+
+							{!!blog?.content && <Button className="card-content-button" variant="contained" disableElevation component={RouterLink} to={`/blog/${blog?.slug}`}>
+								{readMore ?? 'More'}
+							</Button>}
+
+						</div>
 
 						<Box className="card-content-author">
+							<Avatar>
+								{`${blog ? blog?.author?.data?.attributes?.firstname : testimonial?.name}`?.charAt(0)}<br />
+							</Avatar>
 							<Typography variant="subtitle1" color="text.secondary" component="p">
-								{testimonial.name}<br />
-								{testimonial.company}
+								{blog ? `${blog?.author?.data?.attributes?.firstname} ${blog?.author?.data?.attributes?.lastname}` : testimonial?.name}<br />
+								{blog ? format(new Date(blog?.publishedAt), "PPPP"): testimonial?.company}
 							</Typography>
-							<Avatar>H</Avatar>
 						</Box>
 					</CardContent>
 				</Box>
@@ -55,12 +78,31 @@ const Styles = styled.div`
 				font-size: 1.5rem;
 				font-weight: bold;
 			}
+
+			.card-content-text {
+				word-break: break-word;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				line-height: 32px;
+				font-size: 18px;
+				max-height: 190px;
+				-webkit-line-clamp: 5;
+				-webkit-box-orient: vertical;
+			}
 			
 			.card-content-author {
-				justify-content: space-between;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
+				
+				p {
+					margin-left: 10px;
+				}
+			}
+			
+			.card-content-button {
+				margin-top: 10px;
 			}
 		}
 	}

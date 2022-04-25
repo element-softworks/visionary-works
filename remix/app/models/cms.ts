@@ -45,30 +45,48 @@ export interface CMSMediaDetail {
 	url: string;
 }
 
+export interface CMSAuthor {
+	id: number;
+	attributes: {
+		firstname: string;
+		lastname: string;
+		username: string;
+		preferedLanguage: string;
+		createdAt: string;
+		updatedAt: string;
+	}
+}
+export interface CMSTag {
+	id: number;
+	attributes: {
+		name: string;
+		createdAt: string;
+		updatedAt: string;
+	}
+}
+
 export interface CMSMedia {
-	data: {
-		id: number,
-		attributes: {
-			name: string;
-			alternativeText: string;
-			caption: string;
-			width: number;
-			height: number;
-			formats: {
-				thumbnail: CMSMediaDetail;
-				medium: CMSMediaDetail;
-				small: CMSMediaDetail;
-			} | null;
-			hash: string;
-			ext: string;
-			mime: string;
-			size: number;
-			url: string;
-			previewUrl: any;
-			provider: 'aws-s3' | string;
-			provider_metadata: any;
-			createdAt: string;
-			updatedAt: string;
-		}
-	};
+	id: number;
+	attributes: {
+		name: string;
+		alternativeText: string;
+		caption: string;
+		width: number;
+		height: number;
+		formats: {
+			thumbnail: CMSMediaDetail;
+			medium: CMSMediaDetail;
+			small: CMSMediaDetail;
+		} | null;
+		hash: string;
+		ext: string;
+		mime: string;
+		size: number;
+		url: string;
+		previewUrl: any;
+		provider: "aws-s3" | string;
+		provider_metadata: any;
+		createdAt: string;
+		updatedAt: string;
+	}
 }

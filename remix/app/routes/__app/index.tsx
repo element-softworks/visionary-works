@@ -1,26 +1,38 @@
-import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
-import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
-import { cms } from '~/utils/cms.server';
-import React, { useState } from 'react';
-import styled from '@emotion/styled';
-import { getSeoMeta } from '~/seo';
-import Affiliates from '~/components/Affiliates';
-import monitor from '~/images/monitor.png';
-import mobile from '~/images/mobile.png';
-import wave from '~/images/wave.svg';
-import projects from '~/images/projects.png';
-import Team from '~/components/Team';
-import Intro from '~/components/Home/Intro';
-import Slider from '~/components/Slider';
-import ContentCard from '~/components/ContentCard';
+import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from "remix";
+import { Box, Button, Container, Grid, Link, Stack, Typography } from "@mui/material";
+import { cms } from "~/utils/cms.server";
+import React, { useState } from "react";
+import styled from "@emotion/styled";
+import { getSeoMeta } from "~/seo";
+import Affiliates from "~/components/Affiliates";
+import monitor from "~/images/monitor.png";
+import mobile from "~/images/mobile.png";
+import wave from "~/images/wave.svg";
+import projects from "~/images/projects.png";
+import TeamSection from "~/components/Team";
+import Intro from "~/components/Home/Intro";
+import Slider from "~/components/Slider";
+import ContentCard from "~/components/ContentCard";
+import { CMSData, CMSDataList } from "~/models/cms";
+import { Homepage } from "~/models/single/homepage";
+import { Testimonial } from "~/models/collection/testimonial";
+import { Blog } from "~/models/collection/blog";
+import Faqs from "~/components/Faqs";
 
-export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
+type Data = {
+	page: CMSData<Homepage>;
+	testimonials: CMSDataList<Testimonial>;
+	blogs: CMSDataList<Blog>;
+};
+
+export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: "Visionary Works" });
 
 export const loader: LoaderFunction = async () => {
-	const testimonials = await cms('testimonials');
-	const page = await cms('homepage', ['hero.logos', 'intro.services']);
+	const testimonials = await cms<Data["testimonials"]>("testimonials");
+	const page = await cms<Data["page"]>("homepage", ["hero.logos", "intro.services", "team", "team.image", "faq", "faqImage"]);
+	const blogs = await cms<Data["blogs"]>("blogs", ["author", "coverImage"]);
 
-	return json({ testimonials, page });
+	return json({ testimonials, page, blogs });
 };
 
 const Testimonials: React.FC = () => {
@@ -28,15 +40,27 @@ const Testimonials: React.FC = () => {
 		testimonials,
 		page: {
 			data: {
-				attributes: { hero, intro },
-			},
+				attributes: {
+					hero,
+					intro,
+					team,
+					projectTitle,
+					projectDescription,
+					newsTitle,
+					faqTitle,
+					faqImage,
+					faq,
+					blogReadMore,
+				}
+			}
 		},
-	} = useLoaderData();
+		blogs
+	} = useLoaderData<Data>();
 	const [step, setStep] = useState(0);
-	const firstWord = hero?.title?.split(' ')?.[0];
+	const firstWord = hero?.title?.split(" ")?.[0];
 	const services = intro?.services;
 
-	console.log({ testimonials });
+	console.log({ team });
 
 	return (
 		<Styles>
@@ -44,7 +68,7 @@ const Testimonials: React.FC = () => {
 				<Container>
 					<Typography gutterBottom variant="h1" align="center">
 						<span>{firstWord}</span>
-						{hero?.title?.replace(firstWord, '')}
+						{hero?.title?.replace(firstWord, "")}
 					</Typography>
 					<Typography gutterBottom variant="h2" align="center">
 						{hero?.subtitle}
@@ -77,6 +101,7 @@ const Testimonials: React.FC = () => {
 										{service?.title}
 									</Typography>
 									<Typography>{service.description}</Typography>
+									<Button variant="contained">Hello</Button>
 								</Grid>
 								{service.right && (
 									<Grid item md={6}>
@@ -102,9 +127,9 @@ const Testimonials: React.FC = () => {
 					<Grid container alignItems="center">
 						<Grid item xs={12} lg={6}>
 							<Typography sx={{ mb: 2 }} variant="h3">
-								Projects
+								{projectTitle}
 							</Typography>
-							<Typography>A selection of our favourite projects.</Typography>
+							<Typography>{projectDescription}</Typography>
 						</Grid>
 
 						<Grid item lg={12}>
@@ -115,26 +140,27 @@ const Testimonials: React.FC = () => {
 			</Box>
 
 			<Slider>
-				{testimonials?.data?.map((t) => (
-					<ContentCard testimonial={t?.attributes} />
+				{testimonials?.data?.map((t, i) => (
+					<ContentCard testimonial={t?.attributes} key={i} />
 				))}
 			</Slider>
-			<Team />
+
+			<TeamSection team={team} />
 
 			<Box className="news">
 				<Container>
-					<Grid container alignItems="center">
-						<Grid item xs={12} lg={6}>
-							<Typography sx={{ mb: 2 }} variant="h3">
-								Checkout our latest news
-							</Typography>
-							<Typography>A selection of our favourite projects.</Typography>
-						</Grid>
+					<Typography sx={{ mb: 2 }} variant="h3">
+						{newsTitle}
+					</Typography>
+				</Container>
+				<Slider>
+					{blogs?.data?.map((t, i) => (
+						<ContentCard blog={t?.attributes} key={i} readMore={blogReadMore} />
+					))}
+				</Slider>
 
-						<Grid item lg={12}>
-							<img alt="Web Development" src={projects} className="project-images" />
-						</Grid>
-					</Grid>
+				<Container>
+					<Faqs faqs={faq} title={faqTitle} image={faqImage} />
 				</Container>
 			</Box>
 		</Styles>
@@ -208,7 +234,7 @@ const Styles = styled.div`
 			}
 		}
 	}
-  
+
 	.services {
 		position: relative;
 		background-color: #191919;
@@ -228,10 +254,11 @@ const Styles = styled.div`
 		max-width: 100%;
 		overflow-x: hidden;
 		background-color: #191919;
+		margin: ${({ theme }) => theme.spacing(-6, 0)};
 
 		img {
 			max-width: 150%;
-			margin: ${({ theme }) => theme.spacing(-2, -6)}
+			margin: ${({ theme }) => theme.spacing(0, -6)};
 		}
 	}
 
