@@ -78,12 +78,12 @@ const Styles = styled.div`
 		.swiper-slide {
 			position: relative;
 			width: 70%;
-			max-width: 800px;
+			max-width: 1000px;
 			//height: calc(432 * (16rem / 750));
 			overflow: hidden;
 			opacity: 0.3;
 			transition: opacity 0.5s ease-out;
-
+			
 			&.swiper-slide-active {
 				opacity: 1;
 			}
