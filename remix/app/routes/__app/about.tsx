@@ -49,8 +49,7 @@ const AboutPage = () => {
 	const [reactContent, setMarkdownSource] = useRemark();
 
 	const [lineOne, setLineOne] = useState<number>(0);
-	const [lineTwo, setLineTwo] = useState<number>(2);
-	const [lineThree, setLineThree] = useState<number>(1);
+	const [lineTwo, setLineTwo] = useState<number>(0);
 
 	console.log("team", team);
 
@@ -66,30 +65,10 @@ const AboutPage = () => {
 					<Typography variant="h3" className="about-related-title">
 					</Typography>
 					<Grid container spacing={2}>
-						{team?.data?.slice(0, 3)?.sort((a, b) => {
+						{team?.data?.sort((a, b) => {
 							return a?.attributes?.order - b?.attributes?.order;
-						})?.map((member, i) => <Grid md={6} className={`grid-smooth ${lineOne === i ? 'grid-smooth-large' : ''}`} item onClick={() => {
-							setLineOne(i)
-						}}>
-							<TeamCard key={i} content={member?.attributes} fullWidth={lineOne === i}  />
-						</Grid>)}
-					</Grid>
-					<Grid container spacing={2}>
-						{team?.data?.slice(3, 6)?.sort((a, b) => {
-							return a?.attributes?.order - b?.attributes?.order;
-						})?.map((member, i) => <Grid md={6} className={`grid-smooth ${lineTwo === i ? 'grid-smooth-large' : ''}`} item onClick={() => {
-							setLineTwo(i)
-						}}>
-							<TeamCard key={i} content={member?.attributes} fullWidth={lineTwo === i}  />
-						</Grid>)}
-					</Grid>
-					<Grid container spacing={2}>
-						{team?.data?.slice(6, 9)?.sort((a, b) => {
-							return a?.attributes?.order - b?.attributes?.order;
-						})?.map((member, i) => <Grid md={6} className={`grid-smooth ${lineThree === i ? 'grid-smooth-large' : ''}`} item onClick={() => {
-							setLineThree(i)
-						}}>
-							<TeamCard key={i} content={member?.attributes} fullWidth={lineThree === i}  />
+						})?.map((member, i) => <Grid className="grid-smooth" item md={6}>
+							<TeamCard key={i} content={member?.attributes} />
 						</Grid>)}
 					</Grid>
 				</Box>
@@ -132,18 +111,11 @@ const Styles = styled.div`
 	}
 
 	.about-team {
-		margin: 0 -50px;
+		margin: 0 -100px;
 	}
 	
 	.grid-smooth {
 		transition: all 500ms ease-in-out;
-		width: 20%;
-		flex-basis: 20%;
-		&.grid-smooth-large {
-			width: 60%;
-			max-width: 60%;
-			flex-basis: 60%;
-		}
 	}
 	.about-related-title {
 		font-size: 2rem;
