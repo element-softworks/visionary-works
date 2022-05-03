@@ -89,7 +89,7 @@ const Service = () => {
 					</Typography>
 					<Grid container spacing={2}>
 						{services?.data?.map((service, i) => <Grid item md={4}>
-							<ContentCardSmall key={i} blog={service?.attributes} type="services" />
+							<ContentCardSmall key={i} content={service?.attributes} type="services" />
 						</Grid>)}
 					</Grid>
 				</Box>

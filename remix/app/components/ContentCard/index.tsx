@@ -66,6 +66,7 @@ const Styles = styled.div`
 	.card {
 		display: flex;
 		border-radius: 15px;
+		background: white;
 
 		.card-content {
 			padding: ${({ theme }) => theme.spacing(5)};

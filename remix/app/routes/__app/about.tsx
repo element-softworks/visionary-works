@@ -8,16 +8,20 @@ import { getSeoMeta } from "~/seo";
 import { About } from "~/models/single/about";
 import Header from "~/components/Header";
 import { useRemark } from "react-remark";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import parseISO from "date-fns/parseISO";
 import { format } from "date-fns";
 import ContentCard from "~/components/ContentCard";
 import ContentCardSmall from "~/components/ContentCardSmall";
 import { Service } from "~/models/collection/service";
+import { Team } from "~/models/collection/team";
+import TeamCard from "~/components/TeamCard";
+import styled from "@emotion/styled";
 
 type Data = {
 	about: CMSData<About>;
 	services: CMSDataList<Service>;
+	team: CMSDataList<Team>;
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -29,20 +33,25 @@ export const meta: MetaFunction = ({ data }) => {
 export const loader: LoaderFunction = async ({ params }) => {
 	const about: any = await cms<Data>(`about`, ["*"]);
 	const services: any = await cms<Data>(`services`, ["*"]);
+	const team: any = await cms<Data>(`team-members`, ["*"]);
 
 	return json({
 		about,
-		services
+		services,
+		team
 	});
 };
 
 const AboutPage = () => {
-	const { about, services } = useLoaderData<Data>();
-	const Styles = useStyle(styles);
+	const { about, services, team } = useLoaderData<Data>();
+	// const Styles = useStyle(styles);
 	const theme = useTheme();
 	const [reactContent, setMarkdownSource] = useRemark();
 
-	console.log("services", services);
+	const [lineOne, setLineOne] = useState<number>(0);
+	const [lineTwo, setLineTwo] = useState<number>(0);
+
+	console.log("team", team);
 
 	return (
 		<Styles>
@@ -52,12 +61,14 @@ const AboutPage = () => {
 						{about?.data?.attributes?.title}
 					</Typography>
 				</Box>
-				<Box className="about-related">
+				<Box className="about-team">
 					<Typography variant="h3" className="about-related-title">
 					</Typography>
 					<Grid container spacing={2}>
-						{services?.data?.map((service, i) => <Grid item md={4}>
-							<ContentCardSmall key={i} blog={service?.attributes} type="services" />
+						{team?.data?.sort((a, b) => {
+							return a?.attributes?.order - b?.attributes?.order;
+						})?.map((member, i) => <Grid className="grid-smooth" item md={6}>
+							<TeamCard key={i} content={member?.attributes} />
 						</Grid>)}
 					</Grid>
 				</Box>
@@ -66,39 +77,50 @@ const AboutPage = () => {
 	);
 };
 
-const styles = (theme: Theme) => `
+const Styles = styled.div`
+	background: #f5f5f5;
+
 	.about-header {
 		text-align: center;
 		padding: 100px 0;
-		
+		background: transparent;
+
 		.about-title {
 			padding: 20px 0;
 		}
+
 		.about-tags {
-			display: flex; justifyContent: "center";
+			justify-content: center;
 			margin: auto;
 			display: block;
-			
+
 			.MuiChip-root {
 				margin: 10px 10px 20px;
 			}
-		} 
+		}
 	}
-	
+
 	.about-image {
 		max-width: 100%;
 		margin-bottom: 50px;
 		border-radius: 5px;
-	} 
+	}
+
+	.about-content {
+		margin-bottom: 60px;
+	}
+
+	.about-team {
+		margin: 0 -100px;
+	}
 	
-    .about-content {
-        margin-bottom: 60px;
-    }
-    
-    .about-related-title {
-        font-size: 2rem;
-        margin-bottom: 10px;
-    }
+	.grid-smooth {
+		transition: all 500ms ease-in-out;
+	}
+	.about-related-title {
+		font-size: 2rem;
+		margin-bottom: 10px;
+	}
 `;
 
 export default AboutPage;
