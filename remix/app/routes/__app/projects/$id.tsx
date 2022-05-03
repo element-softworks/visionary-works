@@ -87,7 +87,7 @@ const Project = () => {
 					</Typography>
 					<Grid container spacing={2}>
 						{projects?.data?.map((project, i) => <Grid item md={4}>
-							<ContentCardSmall key={i} blog={project?.attributes} type="projects" />
+							<ContentCardSmall key={i} content={project?.attributes} type="projects" />
 						</Grid>)}
 					</Grid>
 				</Box>

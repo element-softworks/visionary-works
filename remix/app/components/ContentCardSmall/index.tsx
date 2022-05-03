@@ -13,11 +13,22 @@ import { useTheme } from "@mui/material/styles";
 import { Testimonial } from "~/models/collection/testimonial";
 import { Link as RouterLink } from "remix";
 
-import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
-import { Blog } from "~/models/collection/blog";
 import { format } from "date-fns";
+import { CMSAuthor, CMSMedia, CMSTag } from "~/models/cms";
 
-const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string; type?: 'blog' | 'projects' | 'services' }> = ({ blog, readMore, type = "blog" }) => {
+export type Content = {
+	title: string;
+	content: any;
+	slug: string;
+	createdAt?: string;
+	updatedAt?: string;
+	publishedAt?: string;
+	coverImage: {data: CMSMedia};
+	author?: {data: CMSAuthor};
+	tags?: {data: CMSTag[]};
+};
+
+const ContentCardSmall: React.FC<{ content: Content; readMore?: string; type?: 'blog' | 'projects' | 'services' | 'team' }> = ({ content, readMore, type = "blog" }) => {
 	const theme = useTheme();
 
 	return (
@@ -26,29 +37,29 @@ const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string; type?: 'blog' 
 				<CardMedia
 					component="img"
 					sx={{ width: "100%" }}
-					image={blog?.coverImage?.data?.attributes?.url}
-					alt="Live from space album cover"
+					image={content?.coverImage?.data?.attributes?.url}
+					alt="Image"
 				/>
 				<Box sx={{ display: "flex", flexDirection: "row" }}>
 					<CardContent className={"card-content"}>
 						<div>
 							<Typography component="h5">
-								{blog?.title}
+								{content?.title}
 							</Typography>
 
-							<Box className="card-content-author">
+							{content?.publishedAt && <Box className="card-content-author">
 								<Typography variant="subtitle1" color="text.secondary" component="p">
-									{format(new Date(blog?.publishedAt), "PPPP")}
+									{format(new Date(content?.publishedAt), "PPPP")}
 								</Typography>
-							</Box>
+							</Box>}
 
-							{!!blog?.content && <Typography variant="body1" className="card-content-text">
-								{blog?.content}
+							{!!content?.content && <Typography variant="body1" className="card-content-text">
+								{content?.content}
 							</Typography>}
 
-							{!!blog?.content &&
+							{!!content?.content &&
 								<Button className="card-content-button" variant="contained" disableElevation
-								        component={RouterLink} to={`/${type}/${blog?.slug}`}>
+								        component={RouterLink} to={`/${type}/${content?.slug}`}>
 									{readMore ?? "Read More"}
 								</Button>}
 
@@ -64,6 +75,7 @@ const ContentCardSmall: React.FC<{ blog: Blog; readMore?: string; type?: 'blog' 
 const Styles = styled.div`
 	.card {
 		display: flex;
+		background: white;
 		border-radius: 15px;
 		flex-direction: column;
 		margin-bottom: 30px;
