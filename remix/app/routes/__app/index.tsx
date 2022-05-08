@@ -88,7 +88,6 @@ const Testimonials: React.FC = () => {
 				</Container>
 			</Stack>
 			<Affiliates logos={hero?.logos?.data} />
-			<Box mt={8} />
 			<Intro data={intro} />
 			<Box className="services">
 				{services?.map((service: any, i: number) => (
@@ -141,7 +140,7 @@ const Testimonials: React.FC = () => {
 						</Grid>
 
 						<Grid item lg={12}>
-							<img alt="Web Development" src={projects} className="project-images" />
+							{/*<img alt="Web Development" src={projects} className="project-images" />*/}
 						</Grid>
 					</Grid>
 				</Container>
@@ -182,7 +181,7 @@ const Testimonials: React.FC = () => {
 const Styles = styled.div`
 	.hero {
 		background-color: ${({ theme }) => theme.palette.common.white};
-		height: 100vh;
+		height: 80vh;
 		min-height: 900px;
 
 		h1 {

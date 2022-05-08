@@ -8,6 +8,7 @@ export type Service = {
 	createdAt: string;
 	updatedAt: string;
 	publishedAt: string;
+	icon: string;
 	coverImage: {data: CMSMedia};
 	author: {data: CMSAuthor};
 	tag: {data: CMSTag};
