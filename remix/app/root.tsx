@@ -36,6 +36,7 @@ import { getSeo } from '~/seo';
 import theme from '~/theme';
 import SnackbarProvider from '~/components/Snackbar';
 import { MessageContext } from '~/helpers/contexts';
+// @ts-ignore
 import swiperStyles from 'swiper/css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'

@@ -3,6 +3,7 @@ import { CMSAuthor, CMSData, CMSMedia, CMSTag } from "~/models/cms";
 export type Service = {
 	title: string;
 	subtitle: string;
+	contentTitle: string;
 	content: any;
 	slug: string;
 	createdAt: string;

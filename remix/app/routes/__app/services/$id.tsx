@@ -12,15 +12,20 @@ import React, { useEffect } from "react";
 import parseISO from "date-fns/parseISO";
 import { format } from "date-fns";
 import ContentCard from "~/components/ContentCard";
-import ContentCardSmall from "~/components/ContentCardSmall";
+import ServicesCard from "~/components/ServicesCard";
+import ProcessTabs from "~/components/ProcessTabs";
 import { Link as RouterLink } from "remix";
 import styled from "@emotion/styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconName } from "@fortawesome/fontawesome-common-types";
+import Slider from "~/components/Slider";
+import { Project } from "~/models/collection/project";
+import FaqsList from "~/components/FaqsList";
 
 type Data = {
 	service: CMSData<Service>;
 	services: CMSDataList<Service>;
+	projects: CMSDataList<Project>;
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -33,12 +38,14 @@ export const loader: LoaderFunction = async ({ params }) => {
 	// const service = await cms<Data>(`slugify/slugs/service/${params.id}`);
 	const service: any = await cms<Data>(`services`, ["*"], `?filters[slug]=${params.id}`);
 	const services: any = await cms<Data>(`services`, ["*"]);
+	const projects: any = await cms<Data>(`projects`, ["*"]);
 
 	// const firstService = service?.data?.[0]
 	return json({
 		service: {
 			data: service?.data?.[0]
 		},
+		projects,
 		// services: {
 		// 	data: services?.data?.filter((service: Service) => {
 		// 		console.log( service?.attributes?.slug, params?.id);
@@ -46,17 +53,18 @@ export const loader: LoaderFunction = async ({ params }) => {
 		// 	})
 		// }
 		services: {
-			data: services?.data?.slice(0, 2)
+			data: services?.data?.filter((s: { attributes: Service }) => {
+				console.log(242, s?.attributes?.tag?.data?.attributes?.name, s?.attributes?.title);
+				return s?.attributes?.slug !== params?.id;// && s?.attributes?.tag?.data?.attributes?.name === service?.attributes?.tag?.data?.attributes?.name
+			})
 		}
 	});
 };
 
 const Service = () => {
-	const { service, services } = useLoaderData<Data>();
+	const { service, services, projects } = useLoaderData<Data>();
 	const theme = useTheme();
 	const [reactContent, setMarkdownSource] = useRemark();
-
-	console.log("service", services);
 
 	useEffect(() => {
 		setMarkdownSource(service?.data?.attributes?.content);
@@ -69,7 +77,7 @@ const Service = () => {
 					<Grid container>
 						<Grid item sm={6}>
 							<Typography className="service-title"
-							            variant="h1">{service?.data?.attributes?.title} </Typography>
+							            variant="h1">{service?.data?.attributes?.title}</Typography>
 							{!!service?.data?.attributes?.tag?.data?.attributes?.name &&
 								<Box className="service-tags" component={RouterLink} to={"/service"}>
 									<Chip label={service?.data?.attributes?.tag?.data?.attributes?.name} />
@@ -79,11 +87,9 @@ const Service = () => {
 							            variant="h2">{service?.data?.attributes?.subtitle}</Typography>
 						</Grid>
 						<Grid item sm={6}>
-							{/*<img src={service?.data?.attributes?.coverImage?.data?.attributes?.url}*/}
-							{/*     className="service-image"*/}
-							{/*     alt={`${service?.data?.attributes?.title} cover image`} />*/}
 							<Box className="service-icon-background">
-								<FontAwesomeIcon icon={["fad", service?.data?.attributes?.icon as IconName]} />
+								{!!service?.data?.attributes?.icon &&
+									<FontAwesomeIcon icon={["fad", service?.data?.attributes?.icon as IconName]} />}
 							</Box>
 						</Grid>
 					</Grid>
@@ -92,22 +98,58 @@ const Service = () => {
 
 			<Box className="service-content">
 				<Container>
-					{reactContent}
+					<Grid container className="service-content-wrapper" spacing={2}>
+						<Grid item sm={7}>
+							<Typography className="service-subtitle"
+							            variant="h3">{service?.data?.attributes?.contentTitle}</Typography>
+							{reactContent}
+						</Grid>
+						<Grid item sm={5}>
+							<img src={service?.data?.attributes?.coverImage?.data?.attributes?.url}
+							     className="service-image"
+							     alt={`${service?.data?.attributes?.title} cover image`} />
+						</Grid>
+					</Grid>
+
+					<Typography className="service-what-can-we-provide" variant="h4">What can we provide?</Typography>
+
+					<Grid container spacing={2}>
+						{services?.data?.map((service, i) => <Grid key={i} item md={4}>
+							<ServicesCard content={service?.attributes} />
+						</Grid>)}
+					</Grid>
+
 				</Container>
 			</Box>
 
-			<Container>
-				<Box className="service-related">
-					<Typography variant="h3" className="service-related-title">
-						Suggested Services
-					</Typography>
-					<Grid container spacing={2}>
-						{services?.data?.map((service, i) => <Grid item md={4}>
-							<ContentCardSmall key={i} content={service?.attributes} type="services" />
-						</Grid>)}
-					</Grid>
-				</Box>
-			</Container>
+			<Box className="service-related">
+				<Container>
+					<ProcessTabs />
+				</Container>
+			</Box>
+
+
+			<Box className="projects-related">
+				<Container>
+					<Typography className="projects-related-title"
+					            variant="h4">Checkout our recent {service?.data?.attributes?.title} projects</Typography>
+
+				</Container>
+				<Slider>
+					{projects?.data?.map((t, i) => (
+						<ContentCard blog={t?.attributes} key={i} readMore="Read More" />
+					))}
+				</Slider>
+			</Box>
+
+
+			<Box className="faqs">
+				<Container>
+					<Typography className="service-subtitle"
+					            variant="h4">Got a {service?.data?.attributes?.title} related question?</Typography>
+					<FaqsList />
+				</Container>
+			</Box>
 		</Styles>
 	);
 };
@@ -115,7 +157,7 @@ const Service = () => {
 const Styles = styled.div`
 	.service-header {
 		background: white;
-		margin-bottom: 60px;
+		//margin-bottom: 60px;
 		text-align: left;
 		padding: 100px 0;
 
@@ -132,19 +174,19 @@ const Styles = styled.div`
 
 		.service-tags {
 			display: flex;
-			justifyContent: "center";
+			//justify-content: center;
 			margin: auto;
-			display: block;
+			text-decoration: none;
 
 			.MuiChip-root {
 				margin: 10px 10px 20px;
 			}
 		}
-		
+
 		.service-icon-background {
-			background: #00e6f740;	
+			background: #00e6f740;
 			border-radius: 10px;
-			
+
 			svg {
 				font-size: 100px;
 				padding: 170px 0;
@@ -154,22 +196,49 @@ const Styles = styled.div`
 		}
 	}
 
-	.service-image {
-		margin-top: -60px;
-		max-width: 100%;
-		margin-bottom: 50px;
-		border-radius: 5px;
-	}
-
 	.service-content {
-		padding: 300px 0;
+		padding: 100px 0;
 		color: white;
 		background: #111;
+
+		.service-content-wrapper {
+			align-items: center;
+			margin-bottom: 100px;
+
+			.service-image {
+				max-width: 100%;
+				border-radius: 5px;
+			}
+		}
+
+		.service-what-can-we-provide {
+			font-size: 1.5rem;
+			max-width: 600px;
+			display: block;
+			margin-bottom: 30px;
+		}
 	}
 
-	.service-related-title {
-		font-size: 2rem;
-		margin-bottom: 10px;
+	.service-related {
+		background: white;
+
+		.service-related-title {
+			font-size: 2rem;
+			margin-bottom: 10px;
+		}
+	}
+
+	.projects-related {
+		padding: 150px 0;
+		background: #00afd4c2;
+		
+		.projects-related-title {
+			padding-bottom: 30px;
+		}
+	}
+
+	.faqs {
+		background: #00afd4c2;
 	}
 `;
 
