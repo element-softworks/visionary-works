@@ -17,6 +17,26 @@
     },
     "description": {
       "type": "text"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "heroText": {
+      "type": "text"
+    },
+    "services": {
+      "displayName": "services",
+      "type": "component",
+      "repeatable": false,
+      "component": "about.services"
     }
   }
 }

@@ -36,7 +36,12 @@ import { getSeo } from '~/seo';
 import theme from '~/theme';
 import SnackbarProvider from '~/components/Snackbar';
 import { MessageContext } from '~/helpers/contexts';
+// @ts-ignore
 import swiperStyles from 'swiper/css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { fad } from "@fortawesome/pro-duotone-svg-icons";
 
 // console.log('swiperStyles', swiperStyles);
 
@@ -66,6 +71,8 @@ interface DocumentProps {
 const Document = withEmotionCache(({ children, title }: DocumentProps, emotionCache) => {
 	const serverStyleData = useContext(ServerStyleContext);
 	const clientStyleData = useContext(ClientStyleContext);
+
+	library.add(fab, faCheckSquare, faCoffee, fad)
 
 	// Only executed on client
 	useEnhancedEffect(() => {

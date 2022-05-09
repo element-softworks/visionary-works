@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_about_services",
+  "info": {
+    "displayName": "services",
+    "icon": "american-sign-language-interpreting"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "list": {
+      "type": "component",
+      "repeatable": true,
+      "component": "service.bulletpoint"
+    }
+  }
+}

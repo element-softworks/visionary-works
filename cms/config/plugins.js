@@ -20,6 +20,10 @@ module.exports = ({ env }) => ({
           field: "slug",
           references: "title"
         },
+        service: {
+          field: "slug",
+          references: "title"
+        },
         project: {
           field: "slug",
           references: "title"

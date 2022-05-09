@@ -23,7 +23,9 @@ const Affiliates: React.FC<{ logos: { attributes: { name: string; url: string } 
 const Styles = styled.div`
 	max-width: 100%;
 	overflow: hidden;
-
+	background: white;
+	padding-bottom: 80px;
+	
 	ul {
 		list-style: none;
 		flex-wrap: nowrap;
@@ -32,10 +34,11 @@ const Styles = styled.div`
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		padding-inline-start: 0;
 
 		li {
 			flex: 0 0 150px;
-			margin-left: ${({ theme }) => theme.spacing(10)};
+			margin: 0 80px !important;
 
 			img {
 				width: 100%;
