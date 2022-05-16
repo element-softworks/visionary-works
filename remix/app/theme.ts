@@ -68,6 +68,21 @@ theme.components = {
 			},
 		},
 	},
+	MuiContainer: {
+		styleOverrides: {
+			root: css`
+				${theme.breakpoints.up('sm')} {
+					padding-left: ${theme.spacing(6)};
+					padding-right: ${theme.spacing(6)};
+				}
+
+				${theme.breakpoints.up('lg')} {
+					padding-left: ${theme.spacing(3)};
+					padding-right: ${theme.spacing(3)};
+				}
+			`,
+		},
+	},
 	MuiLink: {
 		styleOverrides: {
 			root: css`
