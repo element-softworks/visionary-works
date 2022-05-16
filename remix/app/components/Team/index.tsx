@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Button, Container, Grid } from '@mui/material';
+import { Typography, Button, Container, Grid, useMediaQuery } from '@mui/material';
 import styled from '@emotion/styled';
 import { useTheme } from '@mui/material/styles';
 import { Homepage } from '~/models/single/homepage';
@@ -14,6 +14,7 @@ import { shuffle } from '~/helpers/common';
 
 const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
 	const theme = useTheme();
+	const md = useMediaQuery(theme.breakpoints.up('md'));
 	const teamImages = shuffle([
 		{ name: 'Abigail', src: teamAbigail },
 		{ name: 'Darryl', src: teamDarryl },
@@ -28,7 +29,16 @@ const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
 		<Styles>
 			<Container>
 				<Grid container spacing={3} alignItems="center">
-					<Grid item xs={5}>
+					{!md && (
+						<Grid item xs={12} md={6} xl={7}>
+							<div className="team-images team-images-mobile team-images-mobile-first">
+								{teamImages?.slice(0, 3)?.map((team) => (
+									<img className="team-image" alt={team.name} src={team.src} />
+								))}
+							</div>
+						</Grid>
+					)}
+					<Grid item xs={12} md={6} xl={5}>
 						<Typography component="h2" className="team-title">
 							{team?.title}
 						</Typography>
@@ -39,11 +49,17 @@ const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
 							{team?.button}
 						</Button>
 					</Grid>
-					<Grid item xs={7}>
-						<div className="team-images">
-							{teamImages?.map((team) => (
-								<img className="team-image" alt={team.name} src={team.src} />
-							))}
+					<Grid item xs={12} md={6} xl={7}>
+						<div
+							className={`team-images ${
+								!md ? 'team-images-mobile team-images-mobile-second' : ''
+							}`}
+						>
+							{teamImages
+								?.slice(!md ? 3 : 0, !md ? 6 : teamImages.length)
+								?.map((team) => (
+									<img className="team-image" alt={team.name} src={team.src} />
+								))}
 						</div>
 					</Grid>
 				</Grid>
@@ -67,6 +83,32 @@ const Styles = styled.div`
 	.team-images {
 		position: relative;
 		height: 750px;
+
+		&.team-images-mobile {
+			height: 30vw;
+
+			&.team-images-mobile-first {
+				.team-image {
+					&:nth-child(1) {
+						top: 7.5vw;
+						left: 3vw;
+						width: 20vw;
+					}
+
+					&:nth-child(2) {
+						top: 0;
+						left: 38vw;
+						width: 16vw;
+					}
+
+					&:nth-child(3) {
+						top: 5vw;
+						left: 68vw;
+						width: 14vw;
+					}
+				}
+			}
+		}
 
 		.team-image {
 			position: absolute;
