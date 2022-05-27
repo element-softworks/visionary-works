@@ -1,4 +1,5 @@
-import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
+import { useLoaderData, Link as RouterLink } from '@remix-run/react';
+import { json, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { Box, Button, Container, Grid, Link, Stack, Typography, useTheme } from '@mui/material';
 import { cms } from '~/utils/cms.server';
 import React, { useState } from 'react';

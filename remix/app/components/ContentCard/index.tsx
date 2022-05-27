@@ -11,7 +11,7 @@ import {
 import styled from "@emotion/styled";
 import { useTheme } from "@mui/material/styles";
 import { Testimonial } from "~/models/collection/testimonial";
-import { Link as RouterLink } from 'remix';
+import { Link as RouterLink }from '@remix-run/react';
 
 import { SkipPrevious, PlayArrow, SkipNext } from "@mui/icons-material";
 import { Blog } from "~/models/collection/blog";

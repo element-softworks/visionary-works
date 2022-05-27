@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import { IconButton, useMediaQuery, useTheme } from '@mui/material';
 import { ArrowForward, ArrowRight } from '@mui/icons-material';
@@ -17,35 +17,35 @@ const Slider: React.FC<{
 
 	return (
 		<Styles>
-			<Swiper
-				className="swiper-container"
-				spaceBetween={100}
-				// slidesPerView={lg ? "auto" : md ? 1.5 : 1.25}
-				slidesPerView="auto"
-				centeredSlides={md}
-				loop
-				autoplay
-				onSlideChange={() => console.log('slide change')}
-				onSwiper={(swiper) => setSwiper(swiper)}
-				navigation={{
-					nextEl: '.slider-next',
-				}}
-				// onSlideChangeTransitionStart={(swiper) => swiper.slideTo()}
-			>
-				{React.Children.map(children, (child, i) => (
-					<SwiperSlide key={i}>{child}</SwiperSlide>
-				))}
+			{/*<Swiper*/}
+			{/*	className="swiper-container"*/}
+			{/*	spaceBetween={100}*/}
+			{/*	// slidesPerView={lg ? "auto" : md ? 1.5 : 1.25}*/}
+			{/*	slidesPerView="auto"*/}
+			{/*	centeredSlides={md}*/}
+			{/*	loop*/}
+			{/*	autoplay*/}
+			{/*	onSlideChange={() => console.log('slide change')}*/}
+			{/*	onSwiper={(swiper) => setSwiper(swiper)}*/}
+			{/*	navigation={{*/}
+			{/*		nextEl: '.slider-next',*/}
+			{/*	}}*/}
+			{/*	// onSlideChangeTransitionStart={(swiper) => swiper.slideTo()}*/}
+			{/*>*/}
+			{/*	{React.Children.map(children, (child, i) => (*/}
+			{/*		<SwiperSlide key={i}>{child}</SwiperSlide>*/}
+			{/*	))}*/}
 
-				<IconButton
-					size="large"
-					color="inherit"
-					ref={$next}
-					className="slider-next"
-					onClick={() => swiper?.slideNext()}
-				>
-					<ArrowForward />
-				</IconButton>
-			</Swiper>
+			{/*	<IconButton*/}
+			{/*		size="large"*/}
+			{/*		color="inherit"*/}
+			{/*		ref={$next}*/}
+			{/*		className="slider-next"*/}
+			{/*		onClick={() => swiper?.slideNext()}*/}
+			{/*	>*/}
+			{/*		<ArrowForward />*/}
+			{/*	</IconButton>*/}
+			{/*</Swiper>*/}
 		</Styles>
 	);
 };

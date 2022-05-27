@@ -1,18 +1,14 @@
-import { json, LoaderFunction, MetaFunction, useLoaderData } from "remix";
-import { Typography, Chip, useTheme, Container, Grid, Box } from "@mui/material";
-import useStyle from "~/helpers/hooks/useStyle";
-import { Theme } from "@emotion/react";
-import { cms } from "~/utils/cms.server";
-import { CMSData, CMSDataList } from "~/models/cms";
-import { getSeoMeta } from "~/seo";
-import { Service } from "~/models/collection/service";
-import Header from "~/components/Header";
-import { useRemark } from "react-remark";
-import React, { useEffect } from "react";
-import parseISO from "date-fns/parseISO";
-import { format } from "date-fns";
-import ContentCard from "~/components/ContentCard";
-import ContentCardSmall from "~/components/ContentCardSmall";
+import { json, LoaderFunction, MetaFunction, useLoaderData } from 'remix';
+import { Typography, useTheme, Container, Grid, Box } from '@mui/material';
+import useStyle from '~/helpers/hooks/useStyle';
+import { Theme } from '@emotion/react';
+import { cms } from '~/utils/cms.server';
+import { CMSData, CMSDataList } from '~/models/cms';
+import { getSeoMeta } from '~/seo';
+import { Service } from '~/models/collection/service';
+import { useRemark } from 'react-remark';
+import React from 'react';
+import ContentCardSmall from '~/components/ContentCardSmall';
 
 type Data = {
 	service: CMSData<Service>;
@@ -21,15 +17,15 @@ type Data = {
 
 export const meta: MetaFunction = ({ data }) => {
 	return getSeoMeta({
-		title: data?.services?.data?.attributes?.title ?? "Service"
+		title: data?.services?.data?.attributes?.title ?? 'Service',
 	});
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-	const services: any = await cms<Data>(`services`, ["*"]);
+	const services: any = await cms<Data>(`services`, ['*']);
 
 	return json({
-		services
+		services,
 	});
 };
 
@@ -39,22 +35,30 @@ const ServicePage = () => {
 	const theme = useTheme();
 	const [reactContent, setMarkdownSource] = useRemark();
 
-	console.log("services", services);
+	console.log('services', services);
 
 	return (
 		<Styles>
 			<Container>
 				<Box className="service-header">
-					<Typography className="service-title" variant="h1">Services</Typography>
+					<Typography className="service-title" variant="h1">
+						Services
+					</Typography>
 				</Box>
 				<Box className="service-related">
 					<Typography variant="h3" className="service-related-title">
 						Latest Posts
 					</Typography>
 					<Grid container spacing={2}>
-						{services?.data?.map((service, i) => <Grid item md={4}>
-							<ContentCardSmall key={i} content={service?.attributes} type="services" />
-						</Grid>)}
+						{services?.data?.map((service, i) => (
+							<Grid item md={4}>
+								<ContentCardSmall
+									key={i}
+									content={service?.attributes}
+									type="services"
+								/>
+							</Grid>
+						))}
 					</Grid>
 				</Box>
 			</Container>
