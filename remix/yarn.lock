@@ -2564,6 +2564,11 @@ embla-carousel-auto-height@^6.2.0:
   resolved "https://registry.yarnpkg.com/embla-carousel-auto-height/-/embla-carousel-auto-height-6.2.0.tgz#43c942f1928a6437388c54a454c721c8324290dd"
   integrity sha512-Qz+P4ihnsCYzVHdlTVb3gKOSbPfJBgxf3b33EjyvjpAt8vxJuDRE0ljIMI1oiMwKGBBqpJGbZCCUyMwPfaXCOA==
 
+embla-carousel-autoplay@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-autoplay/-/embla-carousel-autoplay-6.2.0.tgz#0fe9c1fb0b2e0f8196f686f21cf3a8c47a008ba6"
+  integrity sha512-3AxzeRwzgDR5aPcPXwdcrpm25A9yVB1ZE/0mQJJsOyfIfKrXu3wgSkI/cxQkCOxM54UjTVhiuhoJb8enpRa7FQ==
+
 embla-carousel-class-names@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/embla-carousel-class-names/-/embla-carousel-class-names-6.2.0.tgz#aae44412f520a4a93d8a52c8fffedad6cf1d6f22"
