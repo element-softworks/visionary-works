@@ -16,3 +16,4 @@ node_modules
 remix/functions/
 
 remix/yarn-error.log
+.netlify

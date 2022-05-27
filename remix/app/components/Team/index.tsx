@@ -32,8 +32,13 @@ const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
 					{!md && (
 						<Grid item xs={12} md={6} xl={7}>
 							<div className="team-images team-images-mobile team-images-mobile-first">
-								{teamImages?.slice(0, 3)?.map((team) => (
-									<img className="team-image" alt={team.name} src={team.src} />
+								{teamImages?.slice(0, 3)?.map((team, i) => (
+									<img
+										key={`${team.src}_${i}`}
+										className="team-image"
+										alt={team.name}
+										src={team.src}
+									/>
 								))}
 							</div>
 						</Grid>
@@ -57,8 +62,13 @@ const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
 						>
 							{teamImages
 								?.slice(!md ? 3 : 0, !md ? 6 : teamImages.length)
-								?.map((team) => (
-									<img className="team-image" alt={team.name} src={team.src} />
+								?.map((team, i) => (
+									<img
+										key={`${team.src}_${i}`}
+										className="team-image"
+										alt={team.name}
+										src={team.src}
+									/>
 								))}
 						</div>
 					</Grid>

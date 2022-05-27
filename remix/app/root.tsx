@@ -32,13 +32,10 @@ import { getSeo } from '~/seo';
 import theme from '~/theme';
 import SnackbarProvider from '~/components/Snackbar';
 import { MessageContext } from '~/helpers/contexts';
-import swiperStyles from 'swiper/swiper.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { fad } from '@fortawesome/pro-duotone-svg-icons';
-
-console.log('swiperStyles', swiperStyles);
 
 const [seoMeta, seoLinks] = getSeo();
 
@@ -50,11 +47,7 @@ export const links: LinksFunction = () => {
 		{
 			rel: 'stylesheet',
 			href: globalStyles,
-		},
-		{
-			rel: 'stylesheet',
-			href: swiperStyles,
-		},
+		}
 	];
 };
 

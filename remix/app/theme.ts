@@ -1,8 +1,8 @@
 import { grey } from '@mui/material/colors';
-import { createTheme, lighten } from '@mui/material';
+import {createTheme, lighten, responsiveFontSizes} from '@mui/material';
 import { css } from '@emotion/react';
 
-const theme = createTheme({
+let theme = createTheme({
 	palette: {
 		primary: {
 			main: '#00AFD4',
@@ -150,5 +150,7 @@ theme.components = {
 		],
 	},
 };
+
+theme = responsiveFontSizes(theme);
 
 export default theme;
