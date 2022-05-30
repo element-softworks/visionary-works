@@ -1,6 +1,7 @@
-import { useLoaderData, Link as RouterLink } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { json, LoaderFunction, MetaFunction } from '@remix-run/node';
 import {
+	alpha,
 	Avatar,
 	Box,
 	Button,
@@ -10,20 +11,20 @@ import {
 	CardMedia,
 	Container,
 	Grid,
+	IconButton,
 	Link,
 	Stack,
 	Typography,
 	useTheme,
 } from '@mui/material';
 import { cms } from '~/utils/cms.server';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';
 import Affiliates from '~/components/Affiliates';
 import monitor from '~/images/monitor.png';
 import mobile from '~/images/mobile.png';
 import wave from '~/images/wave.svg';
-import projects from '~/images/projects.png';
 import TeamSection from '~/components/Team';
 import Intro from '~/components/Home/Intro';
 import Slider from '~/components/Slider';
@@ -33,12 +34,25 @@ import { Homepage } from '~/models/single/homepage';
 import { Testimonial } from '~/models/collection/testimonial';
 import { Blog } from '~/models/collection/blog';
 import Faqs from '~/components/Faqs';
-import { format } from 'date-fns';
+import { config, animated, useTransition } from 'react-spring';
+import { grey } from '@mui/material/colors';
+import { HeaderHeightContext } from '~/helpers/contexts';
+import { KeyboardArrowDown } from '@mui/icons-material';
+import { shuffle } from '~/helpers/common';
+import teamAbigail from '~/images/team/abigail.jpg';
+import teamDarryl from '~/images/team/darryl.jpg';
+import teamJacob from '~/images/team/jacob.jpg';
+import teamJoe from '~/images/team/joe.jpg';
+import teamLauren from '~/images/team/lauren.jpg';
+import teamLuke from '~/images/team/luke.jpg';
+import teamNatalie from '~/images/team/natalie.jpg';
+import useDimensions from '~/helpers/hooks/useDimensions';
 
 type Data = {
 	page: CMSData<Homepage>;
 	testimonials: CMSDataList<Testimonial>;
 	blogs: CMSDataList<Blog>;
+	teamImages: { name: string; src: string }[];
 };
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
@@ -55,13 +69,24 @@ export const loader: LoaderFunction = async () => {
 	]);
 	const blogs = await cms<Data['blogs']>('blogs', ['author', 'coverImage']);
 
-	return json({ testimonials, page, blogs });
+	const teamImages = shuffle([
+		{ name: 'Abigail', src: teamAbigail },
+		{ name: 'Darryl', src: teamDarryl },
+		{ name: 'Jacob', src: teamJacob },
+		{ name: 'Joe', src: teamJoe },
+		{ name: 'Lauren', src: teamLauren },
+		{ name: 'Luke', src: teamLuke },
+		{ name: 'Natalie', src: teamNatalie },
+	]);
+
+	return json({ testimonials, page, blogs, teamImages });
 };
 
 const Home: React.FC = () => {
 	const theme = useTheme();
 	const {
 		testimonials,
+		teamImages,
 		page: {
 			data: {
 				attributes: {
@@ -80,30 +105,78 @@ const Home: React.FC = () => {
 		},
 		blogs,
 	} = useLoaderData<Data>();
-	const [step, setStep] = useState(0);
-	const firstWord = hero?.title?.split(' ')?.[0];
+	const [titleVerbs] = useState(['Visionary', 'Innovative', 'Revolutionary']);
+	const [titleVerbIndex, setTitleVerbIndex] = useState(0);
 	const services = intro?.services;
+	const [show, set] = useState(false);
+	const { height: headerHeight } = useContext(HeaderHeightContext);
 
-	console.log({ team });
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setTitleVerbIndex((state) => (state + 1) % titleVerbs.length);
+		}, 4000);
+
+		return () => clearInterval(interval);
+	}, []);
+
+	const textTransitions = useTransition(titleVerbs[titleVerbIndex], {
+		from: { opacity: 0 },
+		enter: { opacity: 1 },
+		leave: { opacity: 0 },
+		delay: 200,
+		config: config.molasses,
+		reverse: show,
+		onRest: () => set(!show),
+	});
+
+	const [$heroText, { offsetHeight: heroTextHeight }] = useDimensions();
 
 	return (
 		<Styles>
-			<Stack justifyContent="center" className="hero">
-				<Container>
+			<Stack className="hero" style={{ paddingTop: `${headerHeight}px` }}>
+				<Container className="hero-content">
 					<Typography gutterBottom variant="h1" align="center">
-						<span>{firstWord}</span>
-						{hero?.title?.replace(firstWord, '')}
+						<Box
+							component="span"
+							style={{
+								display: 'flex',
+								flexWrap: 'wrap',
+							}}
+						>
+							<Box ref={$heroText} sx={{ marginRight: 2.5 }}>
+								We are a {` `}
+							</Box>
+							<span
+								className="heading-animated-text-wrapper"
+								style={{
+									height: heroTextHeight,
+								}}
+							>
+								{textTransitions((styles, item) => (
+									<animated.span
+										className="heading-animated-text"
+										style={{ ...styles }}
+									>
+										{item}
+									</animated.span>
+								))}
+							</span>
+						</Box>
+						web development agency.
 					</Typography>
 					<Typography gutterBottom variant="h2" align="center">
 						{hero?.subtitle}
 					</Typography>
-					<Box mt={8} />
-					<Button variant="contained" disableElevation>
-						{hero?.cta}
-					</Button>
+					<Box mt={4} />
+					<IconButton className="heading-action" color="primary">
+						<KeyboardArrowDown />
+					</IconButton>
 				</Container>
+				<Affiliates logos={hero?.logos?.data} />
+
+				<img alt="Visionary Works Team" className="hero-team" src="/team.jpg" />
 			</Stack>
-			<Affiliates logos={hero?.logos?.data} />
+
 			<Intro data={intro} />
 			<Box className="services">
 				{services?.map((service: any, i: number) => (
@@ -201,7 +274,7 @@ const Home: React.FC = () => {
 			</Slider>
 
 			<Box sx={{ mt: theme.spacing(20) }} />
-			<TeamSection team={team} />
+			<TeamSection team={team} teamImages={teamImages} />
 			<Box sx={{ mt: theme.spacing(20) }} />
 
 			<Box className="news">
@@ -226,28 +299,65 @@ const Home: React.FC = () => {
 
 const Styles = styled.div`
 	.hero {
-		background-color: ${({ theme }) => theme.palette.common.white};
-		height: 80vh;
+		background-color: ${grey[200]};
+		height: 100vh;
 		min-height: 900px;
+	  	position: relative;
+	  
+	  .hero-content {
+	    margin-top: auto;
+	    position: relative;
+	    z-index: 1;
+	  }
+	  
+	  .hero-team {
+		position: absolute;
+	    top: 40%;
+		object-fit: cover;
+	    opacity: 0.5;
+		transform: translateY(-50%) scaleX(-1);
+		object-position: top right;
+		max-width: 50vw;
+		min-height: 40vw;
+		transform-origin: top center;
+		right: 0;
+
+		${({ theme }) => theme.breakpoints.up('md')} {
+		  max-width: 50vw;
+		  min-height: 28vw;
+		  right: -50%;
+		  transform-origin: left;
+		}
+	  }
 
 		h1 {
 			color: #4D4D4D;
-			max-width: 1000px;
-			margin: auto;
 			display: block;
+		  	text-align: left;
 
 			> span {
-				display: block;
+			  	display: block;
+			  
+				  .heading-animated-text-wrapper {
+				    min-width: 600px;
+				    display: inline-flex;
 
-				background-size: 100% 100%;
-				background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
-				//background-blend-mode: hue, hard-light, hard-light, hard-light, lighten, normal;
-				// FF doesn't have a prefix
-				background-clip: text;
-				text-fill-color: transparent;
-
-				animation: gradient-loop 4s infinite alternate;
-				background-image: ${({ theme }) => theme.palette.primary.gradient};
+					.heading-animated-text {
+					  position: absolute;
+					  color: ${({ theme }) => theme.palette.primary.main};
+					  will-change: opacity;
+					  
+					  //background-size: 100% 100%;
+					  //background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+					  ////background-blend-mode: hue, hard-light, hard-light, hard-light, lighten, normal;
+					  //// FF doesn't have a prefix
+					  //background-clip: text;
+					  //text-fill-color: transparent;
+					  //
+					  //animation: gradient-loop 4s infinite alternate;
+					  // background-image: // // ({ theme }) // => /*theme.palette.primary.gradient};
+					}
+				  }
 			}
 
 			@media (max-width: 600px) {
@@ -256,17 +366,19 @@ const Styles = styled.div`
 		}
 
 		h2 {
-			font-size: 1.6rem;
-			max-width: 900px;
+			font-size: 1.2rem;
+		  	font-weight: 400;
 			display: block;
-			margin: auto;
 			margin-top: ${({ theme }) => theme.spacing(2)};
+		  	text-align: left;
+		  	max-width: 800px;
+		  	max-width: 65ch;
+		  	line-height: 150%;
 		}
-
-		button {
-			display: block;
-			margin: auto;
-		}
+	  
+	  .heading-action {
+	    background: ${({ theme }) => alpha(theme.palette.primary.main, 0.25)};
+	  }
 
 		@keyframes gradient-loop {
 			from {

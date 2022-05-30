@@ -74,7 +74,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 						className="intro-feature"
 						style={{
 							height: windowHeight ?? undefined,
-							opacity: introFeatureOpacity,
+							opacity: isNaN(introFeatureOpacity) ? 0 : introFeatureOpacity,
 						}}
 					>
 						<div style={{ transform: `translateX(0%)` }}>
@@ -130,7 +130,10 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 					className="intro-content"
 					sx={{ py: 12 }}
 					ref={$introContentWrapper}
-					style={{ minHeight: windowHeight ?? undefined, opacity: isNaN(introContentOpacity) ? 0 : introContentOpacity }}
+					style={{
+						minHeight: windowHeight ?? undefined,
+						opacity: isNaN(introContentOpacity) ? 0 : introContentOpacity,
+					}}
 				>
 					<Grid container ref={$introContent}>
 						<Grid item xs={12} md={8}>

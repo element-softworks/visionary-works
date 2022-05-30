@@ -1,12 +1,19 @@
-import React from "react";
-import { Box, Button, Container, CssBaseline, Grid, Link, Stack, Typography } from "@mui/material";
-import { json, LoaderFunction, Outlet, Link as RouterLink } from "remix";
-import useStyle from "~/helpers/hooks/useStyle";
-import { Theme } from "@emotion/react";
-import styled from "@emotion/styled";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
-import { faLinkedinIn, faFacebookF, faInstagram, faTiktok } from "@fortawesome/free-brands-svg-icons";
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Button, Container, CssBaseline, Grid, Link, Stack, Typography } from '@mui/material';
+import { json, LoaderFunction, Outlet, Link as RouterLink } from 'remix';
+import useStyle from '~/helpers/hooks/useStyle';
+import { Theme } from '@emotion/react';
+import styled from '@emotion/styled';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import {
+	faLinkedinIn,
+	faFacebookF,
+	faInstagram,
+	faTiktok,
+} from '@fortawesome/free-brands-svg-icons';
+import Header from '~/components/Header';
+import { HeaderHeightContext } from '~/helpers/contexts';
 // import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 // using authenticated session with cloudflare pages
@@ -34,92 +41,53 @@ export const loader: LoaderFunction = async ({ context, request }) => {
 };
 
 const Layout: React.FC = () => {
+	const $header: any = useRef(null);
+	const [headerHeight, setHeaderHeight] = useState(null);
+
+	const handleHeaderHeight = () => {
+		setHeaderHeight($header?.current?.offsetHeight ?? null);
+	};
+
+	useEffect(() => {
+		window.addEventListener('resize', handleHeaderHeight);
+		handleHeaderHeight();
+
+		return () => {
+			window.removeEventListener('resize', handleHeaderHeight);
+		};
+	}, []);
+
 	return (
 		<Styles>
 			<CssBaseline />
-			<Box component="header">
-				<Container maxWidth="lg">
-					<Stack direction="row" alignItems="center">
-						<Box component="span" sx={{ flexGrow: 1 }}>
-							<Link component={RouterLink} to="/">
-								<img className="logo" alt="Logo" src="/logo-draft.svg" />
-							</Link>
-						</Box>
-						<Box component="nav">
-							<Stack spacing={10} direction="row" component="ul" alignItems="center">
-								<li>
-									<Link
-										className="mobile-hidden"
-										component={RouterLink}
-										to="/about"
-									>
-										About
-									</Link>
-								</li>
-								<li>
-									<Link
-										className="mobile-hidden"
-										component={RouterLink}
-										to="/services"
-									>
-										Services
-									</Link>
-								</li>
-								<li>
-									<Link
-										className="mobile-hidden"
-										component={RouterLink}
-										to="/projects"
-									>
-										Projects
-									</Link>
-								</li>
-								<li>
-									<Link
-										className="mobile-hidden"
-										component={RouterLink}
-										to="/blog"
-									>
-										Blog
-									</Link>
-								</li>
-								<li>
-									<Button
-										className="mobile-hidden"
-										variant="inverse"
-										component={RouterLink}
-										to="/contact"
-									>
-										Contact
-									</Button>
-								</li>
-							</Stack>
-						</Box>
-					</Stack>
-				</Container>
-			</Box>
-			<Box component="main">
-				<Outlet />
-			</Box>
+			<Header ref={$header} />
+			<HeaderHeightContext.Provider value={{ height: headerHeight }}>
+				<Box component="main">
+					<Outlet />
+				</Box>
+			</HeaderHeightContext.Provider>
 			<footer>
 				<Container>
 					<Grid container sx={{ mb: 2 }}>
 						<Grid item sm={6}>
-							<Typography
-								variant="h5"
-								className="footer-title"
-							>
+							<Typography variant="h5" className="footer-title">
 								<b>Contact Us</b>
 							</Typography>
 							<Typography
 								variant="h5"
-								component="a" target="_blank"
+								component="a"
+								target="_blank"
 								href="mailto:hello@visionary-works.co.uk"
 							>
 								hello@visionary-works.co.uk
 							</Typography>
 							<br />
-							<Typography variant="h5" component="a" target="_blank" href="tel:01206455355">
+							<Typography
+								variant="h5"
+								component="a"
+								target="_blank"
+								href="tel:01206455355"
+							>
 								01206 455355
 							</Typography>
 
@@ -127,28 +95,32 @@ const Layout: React.FC = () => {
 							<Box className="footer-socials">
 								<Typography
 									variant="h4"
-									component="a" target="_blank"
+									component="a"
+									target="_blank"
 									href="http://instagram.com/elementsoftworks"
 								>
 									<FontAwesomeIcon icon={faInstagram} />
 								</Typography>
 								<Typography
 									variant="h4"
-									component="a" target="_blank"
+									component="a"
+									target="_blank"
 									href="https://www.linkedin.com/company/element-softworks-ltd/"
 								>
 									<FontAwesomeIcon icon={faLinkedinIn} />
 								</Typography>
 								<Typography
 									variant="h4"
-									component="a" target="_blank"
+									component="a"
+									target="_blank"
 									href="https://www.facebook.com/elementsoftworks"
 								>
 									<FontAwesomeIcon icon={faFacebookF} />
 								</Typography>
 								<Typography
 									variant="h4"
-									component="a" target="_blank"
+									component="a"
+									target="_blank"
 									href="https://tiktok.com"
 								>
 									<FontAwesomeIcon icon={faTiktok} />
@@ -156,23 +128,19 @@ const Layout: React.FC = () => {
 							</Box>
 						</Grid>
 						<Grid item sm={6}>
-							<Typography
-								align="right"
-								variant="h5"
-								className="footer-title"
-							>
+							<Typography align="right" variant="h5" className="footer-title">
 								<b>Visit Us</b>
 							</Typography>
 
-							<Typography
-								align="right"
-								variant="h5"
-								className="footer-address"
-							>
-								Visionary Works<br />
-								Innovation Centre<br />
-								Knowledge Gateway<br />
-								Boundary Road<br />
+							<Typography align="right" variant="h5" className="footer-address">
+								Visionary Works
+								<br />
+								Innovation Centre
+								<br />
+								Knowledge Gateway
+								<br />
+								Boundary Road
+								<br />
 								Colchester, CO4 3ZQ
 							</Typography>
 						</Grid>
@@ -206,43 +174,6 @@ const Layout: React.FC = () => {
 };
 
 const Styles = styled.div`
-	header {
-		//position: absolute;
-		//top: 0;
-		//left: 0;
-		//right: 0;
-		//z-index: 1;
-
-		.logo {
-			height: 45px;
-		}
-
-		nav {
-			margin-left: auto;
-
-			@media (max-width: 600px) {
-				.mobile-hidden {
-					display: none;
-				}
-			},
-		ul {
-			list-style: none;
-
-			li:not(:last-of-type) {
-				a {
-					text-decoration: none;
-					color: ${({ theme }) => theme.palette.text.primary};
-					transition: ${({ theme }) => theme.transitions.create(["color"])};
-
-					&:hover {
-						color: ${({ theme }) => theme.palette.secondary.main};
-					}
-				}
-			}
-		}
-		}
-	}
-
 	footer {
 		background-color: #000;
 		padding: ${({ theme }) => theme.spacing(12, 0, 8)};
@@ -256,7 +187,7 @@ const Styles = styled.div`
 				font-weight: 700;
 				color: ${({ theme }) => theme.palette.primary.main};
 			}
-			
+
 			&.footer-address {
 				font-size: 1.3rem;
 			}

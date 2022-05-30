@@ -20,3 +20,7 @@ export const MessageContext = createContext<{
 }>({
 	message: null,
 });
+
+export const HeaderHeightContext = createContext<Partial<{ height: number | null }>>({
+	height: null,
+});

@@ -3,27 +3,13 @@ import { Typography, Button, Container, Grid, useMediaQuery } from '@mui/materia
 import styled from '@emotion/styled';
 import { useTheme } from '@mui/material/styles';
 import { Homepage } from '~/models/single/homepage';
-import teamAbigail from '~/images/team/abigail.jpg';
-import teamDarryl from '~/images/team/darryl.jpg';
-import teamJacob from '~/images/team/jacob.jpg';
-import teamJoe from '~/images/team/joe.jpg';
-import teamLauren from '~/images/team/lauren.jpg';
-import teamLuke from '~/images/team/luke.jpg';
-import teamNatalie from '~/images/team/natalie.jpg';
-import { shuffle } from '~/helpers/common';
 
-const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
+const TeamSection: React.FC<{
+	team: Homepage['team'];
+	teamImages: { name: string; src: string }[];
+}> = ({ team, teamImages }) => {
 	const theme = useTheme();
 	const md = useMediaQuery(theme.breakpoints.up('md'));
-	const teamImages = shuffle([
-		{ name: 'Abigail', src: teamAbigail },
-		{ name: 'Darryl', src: teamDarryl },
-		{ name: 'Jacob', src: teamJacob },
-		{ name: 'Joe', src: teamJoe },
-		{ name: 'Lauren', src: teamLauren },
-		{ name: 'Luke', src: teamLuke },
-		{ name: 'Natalie', src: teamNatalie },
-	]);
 
 	return (
 		<Styles>

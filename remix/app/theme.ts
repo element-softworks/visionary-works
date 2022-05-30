@@ -1,5 +1,5 @@
 import { grey } from '@mui/material/colors';
-import {createTheme, lighten, responsiveFontSizes} from '@mui/material';
+import { createTheme, lighten, responsiveFontSizes } from '@mui/material';
 import { css } from '@emotion/react';
 
 let theme = createTheme({

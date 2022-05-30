@@ -40,20 +40,13 @@ const Affiliates: React.FC<{ logos: { attributes: { name: string; url: string } 
 };
 
 const Styles = styled.div`
-	//max-width: 100%;
-	//overflow: hidden;
-	background: white;
-	padding-bottom: 80px;
+	margin-top: auto;
+	padding-bottom: ${({ theme }) => theme.spacing(4)};
 
 	.slider {
-		//list-style: none;
-		//flex-wrap: nowrap;
-		//white-space: nowrap;
-		//animation: loop linear 4s infinite;
-		//display: flex;
-		//align-items: center;
-		//justify-content: center;
-		//padding-inline-start: 0;
+		.slider-container {
+			align-items: center;
+		}
 
 		.slider-item {
 			img {

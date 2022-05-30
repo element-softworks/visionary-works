@@ -23,7 +23,6 @@ const Faqs: React.FC<{ faqs?: Homepage["faq"], title: string, image: Homepage["f
 		setExpanded(isExpanded ? panel : false);
 	};
 
-	console.log({ faqs });
 	return (
 		<Styles>
 			<Grid container alignItems="center">
