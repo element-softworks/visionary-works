@@ -25,11 +25,7 @@ const Affiliates: React.FC<{ logos: { attributes: { name: string; url: string } 
 			<Box className="slider" ref={sliderRef} sx={{ overflow: 'hidden' }}>
 				<Box className="slider-container" sx={{ display: 'flex' }}>
 					{_logos?.map((logo, i) => (
-						<Box
-							className="slider-item"
-							sx={{ position: 'relative', flex: '0 0 150px', padding: '0 80px' }}
-							key={i}
-						>
+						<Box className="slider-item" key={i}>
 							<img alt={logo.attributes?.name} src={logo.attributes?.url} />
 						</Box>
 					))}
@@ -49,11 +45,23 @@ const Styles = styled.div`
 		}
 
 		.slider-item {
+			position: relative;
+			flex: 0 0 125px;
+			padding: 0 60px;
+
 			img {
 				width: 100%;
 				max-height: 80px;
-				min-width: 200px;
-				padding: 0 40px;
+				min-width: 125px;
+			}
+
+			${({ theme }) => theme.breakpoints.up('md')} {
+				flex: 0 0 150px;
+				padding: 0 100px;
+
+				img {
+					min-width: 200px;
+				}
 			}
 
 			svg {
