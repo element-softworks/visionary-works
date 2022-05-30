@@ -1,5 +1,20 @@
-import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
-import { Box, Button, Container, Grid, Link, Stack, Typography, useTheme } from '@mui/material';
+import { useLoaderData, Link as RouterLink } from '@remix-run/react';
+import { json, LoaderFunction, MetaFunction } from '@remix-run/node';
+import {
+	Avatar,
+	Box,
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	CardMedia,
+	Container,
+	Grid,
+	Link,
+	Stack,
+	Typography,
+	useTheme,
+} from '@mui/material';
 import { cms } from '~/utils/cms.server';
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
@@ -18,6 +33,7 @@ import { Homepage } from '~/models/single/homepage';
 import { Testimonial } from '~/models/collection/testimonial';
 import { Blog } from '~/models/collection/blog';
 import Faqs from '~/components/Faqs';
+import { format } from 'date-fns';
 
 type Data = {
 	page: CMSData<Homepage>;
@@ -42,7 +58,7 @@ export const loader: LoaderFunction = async () => {
 	return json({ testimonials, page, blogs });
 };
 
-const Testimonials: React.FC = () => {
+const Home: React.FC = () => {
 	const theme = useTheme();
 	const {
 		testimonials,
@@ -149,8 +165,38 @@ const Testimonials: React.FC = () => {
 			<Box mt={10} />
 
 			<Slider>
-				{testimonials?.data?.map((t, i) => (
-					<ContentCard testimonial={t?.attributes} key={i} />
+				{testimonials?.data?.map(({ attributes: testimonial }, i) => (
+					<Card key={i} sx={{ display: 'flex' }}>
+						<CardMedia
+							component="img"
+							sx={{ width: 300, height: 450 }}
+							image={testimonial?.image?.data?.attributes?.url}
+							alt={testimonial?.name}
+						/>
+						<CardContent>
+							<Typography variant="h5">{testimonial?.feedback}</Typography>
+							<Stack direction="row" alignItems="center">
+								<Avatar>{testimonial?.name?.charAt(0)}</Avatar>
+
+								<Stack spacing={2}>
+									<Typography
+										variant="subtitle1"
+										color="text.secondary"
+										component="p"
+									>
+										{testimonial?.name}
+									</Typography>
+									<Typography
+										variant="subtitle1"
+										color="text.secondary"
+										component="p"
+									>
+										{testimonial?.company}
+									</Typography>
+								</Stack>
+							</Stack>
+						</CardContent>
+					</Card>
 				))}
 			</Slider>
 
@@ -290,4 +336,4 @@ const Styles = styled.div`
 	}
 `;
 
-export default Testimonials;
+export default Home;

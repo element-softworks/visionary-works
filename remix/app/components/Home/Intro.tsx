@@ -136,7 +136,7 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 						<Grid item xs={12} md={8}>
 							<Typography sx={{ mb: 8 }} variant="h3">
 								{reactStringReplace(title, highlighted, (match, i) => (
-									<Box component="span" sx={{ color: 'primary.main' }}>
+									<Box key={i} component="span" sx={{ color: 'primary.main' }}>
 										{highlighted}
 									</Box>
 								))}

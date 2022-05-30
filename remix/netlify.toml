@@ -1,0 +1,23 @@
+[functions."server"]
+   node_bundler = "esbuild"
+   included_files = [".cache/sessions/**/*"]
+   external_node_modules = ["@remix-run/react", "react", "react-dom", "encoding", "node_modules/.prisma/client/query-engine-darwin", "node_modules/@emotion/babel-plugin", "node_modules/@babel", "node_modules/@mui/icons-material"]
+
+[build]
+  command = "remix build"
+  functions = "./netlify/functions"
+  publish = "public"
+
+[dev]
+  command = "remix watch"
+  port = 3000
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[[headers]]
+  for = "/build/*"
+  [headers.values]
+    "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"

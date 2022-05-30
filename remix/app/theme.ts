@@ -1,8 +1,8 @@
 import { grey } from '@mui/material/colors';
-import { createTheme, lighten } from '@mui/material';
+import {createTheme, lighten, responsiveFontSizes} from '@mui/material';
 import { css } from '@emotion/react';
 
-const theme = createTheme({
+let theme = createTheme({
 	palette: {
 		primary: {
 			main: '#00AFD4',
@@ -66,6 +66,21 @@ theme.components = {
 			body1: {
 				lineHeight: `1.75`,
 			},
+		},
+	},
+	MuiContainer: {
+		styleOverrides: {
+			root: css`
+				${theme.breakpoints.up('sm')} {
+					padding-left: ${theme.spacing(6)};
+					padding-right: ${theme.spacing(6)};
+				}
+
+				${theme.breakpoints.up('lg')} {
+					padding-left: ${theme.spacing(3)};
+					padding-right: ${theme.spacing(3)};
+				}
+			`,
 		},
 	},
 	MuiLink: {
@@ -135,5 +150,7 @@ theme.components = {
 		],
 	},
 };
+
+theme = responsiveFontSizes(theme);
 
 export default theme;

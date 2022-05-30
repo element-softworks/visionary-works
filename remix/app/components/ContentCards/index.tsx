@@ -1,6 +1,6 @@
 import React from 'react';
-import { json, LoaderFunction, useLoaderData, Link as RouterLink, MetaFunction } from 'remix';
-import { Box, Button, Container, Grid, Link, Stack, Typography } from '@mui/material';
+import { json, LoaderFunction, MetaFunction } from '@remix-run/node';
+import { Container, Grid } from '@mui/material';
 import { cms } from '~/utils/cms.server';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';

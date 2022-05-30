@@ -1,19 +1,15 @@
 import React, { useContext } from 'react';
+import { json, LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import {
-	json,
-	Links,
-	LinksFunction,
-	LiveReload,
-	LoaderFunction,
-	Meta,
 	Outlet,
+	Links,
+	LiveReload,
+	Meta,
 	Scripts,
 	ScrollRestoration,
 	useCatch,
 	useLoaderData,
-} from 'remix';
-import { setPagesContext } from 'remix-pages-context';
-import type { MetaFunction } from 'remix';
+} from '@remix-run/react';
 import {
 	ThemeProvider as EmotionThemeProvider,
 	withEmotionCache,
@@ -36,14 +32,10 @@ import { getSeo } from '~/seo';
 import theme from '~/theme';
 import SnackbarProvider from '~/components/Snackbar';
 import { MessageContext } from '~/helpers/contexts';
-// @ts-ignore
-import swiperStyles from 'swiper/css';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
-import { fad } from "@fortawesome/pro-duotone-svg-icons";
-
-// console.log('swiperStyles', swiperStyles);
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { fad } from '@fortawesome/pro-duotone-svg-icons';
 
 const [seoMeta, seoLinks] = getSeo();
 
@@ -55,11 +47,7 @@ export const links: LinksFunction = () => {
 		{
 			rel: 'stylesheet',
 			href: globalStyles,
-		},
-		{
-			rel: 'stylesheet',
-			href: swiperStyles,
-		},
+		}
 	];
 };
 
@@ -72,7 +60,7 @@ const Document = withEmotionCache(({ children, title }: DocumentProps, emotionCa
 	const serverStyleData = useContext(ServerStyleContext);
 	const clientStyleData = useContext(ClientStyleContext);
 
-	library.add(fab, faCheckSquare, faCoffee, fad)
+	library.add(fab, faCheckSquare, faCoffee, fad);
 
 	// Only executed on client
 	useEnhancedEffect(() => {
@@ -122,8 +110,6 @@ type Data = {
 };
 
 export const loader: LoaderFunction = async ({ request, context }) => {
-	setPagesContext(context);
-
 	const session = await messageSession.getSession(request.headers.get('Cookie'));
 	const message = await getMessage(request);
 
