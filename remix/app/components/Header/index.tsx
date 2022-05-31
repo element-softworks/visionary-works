@@ -8,13 +8,16 @@ import { useLocation } from 'react-router';
 const Header: React.FC<{ innerRef?: any }> = ({ innerRef }) => {
 	const location = useLocation();
 	const TRANSPARENT_ROUTES = [/\//];
+	const INVERTED_ROUTES = [/\//];
 	const isTransparent = TRANSPARENT_ROUTES.some((route) => location.pathname.match(route));
+	const isInverted = INVERTED_ROUTES.some((route) => location.pathname.match(route));
 
 	return (
 		<Styles>
 			<Box
 				ref={innerRef}
 				component="header"
+				className={isInverted ? 'header-inverted' : ''}
 				sx={
 					isTransparent
 						? { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }
@@ -96,6 +99,23 @@ const Styles = styled.div`
 
 		.logo {
 			height: 45px;
+			display: none;
+		}
+
+		&.header-inverted {
+			nav {
+				ul {
+					li:not(:last-of-type) {
+						a {
+							color: ${({ theme }) => theme.palette.common.white};
+
+							&:hover {
+								color: ${({ theme }) => theme.palette.secondary.main};
+							}
+						}
+					}
+				}
+			}
 		}
 
 		nav {

@@ -1,10 +1,13 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
 import reactStringReplace from 'react-string-replace';
 import notepad from '~/images/notepad.png';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ForwardedRef, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
-const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted } }) => {
+const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> = ({
+	data: { title, subtitle, highlighted },
+	innerRef: $introContentWrapper,
+}) => {
 	const [windowHeight, setWindowHeight] = useState<number | null>(null);
 	const [scrollY, setScrollY] = useState<number | null>(null);
 	const [introY, setIntroY] = useState<number | null>(null);
@@ -13,7 +16,6 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 	const [introContentHeight, setIntroContentHeight] = useState<number | null>(null);
 	const [introContentOffsetTop, setIntroContentOffsetTop] = useState<number | null>(null);
 	const $intro = useRef<HTMLDivElement>(null);
-	const $introContentWrapper = useRef<HTMLDivElement>(null);
 	const $introContent = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -161,8 +163,6 @@ const Intro: React.FC<{ data: any }> = ({ data: { title, subtitle, highlighted }
 	);
 };
 
-export default Intro;
-
 const Styled = styled.div`
 	.intro {
 		position: relative;
@@ -234,3 +234,5 @@ const Styled = styled.div`
 		}
 	}
 `;
+
+export default React.forwardRef((props: any, ref: any) => <Intro {...props} innerRef={ref} />);

@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, Link as RouterLink } from '@remix-run/react';
 import { json, LoaderFunction, MetaFunction } from '@remix-run/node';
 import {
 	alpha,
@@ -6,19 +6,17 @@ import {
 	Box,
 	Button,
 	Card,
-	CardActions,
 	CardContent,
 	CardMedia,
 	Container,
 	Grid,
 	IconButton,
-	Link,
 	Stack,
 	Typography,
 	useTheme,
 } from '@mui/material';
 import { cms } from '~/utils/cms.server';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { getSeoMeta } from '~/seo';
 import Affiliates from '~/components/Affiliates';
@@ -37,7 +35,7 @@ import Faqs from '~/components/Faqs';
 import { config, animated, useTransition } from 'react-spring';
 import { grey } from '@mui/material/colors';
 import { HeaderHeightContext } from '~/helpers/contexts';
-import { KeyboardArrowDown } from '@mui/icons-material';
+import { ArrowForward, KeyboardArrowDown } from '@mui/icons-material';
 import { shuffle } from '~/helpers/common';
 import teamAbigail from '~/images/team/abigail.jpg';
 import teamDarryl from '~/images/team/darryl.jpg';
@@ -106,17 +104,29 @@ const Home: React.FC = () => {
 		blogs,
 	} = useLoaderData<Data>();
 	const [titleVerbs] = useState(['Visionary', 'Innovative', 'Revolutionary']);
+	const [heroImages] = useState([
+		{ name: 'Ginger chick', src: '/development.jpg' },
+		{ name: 'Reuben Developing', src: '/development-2.png' },
+	]);
 	const [titleVerbIndex, setTitleVerbIndex] = useState(0);
+	const [heroImageIndex, setHeroImageIndex] = useState(0);
 	const services = intro?.services;
 	const [show, set] = useState(false);
 	const { height: headerHeight } = useContext(HeaderHeightContext);
 
 	useEffect(() => {
-		const interval = setInterval(() => {
+		const titleVerbInterval = setInterval(() => {
 			setTitleVerbIndex((state) => (state + 1) % titleVerbs.length);
 		}, 4000);
 
-		return () => clearInterval(interval);
+		const heroImageInterval = setInterval(() => {
+			setHeroImageIndex((state) => (state + 1) % heroImages.length);
+		}, 6000);
+
+		return () => {
+			clearInterval(titleVerbInterval);
+			clearInterval(heroImageInterval);
+		};
 	}, []);
 
 	const textTransitions = useTransition(titleVerbs[titleVerbIndex], {
@@ -129,7 +139,17 @@ const Home: React.FC = () => {
 		onRest: () => set(!show),
 	});
 
+	const heroImageTransitions = useTransition(heroImages[heroImageIndex], {
+		from: { opacity: 0 },
+		enter: { opacity: 0.5 },
+		leave: { opacity: 0 },
+		delay: 200,
+		config: config.molasses,
+	});
+
 	const [$heroText, { offsetHeight: heroTextHeight }] = useDimensions();
+
+	const $intro = useRef<HTMLDivElement>(null);
 
 	return (
 		<Styles>
@@ -168,16 +188,31 @@ const Home: React.FC = () => {
 						{hero?.subtitle}
 					</Typography>
 					<Box mt={4} />
-					<IconButton className="heading-action" color="primary">
+					<IconButton
+						className="heading-action"
+						color="primary"
+						onClick={() => $intro?.current?.scrollIntoView?.({ behavior: 'smooth' })}
+					>
 						<KeyboardArrowDown />
 					</IconButton>
 				</Container>
 				<Affiliates logos={hero?.logos?.data} />
 
-				<img alt="Visionary Works Team" className="hero-team" src="/team.jpg" />
+				{/*<img src="/development.jpg" />*/}
+				{heroImageTransitions((styles, item) => (
+					<animated.img
+						className="hero-team"
+						alt={item.name}
+						src={item.src}
+						style={{
+							opacity: styles.opacity.to({ range: [0.0, 1.0], output: [0, 1] }),
+						}}
+					/>
+				))}
 			</Stack>
 
-			<Intro data={intro} />
+			<Intro data={intro} ref={$intro} />
+
 			<Box className="services">
 				{services?.map((service: any, i: number) => (
 					<React.Fragment key={i}>
@@ -209,29 +244,37 @@ const Home: React.FC = () => {
 								)}
 							</Grid>
 						</Container>
-						{services[services.length - 1]?.title !== service?.title && (
-							<Box className="image-wave">
-								<img alt="Wave" src={wave} className="image-wave" />
-							</Box>
-						)}
+						{/*{services[services.length - 1]?.title !== service?.title && (*/}
+						{/*	<Box className="image-wave">*/}
+						{/*		<img alt="Wave" src={wave} className="image-wave" />*/}
+						{/*	</Box>*/}
+						{/*)}*/}
 					</React.Fragment>
 				))}
 			</Box>
 
+			<Box mt={10} />
 			<Box className="projects">
 				<Container>
-					<Grid container alignItems="center">
-						<Grid item xs={12} lg={6}>
-							<Typography sx={{ mb: 2 }} variant="h3">
-								{projectTitle}
-							</Typography>
+					<Stack direction="row" alignItems="center">
+						<Stack spacing={2} sx={{ flexGrow: 1 }}>
+							<Typography variant="h3">{projectTitle}</Typography>
 							<Typography>{projectDescription}</Typography>
-						</Grid>
+						</Stack>
+						<div>
+							<IconButton
+								component={RouterLink}
+								to="/projects"
+								color="inherit"
+								sx={{ backgroundColor: 'primary.main' }}
+								size="large"
+							>
+								<ArrowForward />
+							</IconButton>
+						</div>
+					</Stack>
 
-						<Grid item lg={12}>
-							{/*<img alt="Web Development" src={projects} className="project-images" />*/}
-						</Grid>
-					</Grid>
+					{/*<img alt="Web Development" src={projects} className="project-images" />*/}
 				</Container>
 			</Box>
 
@@ -299,7 +342,8 @@ const Home: React.FC = () => {
 
 const Styles = styled.div`
 	.hero {
-		background-color: ${grey[200]};
+		//background-color: ${grey[200]};
+		background-color: ${({ theme }) => theme.palette.common.black};
 		height: 100vh;
 		min-height: 900px;
 	  	position: relative;
@@ -312,26 +356,23 @@ const Styles = styled.div`
 	  
 	  .hero-team {
 		position: absolute;
-	    top: 40%;
+	    top: 0;
+	    right: 0;
 		object-fit: cover;
 	    opacity: 0.5;
-		transform: translateY(-50%) scaleX(-1);
-		object-position: top right;
-		max-width: 50vw;
-		min-height: 40vw;
+		object-position: top left;
+		width: 50vw;
+		height: 100vh;
 		transform-origin: top center;
-		right: 0;
+	    display: none;
 
 		${({ theme }) => theme.breakpoints.up('md')} {
-		  max-width: 50vw;
-		  min-height: 28vw;
-		  right: -50%;
-		  transform-origin: left;
+		  display: block;
 		}
 	  }
 
 		h1 {
-			color: #4D4D4D;
+			color: ${({ theme }) => theme.palette.common.white};
 			display: block;
 		  	text-align: left;
 
@@ -366,6 +407,7 @@ const Styles = styled.div`
 		}
 
 		h2 {
+		  	color: ${({ theme }) => theme.palette.common.white};
 			font-size: 1.2rem;
 		  	font-weight: 400;
 			display: block;

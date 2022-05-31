@@ -40,33 +40,35 @@ const Styles = styled.div`
 	padding-bottom: ${({ theme }) => theme.spacing(4)};
 
 	.slider {
+		// todo: change images to white color
+		filter: invert(1);
+
 		.slider-container {
 			align-items: center;
 		}
 
 		.slider-item {
 			position: relative;
-			flex: 0 0 125px;
+			flex: 0 0 auto;
 			padding: 0 60px;
 
 			img {
 				width: 100%;
-				max-height: 80px;
+				max-height: 60px;
 				min-width: 125px;
 			}
 
 			${({ theme }) => theme.breakpoints.up('md')} {
-				flex: 0 0 150px;
-				padding: 0 100px;
+				padding: 0 80px;
 
 				img {
-					min-width: 200px;
+					max-width: 150px;
 				}
 			}
 
 			svg {
 				* {
-					fill: black;
+					fill: ${({ theme }) => theme.palette.common.white};
 				}
 			}
 		}
