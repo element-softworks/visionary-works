@@ -3,6 +3,7 @@ import reactStringReplace from 'react-string-replace';
 import notepad from '~/images/notepad.png';
 import React, { ForwardedRef, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
+import { ParallaxBanner } from 'react-scroll-parallax';
 
 const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> = ({
 	data: { title, subtitle, highlighted },
@@ -39,14 +40,37 @@ const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> 
 	};
 
 	const introContentPercentScrolled = (introContentY ?? 0) / (introContentHeight ?? 0);
-	const introFeatureOpacity =
-		1 - ((scrollY ?? 0) - (introContentY ?? 0)) / (introHeight ?? 0) + 0.2 ?? 0;
-	const introFeatureFill =
-		1 -
-		((windowHeight ?? 0) - ((scrollY ?? 0) - (introContentOffsetTop ?? 0))) /
-			(introContentOffsetTop ?? 0);
-	const introContentOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
+	const _opacity = 1 - ((scrollY ?? 0) - (introContentY ?? 0)) / (introHeight ?? 0) + 0.2 ?? 0;
+	const isVisible =
+		scrollY === 0 ||
+		((introContentY ?? 0) + (introContentHeight ?? 0)) / (windowHeight ?? 0) > 0;
+	const opacity = isNaN(_opacity) || !isVisible ? 0 : _opacity > 1 ? 1 : _opacity;
+	const fill = !isVisible
+		? 0
+		: 1 -
+		  ((windowHeight ?? 0) - ((scrollY ?? 0) - (introContentOffsetTop ?? 0))) /
+				(introContentOffsetTop ?? 0);
+	const position =
+		typeof introY === 'number' && introY <= 0 && introContentPercentScrolled >= 0
+			? 'fixed'
+			: 'absolute';
+	const transformY = !isVisible
+		? undefined
+		: `translateY(${
+				introContentPercentScrolled <= 0 && typeof introContentOffsetTop === 'number'
+					? `${introContentOffsetTop}px`
+					: 0
+		  })`;
+
 	const introSpeed = 0.165;
+	const transformX = !isVisible
+		? undefined
+		: ((scrollY ?? 0) - ((introContentOffsetTop ?? 0) + (windowHeight ?? 0))) * introSpeed;
+	const transformXReverse = !isVisible
+		? undefined
+		: ((introContentOffsetTop ?? 0) + (windowHeight ?? 0) - (scrollY ?? 0)) * introSpeed;
+
+	const contentOpacity = 1 - (introContentY ?? 0) / (windowHeight ?? 0);
 
 	return (
 		<Styled>
@@ -55,71 +79,91 @@ const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> 
 				ref={$intro}
 				style={{ paddingTop: !!windowHeight ? windowHeight * 3 : undefined }}
 			>
+				{/*<Box ref={$intro} sx={{ height: '300vh' }}>*/}
+				{/*	<ParallaxBanner*/}
+				{/*		className="intro-banner"*/}
+				{/*		layers={[*/}
+				{/*			{*/}
+				{/*				children: <span className="intro-feature-text">Visionary</span>,*/}
+				{/*				translateY: ['0vh', '200vh'],*/}
+				{/*				translateX: ['-50vw', '25vw'],*/}
+				{/*			},*/}
+				{/*			{*/}
+				{/*				children: (*/}
+				{/*					<span*/}
+				{/*						style={{ transform: `translateY(100%)` }}*/}
+				{/*						className="intro-feature-text"*/}
+				{/*					>*/}
+				{/*						Revolutionary*/}
+				{/*					</span>*/}
+				{/*				),*/}
+				{/*				translateY: ['0vh', '200vh'],*/}
+				{/*				translateX: ['-25vw', '50vw'],*/}
+				{/*			},*/}
+				{/*			{*/}
+				{/*				children: (*/}
+				{/*					<span*/}
+				{/*						style={{ transform: `translateY(200%)` }}*/}
+				{/*						className="intro-feature-text"*/}
+				{/*					>*/}
+				{/*						Innovative*/}
+				{/*					</span>*/}
+				{/*				),*/}
+				{/*				translateY: ['0vh', '200vh'],*/}
+				{/*				translateX: ['25vw', '-25vw'],*/}
+				{/*			},*/}
+				{/*		]}*/}
+				{/*	/>*/}
+				{/*</Box>*/}
+
 				<div
 					className="intro-feature-wrapper"
 					style={{
-						position:
-							typeof introY === 'number' &&
-							introY <= 0 &&
-							introContentPercentScrolled >= 0
-								? 'fixed'
-								: 'absolute',
-						transform: `translateY(${
-							introContentPercentScrolled <= 0 &&
-							typeof introContentOffsetTop === 'number'
-								? `${introContentOffsetTop}px`
-								: 0
-						})`,
+						position,
+						transform: transformY,
 					}}
 				>
 					<div
 						className="intro-feature"
 						style={{
 							height: windowHeight ?? undefined,
-							opacity: isNaN(introFeatureOpacity) ? 0 : introFeatureOpacity,
+							opacity,
 						}}
 					>
-						<div style={{ transform: `translateX(0%)` }}>
+						<div>
 							<span
 								className="intro-feature-text"
 								style={{
-									transform: `translateX(${
-										((scrollY ?? 0) -
-											((introContentOffsetTop ?? 0) + (windowHeight ?? 0))) *
-										introSpeed
-									}px) translateZ(0)`,
+									transform: !!transformX
+										? `translateX(${transformX}px)`
+										: undefined,
 								}}
 							>
 								Visionary
 							</span>
 						</div>
-						<div style={{ transform: `translateX(0%)` }}>
+						<div>
 							<span
 								className="intro-feature-text"
 								style={{
-									transform: `translateX(${
-										((introContentOffsetTop ?? 0) +
-											(windowHeight ?? 0) -
-											(scrollY ?? 0)) *
-										introSpeed
-									}px) translateZ(0)`,
-									color: `rgba(255, 255, 255, ${introFeatureFill})`,
-									WebkitTextFillColor: `rgba(255, 255, 255, ${introFeatureFill})`,
+									transform: !!transformX
+										? `translateX(${transformXReverse}px)`
+										: undefined,
+									color: `rgba(255, 255, 255, ${fill})`,
+									WebkitTextFillColor: `rgba(255, 255, 255, ${fill})`,
 								}}
 							>
 								Revolutionary
 							</span>
 						</div>
-						<div style={{ transform: `translateX(0%)` }}>
+						<div>
 							<span
 								className="intro-feature-text"
 								style={{
 									marginLeft: 'auto',
-									transform: `translateX(${
-										((scrollY ?? 0) -
-											((introContentOffsetTop ?? 0) + (windowHeight ?? 0))) *
-										introSpeed
-									}px) translateZ(0)`,
+									transform: !!transformX
+										? `translateX(${transformX}px)`
+										: undefined,
 								}}
 							>
 								Innovative
@@ -134,7 +178,7 @@ const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> 
 					ref={$introContentWrapper}
 					style={{
 						minHeight: windowHeight ?? undefined,
-						opacity: isNaN(introContentOpacity) ? 0 : introContentOpacity,
+						opacity: isNaN(contentOpacity) ? 0 : contentOpacity,
 					}}
 				>
 					<Grid container ref={$introContent}>
@@ -164,14 +208,16 @@ const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> 
 };
 
 const Styled = styled.div`
+	overflow: hidden;
+
 	.intro {
 		position: relative;
 		background-color: #191919;
 		color: ${({ theme }) => theme.palette.common.white};
 		padding: ${({ theme }) => theme.spacing(14, 0)};
 		align-items: center;
-		padding-top: ${700 * 4}px;
-		padding-bottom: 0;
+		//padding-top: ${700 * 4}px;
+		//padding-bottom: 0;
 		overflow: hidden;
 
 		.intro-content {
@@ -214,24 +260,28 @@ const Styled = styled.div`
 				&:nth-child(2) {
 					justify-content: flex-end;
 				}
-			}
 
-			.intro-feature-text {
-				font-size: 13vw;
-				font-size: calc(10vh + 8vw);
-				display: block;
-				color: white;
-				will-change: transform;
-				letter-spacing: -2px;
-				line-height: 0.9;
-				position: relative;
-				color: black;
-				-webkit-text-fill-color: ${({ theme }) =>
-					theme.palette.common.black}; /* Will override color (regardless of order) */
-				-webkit-text-stroke-width: 3px;
-				-webkit-text-stroke-color: white;
+				.intro-feature-text {
+					font-size: 13vw;
+					font-size: calc(10vh + 8vw);
+					display: block;
+					color: white;
+					will-change: transform;
+					letter-spacing: -2px;
+					line-height: 0.9;
+					position: relative;
+					color: black;
+					-webkit-text-fill-color: ${({ theme }) =>
+						theme.palette.common.black}; /* Will override color (regardless of order) */
+					-webkit-text-stroke-width: 3px;
+					-webkit-text-stroke-color: white;
+				}
 			}
 		}
+	}
+
+	.intro-banner {
+		height: 100%;
 	}
 `;
 

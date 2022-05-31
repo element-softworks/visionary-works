@@ -1,9 +1,8 @@
 import React from 'react';
 import { Container, Stack, Box, Link, Button } from '@mui/material';
 
-import { Link as RouterLink } from '@remix-run/react/components';
+import { Link as RouterLink, useLocation } from '@remix-run/react';
 import styled from '@emotion/styled';
-import { useLocation } from 'react-router';
 
 const Header: React.FC<{ innerRef?: any }> = ({ innerRef }) => {
 	const location = useLocation();

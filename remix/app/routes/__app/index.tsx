@@ -15,6 +15,7 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material';
+import { Parallax } from 'react-scroll-parallax';
 import { cms } from '~/utils/cms.server';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
@@ -22,7 +23,6 @@ import { getSeoMeta } from '~/seo';
 import Affiliates from '~/components/Affiliates';
 import monitor from '~/images/monitor.png';
 import mobile from '~/images/mobile.png';
-import wave from '~/images/wave.svg';
 import TeamSection from '~/components/Team';
 import Intro from '~/components/Home/Intro';
 import Slider from '~/components/Slider';
@@ -35,7 +35,7 @@ import Faqs from '~/components/Faqs';
 import { config, animated, useTransition } from 'react-spring';
 import { grey } from '@mui/material/colors';
 import { HeaderHeightContext } from '~/helpers/contexts';
-import { ArrowForward, KeyboardArrowDown } from '@mui/icons-material';
+import { ArrowForward, KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
 import { shuffle } from '~/helpers/common';
 import teamAbigail from '~/images/team/abigail.jpg';
 import teamDarryl from '~/images/team/darryl.jpg';
@@ -215,41 +215,55 @@ const Home: React.FC = () => {
 
 			<Box className="services">
 				{services?.map((service: any, i: number) => (
-					<React.Fragment key={i}>
-						<Container>
-							<Grid container alignItems="center" key={i}>
-								{!service.right && (
-									<Grid item xs={12} md={6}>
-										<img
-											alt={`${service?.title} icon`}
-											src={i === 1 ? mobile : monitor}
-											className="image-notepad"
-										/>
-									</Grid>
-								)}
-								<Grid item xs={12} lg={6}>
-									<Typography sx={{ mb: 2 }} variant="h3">
-										{service?.title}
-									</Typography>
-									<Typography>{service.description}</Typography>
-									<Button variant="contained">Hello</Button>
-								</Grid>
-								{service.right && (
-									<Grid item md={6}>
-										<img
-											alt={`${service?.title} icon`}
-											src={i === 1 ? mobile : monitor}
-										/>
-									</Grid>
-								)}
+					<div className="service">
+						<Grid key={i} container alignItems="center" className="service-grid">
+							<Grid item xs={12} lg={6} order={i % 2 ? -1 : 1}>
+								<Stack
+									className="service-content"
+									spacing={4}
+									sx={{
+										paddingLeft: i % 2 ? 4 : 0,
+										paddingRight: i % 2 ? 0 : 4,
+									}}
+								>
+									<Stack spacing={2}>
+										<Typography variant="h3">{service?.title}</Typography>
+										<Typography className="service-content-description">
+											{/*{service.description}*/}
+											Morbi leo risus, porta ac consectetur ac, vestibulum at
+											eros. Etiam porta sem malesuada magna mollis euismod.
+											Nullam id dolor id nibh ultricies vehicula ut id elit.
+										</Typography>
+									</Stack>
+									<div>
+										<Button
+											component={RouterLink}
+											to="/service/web-development"
+											startIcon={<KeyboardArrowRight />}
+											variant="contained"
+										>
+											Learn more
+										</Button>
+									</div>
+								</Stack>
 							</Grid>
-						</Container>
-						{/*{services[services.length - 1]?.title !== service?.title && (*/}
-						{/*	<Box className="image-wave">*/}
-						{/*		<img alt="Wave" src={wave} className="image-wave" />*/}
-						{/*	</Box>*/}
-						{/*)}*/}
-					</React.Fragment>
+
+							<Grid item xs={0} lg={6} order={i % 2 ? 1 : -1}>
+								<Box className="service-image">
+									<Parallax
+										className="service-image-animated-wrapper"
+										speed={0}
+										scale={[1, 1.25, 'easeInQuad']}
+									>
+										<img
+											alt={service?.title}
+											src={i % 2 ? '/services-app.png' : '/service-1.jpg'}
+										/>
+									</Parallax>
+								</Box>
+							</Grid>
+						</Grid>
+					</div>
 				))}
 			</Box>
 
@@ -365,6 +379,7 @@ const Styles = styled.div`
 		height: 100vh;
 		transform-origin: top center;
 	    display: none;
+	    will-change: opacity;
 
 		${({ theme }) => theme.breakpoints.up('md')} {
 		  display: block;
@@ -447,31 +462,60 @@ const Styles = styled.div`
 	}
 
 	.services {
+	  background-color: ${({ theme }) => theme.palette.common.black};
+	  color: ${({ theme }) => theme.palette.common.white};
+
+	  .service {
+		min-height: 100vh;
 		position: relative;
-		background-color: #191919;
-		color: ${({ theme }) => theme.palette.common.white};
-		align-items: center;
+		
+	    .service-grid {
+	      min-height: 100%;
+	    }
+	    
+	    .service-content {
+		  max-width: 40vw;
+		  margin: 0 auto;
 
-		p {
-			max-width: 600px;
-		}
+		  .service-content-description {
+		    max-width: 800px;
+		    max-width: 65ch;
+		  }
+	    }
 
-		.image-notepad {
-			max-width: 100%;
+		.service-image {
+		  height: 100vh;
+		  overflow: hidden;
+		  top: 0;
+		  bottom: 0;
+
+		  .service-image-animated-wrapper {
+			height: 100%;
+			width: 100%;
+		  }
+
+		  img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		  }
 		}
+	  }
 	}
-
-	.image-wave {
-		max-width: 100%;
-		overflow-x: hidden;
-		background-color: #191919;
-		margin: ${({ theme }) => theme.spacing(-6, 0)};
-
-		img {
-			max-width: 150%;
-			margin: ${({ theme }) => theme.spacing(0, -6)};
-		}
-	}
+  
+  
+	//
+	// .image-wave {
+	// 	max-width: 100%;
+	// 	overflow-x: hidden;
+	// 	background-color: #191919;
+	// 	margin: ${({ theme }) => theme.spacing(-6, 0)};
+	//
+	// 	img {
+	// 		max-width: 150%;
+	// 		margin: ${({ theme }) => theme.spacing(0, -6)};
+	// 	}
+	// }
 
 	.projects {
 		.project-images {

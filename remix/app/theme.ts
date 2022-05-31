@@ -110,23 +110,6 @@ theme.components = {
 		},
 		variants: [
 			{
-				props: { variant: 'contained', color: 'primary' },
-				style: css`
-					background-image: ${theme.palette.primary.gradient};
-					background-size: 300%;
-					background-position: left top;
-					transition: ${theme.transitions.create([
-						'background-position',
-						'background-size',
-						'box-shadow',
-					])};
-
-					&:hover {
-						background-size: 150%;
-					}
-				`,
-			},
-			{
 				props: { variant: 'inverse' },
 				style:
 					theme?.palette?.mode === 'light'
