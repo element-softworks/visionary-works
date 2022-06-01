@@ -45,12 +45,15 @@ import teamLauren from '~/images/team/lauren.jpg';
 import teamLuke from '~/images/team/luke.jpg';
 import teamNatalie from '~/images/team/natalie.jpg';
 import useDimensions from '~/helpers/hooks/useDimensions';
+import { format } from 'date-fns';
+import Truncate from 'react-truncate';
+import ProjectsSlider from '~/components/ProjectsSlider';
 
 type Data = {
 	page: CMSData<Homepage>;
 	testimonials: CMSDataList<Testimonial>;
 	blogs: CMSDataList<Blog>;
-	teamImages: { name: string; src: string }[];
+	teamImages: { name: string; src: string; speed: number }[];
 };
 
 export const meta: MetaFunction = () => ({ ...getSeoMeta(), title: 'Visionary Works' });
@@ -67,14 +70,20 @@ export const loader: LoaderFunction = async () => {
 	]);
 	const blogs = await cms<Data['blogs']>('blogs', ['author', 'coverImage']);
 
+	const randomSpeed = () => {
+		let num = Math.floor(Math.random() * 5) + 1; // this will get a number between 1 and 10;
+		num *= Math.round(Math.random()) ? 1 : -1; // this will add minus sign in 50% of cases
+		return num;
+	};
+
 	const teamImages = shuffle([
-		{ name: 'Abigail', src: teamAbigail },
-		{ name: 'Darryl', src: teamDarryl },
-		{ name: 'Jacob', src: teamJacob },
-		{ name: 'Joe', src: teamJoe },
-		{ name: 'Lauren', src: teamLauren },
-		{ name: 'Luke', src: teamLuke },
-		{ name: 'Natalie', src: teamNatalie },
+		{ name: 'Abigail', src: teamAbigail, speed: randomSpeed() },
+		{ name: 'Darryl', src: teamDarryl, speed: randomSpeed() },
+		{ name: 'Jacob', src: teamJacob, speed: randomSpeed() },
+		{ name: 'Joe', src: teamJoe, speed: randomSpeed() },
+		{ name: 'Lauren', src: teamLauren, speed: randomSpeed() },
+		{ name: 'Luke', src: teamLuke, speed: randomSpeed() },
+		{ name: 'Natalie', src: teamNatalie, speed: randomSpeed() },
 	]);
 
 	return json({ testimonials, page, blogs, teamImages });
@@ -198,7 +207,6 @@ const Home: React.FC = () => {
 				</Container>
 				<Affiliates logos={hero?.logos?.data} />
 
-				{/*<img src="/development.jpg" />*/}
 				{heroImageTransitions((styles, item) => (
 					<animated.img
 						className="hero-team"
@@ -217,7 +225,14 @@ const Home: React.FC = () => {
 				{services?.map((service: any, i: number) => (
 					<div className="service">
 						<Grid key={i} container alignItems="center" className="service-grid">
-							<Grid item xs={12} lg={6} order={i % 2 ? -1 : 1}>
+							<Grid
+								item
+								xs={12}
+								md={8}
+								lg={6}
+								order={{ xs: 1, md: i % 2 ? -1 : 1 }}
+								sx={{ height: { xs: '50%', md: '100%' }, display: 'flex' }}
+							>
 								<Stack
 									className="service-content"
 									spacing={4}
@@ -227,7 +242,7 @@ const Home: React.FC = () => {
 									}}
 								>
 									<Stack spacing={2}>
-										<Typography variant="h3">{service?.title}</Typography>
+										<Typography variant="h2">{service?.title}</Typography>
 										<Typography className="service-content-description">
 											{/*{service.description}*/}
 											Morbi leo risus, porta ac consectetur ac, vestibulum at
@@ -248,7 +263,14 @@ const Home: React.FC = () => {
 								</Stack>
 							</Grid>
 
-							<Grid item xs={0} lg={6} order={i % 2 ? 1 : -1}>
+							<Grid
+								item
+								xs={12}
+								md={4}
+								lg={6}
+								order={{ xs: -1, md: i % 2 ? 1 : -1 }}
+								sx={{ height: { xs: '50%', md: '100%' } }}
+							>
 								<Box className="service-image">
 									<Parallax
 										className="service-image-animated-wrapper"
@@ -272,14 +294,16 @@ const Home: React.FC = () => {
 				<Container>
 					<Stack direction="row" alignItems="center">
 						<Stack spacing={2} sx={{ flexGrow: 1 }}>
-							<Typography variant="h3">{projectTitle}</Typography>
+							<Typography variant="h2" component="h3">
+								{projectTitle}
+							</Typography>
 							<Typography>{projectDescription}</Typography>
 						</Stack>
 						<div>
 							<IconButton
 								component={RouterLink}
 								to="/projects"
-								color="inherit"
+								color="primary"
 								sx={{ backgroundColor: 'primary.main' }}
 								size="large"
 							>
@@ -287,42 +311,66 @@ const Home: React.FC = () => {
 							</IconButton>
 						</div>
 					</Stack>
-
-					{/*<img alt="Web Development" src={projects} className="project-images" />*/}
 				</Container>
+
+				<Box mt={4} />
+				<ProjectsSlider />
 			</Box>
 
 			<Box mt={10} />
 
 			<Slider>
 				{testimonials?.data?.map(({ attributes: testimonial }, i) => (
-					<Card key={i} sx={{ display: 'flex' }}>
+					<Card className="testimonial" key={i} sx={{ display: 'flex', height: '100%' }}>
 						<CardMedia
 							component="img"
-							sx={{ width: 300, height: 450 }}
+							sx={{ width: 300, height: 450, display: { xs: 'none', md: 'block' } }}
 							image={testimonial?.image?.data?.attributes?.url}
 							alt={testimonial?.name}
 						/>
 						<CardContent>
-							<Typography variant="h5">{testimonial?.feedback}</Typography>
-							<Stack direction="row" alignItems="center">
-								<Avatar>{testimonial?.name?.charAt(0)}</Avatar>
+							<Stack
+								sx={{
+									height: '100%',
+								}}
+							>
+								<Typography
+									className="testimonial-feedback"
+									variant="h4"
+									component="h3"
+									sx={{
+										flexGrow: 1,
+										order: { xs: 1, md: -1 },
+										marginTop: { xs: 3, md: 0 },
+									}}
+								>
+									{testimonial?.feedback}
+								</Typography>
+								<Stack
+									direction="row"
+									alignItems="center"
+									sx={{ order: { xs: -1, md: 1 } }}
+								>
+									<Stack sx={{ flexGrow: 1 }}>
+										<Typography
+											variant="subtitle1"
+											color="text.secondary"
+											component="p"
+										>
+											{testimonial?.name}
+										</Typography>
+										<Typography
+											variant="subtitle1"
+											color="text.secondary"
+											component="p"
+										>
+											{testimonial?.company}
+										</Typography>
+									</Stack>
 
-								<Stack spacing={2}>
-									<Typography
-										variant="subtitle1"
-										color="text.secondary"
-										component="p"
-									>
-										{testimonial?.name}
-									</Typography>
-									<Typography
-										variant="subtitle1"
-										color="text.secondary"
-										component="p"
-									>
-										{testimonial?.company}
-									</Typography>
+									<div>
+										<Avatar>{testimonial?.name?.charAt(0)}</Avatar>
+									</div>
 								</Stack>
 							</Stack>
 						</CardContent>
@@ -336,13 +384,93 @@ const Home: React.FC = () => {
 
 			<Box className="news">
 				<Container>
-					<Typography sx={{ mb: 2 }} variant="h3">
+					<Typography className="news-title" variant="h2" component="h3">
 						{newsTitle}
 					</Typography>
+					<Box mt={8} />
 				</Container>
 				<Slider>
-					{blogs?.data?.map((t, i) => (
-						<ContentCard blog={t?.attributes} key={i} readMore={blogReadMore} />
+					{blogs?.data?.map(({ attributes: article }, i) => (
+						// <ContentCard blog={t?.attributes} key={i} readMore={blogReadMore} />
+						<Card
+							className="article"
+							key={i}
+							sx={{
+								display: 'flex',
+								height: '100%',
+								flexDirection: { xs: 'column', md: 'row' },
+							}}
+						>
+							<CardMedia
+								component="img"
+								sx={{
+									width: { xs: '100%', md: 300 },
+									height: { xs: 300, md: 450 },
+								}}
+								image={article?.coverImage?.data?.attributes?.url}
+								alt={article?.title}
+							/>
+							<CardContent>
+								<Stack
+									sx={{
+										height: '100%',
+										// paddingLeft: { xs: 3, lg: 4 },
+										// paddingRight: { xs: 3, lg: 4 },
+										// paddingTop: 2,
+										// paddingBottom: 2,
+									}}
+									spacing={4}
+								>
+									<Stack spacing={2} sx={{ flexGrow: 1 }}>
+										<Typography
+											className="testimonial-feedback"
+											variant="h4"
+											component="h3"
+										>
+											{article?.title}
+										</Typography>
+										<Typography>
+											<Truncate lines={5} ellipsis="&hellip;">
+												{article?.content}
+											</Truncate>
+										</Typography>
+										<div>
+											<Button variant="contained">Read more</Button>
+										</div>
+									</Stack>
+									<Stack direction="row" alignItems="center" spacing={2}>
+										<div>
+											<Avatar>
+												{article?.author?.data?.attributes?.firstname?.charAt(
+													0
+												)}
+											</Avatar>
+										</div>
+										<Stack>
+											<Typography
+												variant="subtitle1"
+												color="text.secondary"
+												component="p"
+											>
+												{article?.author?.data?.attributes?.firstname}
+											</Typography>
+											{!!article?.publishedAt && (
+												<Typography
+													variant="subtitle1"
+													color="text.secondary"
+													component="p"
+												>
+													{format(
+														new Date(article?.publishedAt),
+														'dd/MM/yy'
+													)}
+												</Typography>
+											)}
+										</Stack>
+									</Stack>
+								</Stack>
+							</CardContent>
+						</Card>
 					))}
 				</Slider>
 
@@ -356,10 +484,9 @@ const Home: React.FC = () => {
 
 const Styles = styled.div`
 	.hero {
-		//background-color: ${grey[200]};
 		background-color: ${({ theme }) => theme.palette.common.black};
 		height: 100vh;
-		min-height: 900px;
+		min-height: 700px;
 	  	position: relative;
 	  
 	  .hero-content {
@@ -466,16 +593,17 @@ const Styles = styled.div`
 	  color: ${({ theme }) => theme.palette.common.white};
 
 	  .service {
-		min-height: 100vh;
+	    height: 100vh;
+	    min-height: 600px;
 		position: relative;
 		
 	    .service-grid {
-	      min-height: 100%;
+	      height: 100%;
 	    }
 	    
 	    .service-content {
 		  max-width: 40vw;
-		  margin: 0 auto;
+		  margin: auto;
 
 		  .service-content-description {
 		    max-width: 800px;
@@ -484,7 +612,7 @@ const Styles = styled.div`
 	    }
 
 		.service-image {
-		  height: 100vh;
+		  height: 100%;
 		  overflow: hidden;
 		  top: 0;
 		  bottom: 0;
@@ -502,7 +630,6 @@ const Styles = styled.div`
 		}
 	  }
 	}
-  
   
 	//
 	// .image-wave {
@@ -522,11 +649,52 @@ const Styles = styled.div`
 			max-width: 100%;
 		}
 	}
+  
+  .article {
+	img {
+	  width: 100%;
+
+	  ${({ theme }) => theme.breakpoints.up('md')} {
+		width: 250px;
+	  }
+
+	  ${({ theme }) => theme.breakpoints.up('xl')} {
+		width: 300px;
+	  }
+	}
+  }
+  
+  .testimonial {
+    img {
+      width: 300px;
+
+	  ${({ theme }) => theme.breakpoints.up('md')} {
+		width: 250px;
+	  }
+      
+	  ${({ theme }) => theme.breakpoints.up('xl')} {
+		width: 300px;
+	  }
+    }
+    
+    .testimonial-feedback {
+	  font-size: 1.1rem;
+      
+      ${({ theme }) => theme.breakpoints.up('xl')} {
+		font-size: 1.2rem;
+      }
+    }
+  }
 
 	.news {
 		background: #191919;
 		padding: ${({ theme }) => theme.spacing(12, 0)};
-		color: white;
+		color: ${({ theme }) => theme.palette.common.white};
+	  
+	  .news-title {
+	    max-width: 500px;
+		max-width: 15ch;
+	  }
 
 		.project-images {
 			max-width: 100%;

@@ -51,6 +51,7 @@
 		"react-markdown": "^8.0.3",
 		"react-remark": "^2.1.0",
 		"react-string-replace": "^1.0.0",
+		"react-truncate": "^2.4.0",
 		"remix": "^1.4.1",
 		"remix-seo": "^0.1.0",
 		"remix-validated-form": "^4.1.8",

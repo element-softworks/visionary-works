@@ -74,11 +74,7 @@ const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> 
 
 	return (
 		<Styled>
-			<Box
-				className="intro"
-				ref={$intro}
-				style={{ paddingTop: !!windowHeight ? windowHeight * 3 : undefined }}
-			>
+			<Box className="intro" ref={$intro} style={{ paddingTop: '300vh' }}>
 				{/*<Box ref={$intro} sx={{ height: '300vh' }}>*/}
 				{/*	<ParallaxBanner*/}
 				{/*		className="intro-banner"*/}
@@ -183,7 +179,7 @@ const Intro: React.FC<{ data: any; innerRef: React.RefObject<HTMLDivElement> }> 
 				>
 					<Grid container ref={$introContent}>
 						<Grid item xs={12} md={8}>
-							<Typography sx={{ mb: 8 }} variant="h3">
+							<Typography sx={{ mb: 8 }} variant="h2" component="h3">
 								{reactStringReplace(title, highlighted, (match, i) => (
 									<Box key={i} component="span" sx={{ color: 'primary.main' }}>
 										{highlighted}

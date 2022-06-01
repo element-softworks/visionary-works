@@ -174,6 +174,10 @@ const Layout: React.FC = () => {
 };
 
 const Styles = styled.div`
+	main {
+		overflow-x: hidden;
+	}
+
 	footer {
 		background-color: #000;
 		padding: ${({ theme }) => theme.spacing(12, 0, 8)};
