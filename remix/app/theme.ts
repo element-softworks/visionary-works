@@ -69,6 +69,11 @@ let theme = createTheme({
 			fontSize: '0.9rem',
 			fontWeight: 700,
 		},
+		caption: {
+			color: grey['500'],
+			textTransform: 'uppercase',
+			fontWeight: 700,
+		},
 	},
 });
 

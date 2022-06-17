@@ -13,6 +13,7 @@ import {
 	IconButton,
 	Stack,
 	Typography,
+	useMediaQuery,
 	useTheme,
 } from '@mui/material';
 import { Parallax } from 'react-scroll-parallax';
@@ -35,7 +36,13 @@ import Faqs from '~/components/Faqs';
 import { config, animated, useTransition } from 'react-spring';
 import { grey } from '@mui/material/colors';
 import { HeaderHeightContext } from '~/helpers/contexts';
-import { ArrowForward, KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
+import {
+	ArrowForward,
+	Instagram,
+	KeyboardArrowDown,
+	KeyboardArrowRight,
+	Public,
+} from '@mui/icons-material';
 import { shuffle } from '~/helpers/common';
 import teamAbigail from '~/images/team/abigail.jpg';
 import teamDarryl from '~/images/team/darryl.jpg';
@@ -122,6 +129,7 @@ const Home: React.FC = () => {
 	const services = intro?.services;
 	const [show, set] = useState(false);
 	const { height: headerHeight } = useContext(HeaderHeightContext);
+	const md = useMediaQuery(theme.breakpoints.up('md'));
 
 	useEffect(() => {
 		const titleVerbInterval = setInterval(() => {
@@ -150,7 +158,7 @@ const Home: React.FC = () => {
 
 	const heroImageTransitions = useTransition(heroImages[heroImageIndex], {
 		from: { opacity: 0 },
-		enter: { opacity: 0.5 },
+		enter: { opacity: md ? 0.5 : 0.25 },
 		leave: { opacity: 0 },
 		delay: 200,
 		config: config.molasses,
@@ -231,14 +239,14 @@ const Home: React.FC = () => {
 								md={8}
 								lg={6}
 								order={{ xs: 1, md: i % 2 ? -1 : 1 }}
-								sx={{ height: { xs: '50%', md: '100%' }, display: 'flex' }}
+								sx={{ height: { xs: 'auto', md: '100%' }, display: 'flex' }}
 							>
 								<Stack
 									className="service-content"
 									spacing={4}
 									sx={{
-										paddingLeft: i % 2 ? 4 : 0,
-										paddingRight: i % 2 ? 0 : 4,
+										paddingLeft: { xs: 0, md: i % 2 ? 4 : 0 },
+										paddingRight: { xs: 0, md: i % 2 ? 0 : 4 },
 									}}
 								>
 									<Stack spacing={2}>
@@ -269,7 +277,7 @@ const Home: React.FC = () => {
 								md={4}
 								lg={6}
 								order={{ xs: -1, md: i % 2 ? 1 : -1 }}
-								sx={{ height: { xs: '50%', md: '100%' } }}
+								sx={{ height: { xs: '250px', md: '100%' } }}
 							>
 								<Box className="service-image">
 									<Parallax
@@ -368,9 +376,30 @@ const Home: React.FC = () => {
 										</Typography>
 									</Stack>
 
-									<div>
-										<Avatar>{testimonial?.name?.charAt(0)}</Avatar>
-									</div>
+									<Stack
+										direction="row"
+										spacing={1}
+										className="testimonial-feedback-social"
+									>
+										<IconButton
+											className="testimonial-feedback-social-instagram"
+											component="a"
+											target="_blank"
+											rel="noopener noreferrer"
+											href="https://www.instagram.com/happydaysphotouk/"
+										>
+											<Instagram />
+										</IconButton>
+										<IconButton
+											className="testimonial-feedback-social-website"
+											component="a"
+											target="_blank"
+											rel="noopener noreferrer"
+											href="https://happydaysphoto.co.uk/"
+										>
+											<Public />
+										</IconButton>
+									</Stack>
 								</Stack>
 							</Stack>
 						</CardContent>
@@ -483,173 +512,167 @@ const Home: React.FC = () => {
 };
 
 const Styles = styled.div`
-	.hero {
-		background-color: ${({ theme }) => theme.palette.common.black};
-		height: 100vh;
-		min-height: 700px;
-	  	position: relative;
-	  
-	  .hero-content {
-	    margin-top: auto;
-	    position: relative;
-	    z-index: 1;
-	  }
-	  
-	  .hero-team {
-		position: absolute;
-	    top: 0;
-	    right: 0;
-		object-fit: cover;
-	    opacity: 0.5;
-		object-position: top left;
+  .hero {
+	background-color: ${({ theme }) => theme.palette.common.black};
+	height: 100vh;
+	min-height: 700px;
+	position: relative;
+
+	.hero-content {
+	  margin-top: auto;
+	  position: relative;
+	  z-index: 1;
+	}
+
+	.hero-team {
+	  position: absolute;
+	  top: 0;
+	  right: 0;
+	  object-fit: cover;
+	  opacity: 0.5;
+	  object-position: top left;
+	  width: 100vw;
+	  height: 100vh;
+	  transform-origin: top center;
+	  display: block;
+	  will-change: opacity;
+
+	  ${({ theme }) => theme.breakpoints.up('md')} {
 		width: 50vw;
+	  }
+	}
+
+	h1 {
+	  color: ${({ theme }) => theme.palette.common.white};
+	  display: block;
+	  text-align: left;
+
+	  > span {
+		display: block;
+
+		.heading-animated-text-wrapper {
+		  min-width: 600px;
+		  display: inline-flex;
+
+		  .heading-animated-text {
+			position: absolute;
+			color: ${({ theme }) => theme.palette.primary.main};
+			will-change: opacity;
+		  }
+		}
+	  }
+
+	  @media (max-width: 600px) {
+		font-size: 40px;
+	  },
+	}
+
+	h2 {
+	  color: ${({ theme }) => theme.palette.common.white};
+	  font-size: 1.2rem;
+	  font-weight: 400;
+	  display: block;
+	  margin-top: ${({ theme }) => theme.spacing(2)};
+	  text-align: left;
+	  max-width: 800px;
+	  max-width: 65ch;
+	  line-height: 150%;
+	}
+
+	.heading-action {
+	  background: ${({ theme }) => alpha(theme.palette.primary.main, 0.25)};
+	}
+
+	@keyframes gradient-loop {
+	  from {
+		background-position: left top;
+		background-size: 200% 100%;
+	  }
+
+	  50% {
+		background-size: 100% 100%;
+	  }
+
+	  to {
+		background-position: right top;
+		background-size: 200% 100%;
+	  }
+	}
+  }
+
+  .services {
+	background-color: ${({ theme }) => theme.palette.common.black};
+	color: ${({ theme }) => theme.palette.common.white};
+	padding-bottom: ${({ theme }) => theme.spacing(8)};
+
+	${({ theme }) => theme.breakpoints.up('sm')} {
+	  padding-bottom: 0;
+	}
+
+	.service {
+	  height: auto;
+	  min-height: auto;
+	  position: relative;
+
+	  ${({ theme }) => theme.breakpoints.up('md')} {
 		height: 100vh;
-		transform-origin: top center;
-	    display: none;
-	    will-change: opacity;
+		min-height: 600px;
+	  }
+
+	  .service-grid {
+		height: auto;
 
 		${({ theme }) => theme.breakpoints.up('md')} {
-		  display: block;
-		}
-	  }
-
-		h1 {
-			color: ${({ theme }) => theme.palette.common.white};
-			display: block;
-		  	text-align: left;
-
-			> span {
-			  	display: block;
-			  
-				  .heading-animated-text-wrapper {
-				    min-width: 600px;
-				    display: inline-flex;
-
-					.heading-animated-text {
-					  position: absolute;
-					  color: ${({ theme }) => theme.palette.primary.main};
-					  will-change: opacity;
-					  
-					  //background-size: 100% 100%;
-					  //background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
-					  ////background-blend-mode: hue, hard-light, hard-light, hard-light, lighten, normal;
-					  //// FF doesn't have a prefix
-					  //background-clip: text;
-					  //text-fill-color: transparent;
-					  //
-					  //animation: gradient-loop 4s infinite alternate;
-					  // background-image: // // ({ theme }) // => /*theme.palette.primary.gradient};
-					}
-				  }
-			}
-
-			@media (max-width: 600px) {
-				font-size: 40px;
-			},
-		}
-
-		h2 {
-		  	color: ${({ theme }) => theme.palette.common.white};
-			font-size: 1.2rem;
-		  	font-weight: 400;
-			display: block;
-			margin-top: ${({ theme }) => theme.spacing(2)};
-		  	text-align: left;
-		  	max-width: 800px;
-		  	max-width: 65ch;
-		  	line-height: 150%;
-		}
-	  
-	  .heading-action {
-	    background: ${({ theme }) => alpha(theme.palette.primary.main, 0.25)};
-	  }
-
-		@keyframes gradient-loop {
-			from {
-				/* radial-gradient(farthest-corner at top right, ..) */
-				background-position: left top;
-				background-size: 200% 100%;
-			}
-			//49.9% {
-			//	background-position: left top;
-			//}
-			50% {
-				/* radial-gradient(farthest-corner at top center, ..) */
-				background-size: 100% 100%;
-			}
-			//50.1% {
-			//	background-position: right top;
-			//}
-			to {
-				/* radial-gradient(farthest-corner at top left, ..) */
-				background-position: right top;
-				background-size: 200% 100%;
-			}
-		}
-	}
-
-	.services {
-	  background-color: ${({ theme }) => theme.palette.common.black};
-	  color: ${({ theme }) => theme.palette.common.white};
-
-	  .service {
-	    height: 100vh;
-	    min-height: 600px;
-		position: relative;
-		
-	    .service-grid {
-	      height: 100%;
-	    }
-	    
-	    .service-content {
-		  max-width: 40vw;
-		  margin: auto;
-
-		  .service-content-description {
-		    max-width: 800px;
-		    max-width: 65ch;
-		  }
-	    }
-
-		.service-image {
 		  height: 100%;
-		  overflow: hidden;
-		  top: 0;
-		  bottom: 0;
+		}
+	  }
 
-		  .service-image-animated-wrapper {
-			height: 100%;
-			width: 100%;
-		  }
+	  .service-content {
+		max-width: 80vw;
+		margin: auto;
+		padding: ${({ theme }) => theme.spacing(10, 0)};
 
-		  img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		  }
+		${({ theme }) => theme.breakpoints.up('sm')} {
+		  max-width: 60vw;
+		}
+
+		${({ theme }) => theme.breakpoints.up('md')} {
+		  max-width: 40vw;
+		  padding: 0;
+		}
+
+		.service-content-description {
+		  max-width: 800px;
+		  max-width: 65ch;
+		}
+	  }
+
+	  .service-image {
+		height: 100%;
+		overflow: hidden;
+		top: 0;
+		bottom: 0;
+
+		.service-image-animated-wrapper {
+		  height: 100%;
+		  width: 100%;
+		}
+
+		img {
+		  width: 100%;
+		  height: 100%;
+		  object-fit: cover;
 		}
 	  }
 	}
-  
-	//
-	// .image-wave {
-	// 	max-width: 100%;
-	// 	overflow-x: hidden;
-	// 	background-color: #191919;
-	// 	margin: ${({ theme }) => theme.spacing(-6, 0)};
-	//
-	// 	img {
-	// 		max-width: 150%;
-	// 		margin: ${({ theme }) => theme.spacing(0, -6)};
-	// 	}
-	// }
+  }
 
-	.projects {
-		.project-images {
-			max-width: 100%;
-		}
+  .projects {
+	.project-images {
+	  max-width: 100%;
 	}
-  
+  }
+
   .article {
 	img {
 	  width: 100%;
@@ -663,28 +686,47 @@ const Styles = styled.div`
 	  }
 	}
   }
-  
+
+  .testimonial-feedback-social-instagram {
+	color: #C13584;
+	background-color: ${alpha('#C13584', 0.25)};
+
+	&:hover, &:focus {
+	  background-color: ${alpha('#C13584', 0.4)};
+	}
+  }
+
+  .testimonial-feedback-social-website {
+	color: ${({ theme }) => theme.palette.secondary.main};
+	background-color: ${({ theme }) => alpha(theme.palette.secondary.main, 0.25)};
+
+	&:hover, &:focus {
+	  background-color: ${({ theme }) => alpha(theme.palette.secondary.main, 0.4)};
+	}
+  }
+
   .testimonial {
-    img {
-      width: 300px;
+	img {
+	  width: 300px;
 
 	  ${({ theme }) => theme.breakpoints.up('md')} {
 		width: 250px;
 	  }
-      
+
 	  ${({ theme }) => theme.breakpoints.up('xl')} {
 		width: 300px;
 	  }
-    }
-    
-    .testimonial-feedback {
+	}
+
+	.testimonial-feedback {
 	  font-size: 1.1rem;
-      
-      ${({ theme }) => theme.breakpoints.up('xl')} {
+
+	  ${({ theme }) => theme.breakpoints.up('xl')} {
 		font-size: 1.2rem;
-      }
-    }
+	  }
+	}
   }
+
 
 	.news {
 		background: #191919;
@@ -695,7 +737,7 @@ const Styles = styled.div`
 	    max-width: 500px;
 		max-width: 15ch;
 	  }
-
+	
 		.project-images {
 			max-width: 100%;
 		}
