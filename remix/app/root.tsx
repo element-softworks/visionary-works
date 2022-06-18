@@ -36,6 +36,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { fad } from '@fortawesome/pro-duotone-svg-icons';
+import { ParallaxProvider } from 'react-scroll-parallax';
 
 const [seoMeta, seoLinks] = getSeo();
 
@@ -47,7 +48,7 @@ export const links: LinksFunction = () => {
 		{
 			rel: 'stylesheet',
 			href: globalStyles,
-		}
+		},
 	];
 };
 
@@ -133,28 +134,31 @@ const App = () => {
 		<Document>
 			<ThemeProvider theme={theme}>
 				<EmotionThemeProvider theme={theme}>
-					<MessageContext.Provider value={{ message }}>
-						<SnackbarProvider>
-							<CssBaseline />
-							<Global
-								styles={css`
-									a {
-										color: ${theme.palette.secondary.main};
-										text-decoration-color: ${lighten(
-											theme.palette.secondary.main,
-											0.3
-										)};
+					<ParallaxProvider>
+						<MessageContext.Provider value={{ message }}>
+							<SnackbarProvider>
+								<CssBaseline />
+								<Global
+									styles={css`
+										a {
+											color: ${theme.palette.secondary.main};
+											text-decoration-color: ${lighten(
+												theme.palette.secondary.main,
+												0.3
+											)};
 
-										&:hover {
-											text-decoration-color: ${theme.palette.secondary.main};
+											&:hover {
+												text-decoration-color: ${theme.palette.secondary
+													.main};
+											}
 										}
-									}
-								`}
-							/>
+									`}
+								/>
 
-							<Outlet />
-						</SnackbarProvider>
-					</MessageContext.Provider>
+								<Outlet />
+							</SnackbarProvider>
+						</MessageContext.Provider>
+					</ParallaxProvider>
 				</EmotionThemeProvider>
 			</ThemeProvider>
 		</Document>

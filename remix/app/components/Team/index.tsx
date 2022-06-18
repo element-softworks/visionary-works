@@ -3,27 +3,14 @@ import { Typography, Button, Container, Grid, useMediaQuery } from '@mui/materia
 import styled from '@emotion/styled';
 import { useTheme } from '@mui/material/styles';
 import { Homepage } from '~/models/single/homepage';
-import teamAbigail from '~/images/team/abigail.jpg';
-import teamDarryl from '~/images/team/darryl.jpg';
-import teamJacob from '~/images/team/jacob.jpg';
-import teamJoe from '~/images/team/joe.jpg';
-import teamLauren from '~/images/team/lauren.jpg';
-import teamLuke from '~/images/team/luke.jpg';
-import teamNatalie from '~/images/team/natalie.jpg';
-import { shuffle } from '~/helpers/common';
+import { Parallax } from 'react-scroll-parallax';
 
-const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
+const TeamSection: React.FC<{
+	team: Homepage['team'];
+	teamImages: { name: string; src: string; speed: number }[];
+}> = ({ team, teamImages }) => {
 	const theme = useTheme();
 	const md = useMediaQuery(theme.breakpoints.up('md'));
-	const teamImages = shuffle([
-		{ name: 'Abigail', src: teamAbigail },
-		{ name: 'Darryl', src: teamDarryl },
-		{ name: 'Jacob', src: teamJacob },
-		{ name: 'Joe', src: teamJoe },
-		{ name: 'Lauren', src: teamLauren },
-		{ name: 'Luke', src: teamLuke },
-		{ name: 'Natalie', src: teamNatalie },
-	]);
 
 	return (
 		<Styles>
@@ -33,26 +20,29 @@ const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
 						<Grid item xs={12} md={6} xl={7}>
 							<div className="team-images team-images-mobile team-images-mobile-first">
 								{teamImages?.slice(0, 3)?.map((team, i) => (
-									<img
+									<Parallax
 										key={`${team.src}_${i}`}
+										speed={team.speed}
 										className="team-image"
-										alt={team.name}
-										src={team.src}
-									/>
+									>
+										<img alt={team.name} src={team.src} />
+									</Parallax>
 								))}
 							</div>
 						</Grid>
 					)}
 					<Grid item xs={12} md={6} xl={5}>
-						<Typography component="h2" className="team-title">
-							{team?.title}
-						</Typography>
-						<Typography component="p" className="team-paragraph">
-							{team?.description}
-						</Typography>
-						<Button variant="contained" disableElevation>
-							{team?.button}
-						</Button>
+						<Parallax speed={10} opacity={[0, 1, [0.57, 0.17, 0, 1]]}>
+							<Typography component="h2" className="team-title">
+								{team?.title}
+							</Typography>
+							<Typography component="p" className="team-paragraph">
+								{team?.description}
+							</Typography>
+							<Button variant="contained" disableElevation>
+								{team?.button}
+							</Button>
+						</Parallax>
 					</Grid>
 					<Grid item xs={12} md={6} xl={7}>
 						<div
@@ -63,12 +53,13 @@ const TeamSection: React.FC<{ team: Homepage['team'] }> = ({ team }) => {
 							{teamImages
 								?.slice(!md ? 3 : 0, !md ? 6 : teamImages.length)
 								?.map((team, i) => (
-									<img
+									<Parallax
 										key={`${team.src}_${i}`}
+										speed={team.speed}
 										className="team-image"
-										alt={team.name}
-										src={team.src}
-									/>
+									>
+										<img alt={team.name} src={team.src} />
+									</Parallax>
 								))}
 						</div>
 					</Grid>
@@ -92,7 +83,7 @@ const Styles = styled.div`
 
 	.team-images {
 		position: relative;
-		height: 750px;
+		height: 770px;
 
 		&.team-images-mobile {
 			height: 30vw;
@@ -118,13 +109,42 @@ const Styles = styled.div`
 					}
 				}
 			}
+
+			&.team-images-mobile-second {
+				margin-top: 8vw;
+
+				.team-image {
+					&:nth-child(1) {
+						top: 2vw;
+						left: 3vw;
+						width: 18vw;
+					}
+
+					&:nth-child(2) {
+						top: 6vw;
+						left: 36vw;
+						width: 16vw;
+					}
+
+					&:nth-child(3) {
+						top: 0vw;
+						left: 68vw;
+						width: 20vw;
+					}
+				}
+			}
 		}
 
 		.team-image {
 			position: absolute;
-			border-radius: 50%;
 			top: -9999px;
 			left: -9999px;
+
+			img {
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+			}
 
 			&:nth-child(1) {
 				top: 50px;

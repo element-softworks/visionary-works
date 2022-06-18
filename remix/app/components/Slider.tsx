@@ -1,38 +1,34 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { IconButton, useMediaQuery, useTheme } from '@mui/material';
-import { ArrowForward, ArrowRight } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import { ArrowForward } from '@mui/icons-material';
 import useEmblaCarousel from 'embla-carousel-react';
 
 const Slider: React.FC<{
 	children: React.ReactNode;
-}> = ({ children }) => {
+}> = ({ children: _children }) => {
 	const [sliderRef, sliderApi] = useEmblaCarousel({
 		align: 'center',
 		loop: true,
 	});
 	const $next = useRef(null);
-	// const [swiper, setSwiper] = useState<SwiperClass | null>(null);
-	const theme = useTheme();
-	const md = useMediaQuery(theme.breakpoints.up('md'));
-	const lg = useMediaQuery(theme.breakpoints.up('lg'));
+	const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
 	const scrollNext = useCallback(() => {
-		if (sliderApi) sliderApi.scrollNext();
+		if (sliderApi) {
+			sliderApi.scrollNext();
+		}
 	}, [sliderApi]);
 
-	// const activeSlideNode = useMemo(() => {
-	// 	if (sliderApi) return sliderApi.slideNodes()?.[];
-	// 	return null;
-	// }, [sliderApi]);
-
-	const handleSelect = (event: any) => {
-		console.log('event select:', event);
+	const handleSelect = () => {
+		if (!sliderApi) return;
+		setActiveIndex(sliderApi.selectedScrollSnap());
 	};
 
 	useEffect(() => {
 		if (!sliderApi) return;
 
+		setActiveIndex(sliderApi?.selectedScrollSnap());
 		sliderApi.on('select', handleSelect);
 
 		return () => {
@@ -40,12 +36,25 @@ const Slider: React.FC<{
 		};
 	}, [sliderApi]);
 
+	const children = useMemo(
+		() =>
+			React.Children.count(_children) < 3
+				? [...React.Children.toArray(_children), ...React.Children.toArray(_children)]
+				: _children,
+		[_children]
+	);
+
 	return (
 		<Styles>
 			<div ref={sliderRef} className="slider">
 				<div className="slider-container">
 					{React.Children.map(children, (child, i) => (
-						<div className="slider-item" key={i}>
+						<div
+							className={`slider-item ${
+								activeIndex === i ? 'slider-item-active' : ''
+							}`}
+							key={i}
+						>
 							{child}
 						</div>
 					))}
@@ -53,7 +62,7 @@ const Slider: React.FC<{
 
 				<IconButton
 					size="large"
-					color="inherit"
+					color="primary"
 					ref={$next}
 					className="slider-next"
 					onClick={scrollNext}
@@ -82,9 +91,11 @@ const Styles = styled.div`
 		}
 
 		.slider-item {
+			opacity: 0.5;
 			position: relative;
 			flex: 0 0 87.5%;
 			padding-right: ${({ theme }) => theme.spacing(4)};
+			transition: ${({ theme }) => theme.transitions.create(['opacity'])};
 
 			${({ theme }) => theme.breakpoints.up('md')} {
 				flex: 0 0 75%;
@@ -95,13 +106,15 @@ const Styles = styled.div`
 			}
 		}
 
+		.slider-item-active {
+			opacity: 1;
+		}
+
 		.slider-next {
 			position: absolute;
 			left: 93.75%;
 			top: 50%;
 			transform: translateY(-50%) translateX(-50%);
-			background: ${({ theme }) => theme.palette.primary.main};
-			color: ${({ theme }) => theme.palette.common.white};
 
 			${({ theme }) => theme.breakpoints.up('md')} {
 				left: 87.5%;

@@ -1,5 +1,5 @@
 import { grey } from '@mui/material/colors';
-import {createTheme, lighten, responsiveFontSizes} from '@mui/material';
+import { createTheme, lighten, responsiveFontSizes } from '@mui/material';
 import { css } from '@emotion/react';
 
 let theme = createTheme({
@@ -32,42 +32,47 @@ let theme = createTheme({
 		fontFamily: ['F37Ginger'].join(', '),
 		h1: {
 			fontSize: '6rem',
+			lineHeight: 1.1,
 			fontWeight: 700,
 		},
 		h2: {
-			fontSize: '4.375rem',
+			fontSize: '3.75rem',
+			lineHeight: 1.2,
 			fontWeight: 700,
 		},
 		h3: {
-			fontSize: '3.75rem',
+			fontSize: '2rem',
+			lineHeight: 1.5,
 			fontWeight: 700,
 		},
 		h4: {
+			fontSize: '1.3rem',
+			lineHeight: 1.5,
 			fontWeight: 700,
 		},
 		h5: {
+			lineHeight: 1.5,
 			fontWeight: 700,
 		},
 		h6: {
+			lineHeight: 1.5,
 			fontWeight: 700,
 		},
+		body1: {
+			lineHeight: 1.6,
+		},
 		body2: {
+			lineHeight: 1.5,
 			fontSize: '1.5rem',
+		},
+		subtitle1: {
+			fontSize: '0.9rem',
+			fontWeight: 700,
 		},
 	},
 });
 
 theme.components = {
-	MuiTypography: {
-		styleOverrides: {
-			h1: {
-				lineHeight: `1.1`,
-			},
-			body1: {
-				lineHeight: `1.75`,
-			},
-		},
-	},
 	MuiContainer: {
 		styleOverrides: {
 			root: css`
@@ -110,23 +115,6 @@ theme.components = {
 		},
 		variants: [
 			{
-				props: { variant: 'contained', color: 'primary' },
-				style: css`
-					background-image: ${theme.palette.primary.gradient};
-					background-size: 300%;
-					background-position: left top;
-					transition: ${theme.transitions.create([
-						'background-position',
-						'background-size',
-						'box-shadow',
-					])};
-
-					&:hover {
-						background-size: 150%;
-					}
-				`,
-			},
-			{
 				props: { variant: 'inverse' },
 				style:
 					theme?.palette?.mode === 'light'
@@ -148,6 +136,36 @@ theme.components = {
 						  },
 			},
 		],
+	},
+	MuiIconButton: {
+		variants: [
+			{
+				props: { color: 'primary' },
+				style: css`
+					background-color: ${theme.palette.primary.main};
+					color: ${theme.palette.common.white};
+
+					&:hover, &:focus {
+					  background-color: ${theme.palette.primary.dark};
+					},
+				`,
+			},
+		],
+	},
+	MuiCardContent: {
+		styleOverrides: {
+			root: css`
+				padding-top: ${theme.spacing(4)};
+				padding-bottom: ${theme.spacing(4)};
+				padding-left: ${theme.spacing(5)};
+				padding-right: ${theme.spacing(5)};
+
+				${theme.breakpoints.up('lg')} {
+					padding-left: ${theme.spacing(6)};
+					padding-right: ${theme.spacing(6)};
+				}
+			`,
+		},
 	},
 };
 
