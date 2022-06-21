@@ -1,6 +1,7 @@
 import { grey } from '@mui/material/colors';
 import { createTheme, lighten, responsiveFontSizes } from '@mui/material';
 import { css } from '@emotion/react';
+import { Add, Remove } from '@mui/icons-material';
 
 let theme = createTheme({
 	palette: {
@@ -78,6 +79,78 @@ let theme = createTheme({
 });
 
 theme.components = {
+	MuiAccordionSummary: {
+		defaultProps: {
+			expandIcon: (
+				<>
+					<Add className="accordion-icon-plus" />
+					<Remove className="accordion-icon-minus" />
+				</>
+			),
+		},
+		styleOverrides: {
+			root: css`
+				color: white;
+				flex-direction: row-reverse;
+
+				&.Mui-expanded {
+					min-height: 42px;
+				}
+
+				.MuiAccordionSummary-content {
+					padding-left: ${theme.spacing(2)};
+
+					&.Mui-expanded {
+						margin: ${theme.spacing(1, 0)};
+					}
+				}
+
+				.MuiAccordionSummary-expandIconWrapper {
+					color: white;
+
+					.accordion-icon-minus {
+						display: none;
+					}
+
+					.accordion-icon-plus {
+						display: block;
+					}
+
+					&.Mui-expanded {
+						transform: rotate(90deg);
+
+						.accordion-icon-minus {
+							display: block;
+							transform: rotate(90deg);
+						}
+
+						.accordion-icon-plus {
+							display: none;
+						}
+					}
+				}
+			`,
+		},
+	},
+	MuiAccordion: {
+		defaultProps: {
+			elevation: 0,
+		},
+		styleOverrides: {
+			root: css`
+				background-color: transparent;
+				color: white;
+				padding: ${theme.spacing(0, 0)};
+			`,
+		},
+	},
+	MuiAccordionDetails: {
+		styleOverrides: {
+			root: css`
+				padding-left: ${theme.spacing(7)};
+			`,
+		},
+	},
 	MuiContainer: {
 		styleOverrides: {
 			root: css`

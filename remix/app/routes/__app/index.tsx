@@ -504,7 +504,39 @@ const Home: React.FC = () => {
 				</Slider>
 
 				<Container>
-					<Faqs faqs={faq} title={faqTitle} image={faqImage} />
+					<Faqs
+						faqs={
+							/*faq*/ [
+								{
+									question: 'How can we start a project together?',
+									answer: 'Answer',
+								},
+								{
+									question: 'How much do projects usually cost?',
+									answer: 'Answer',
+								},
+								{
+									question: 'What sectors do you work with?',
+									answer: 'Answer',
+								},
+								{
+									question:
+										'What do you need from me in order to prepare a quote?',
+									answer: 'Answer',
+								},
+								{
+									question: 'How do you structure your team and projects?',
+									answer: 'Answer',
+								},
+								{
+									question: 'Who are Visionary Works?',
+									answer: 'Answer',
+								},
+							]
+						}
+						title={faqTitle}
+						image={faqImage}
+					/>
 				</Container>
 			</Box>
 		</Styles>
