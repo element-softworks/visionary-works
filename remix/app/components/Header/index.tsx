@@ -6,8 +6,8 @@ import styled from '@emotion/styled';
 
 const Header: React.FC<{ innerRef?: any }> = ({ innerRef }) => {
 	const location = useLocation();
-	const TRANSPARENT_ROUTES = [/\//];
-	const INVERTED_ROUTES = [/\//];
+	const TRANSPARENT_ROUTES = [/\/$/];
+	const INVERTED_ROUTES = [/\/$/];
 	const isTransparent = TRANSPARENT_ROUTES.some((route) => location.pathname.match(route));
 	const isInverted = INVERTED_ROUTES.some((route) => location.pathname.match(route));
 

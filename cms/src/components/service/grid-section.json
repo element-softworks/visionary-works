@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_service_grid_sections",
+  "info": {
+    "displayName": "Grid",
+    "icon": "bars",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "gridItem": {
+      "displayName": "Grid Item",
+      "type": "component",
+      "repeatable": true,
+      "component": "service.grid-item"
+    }
+  }
+}

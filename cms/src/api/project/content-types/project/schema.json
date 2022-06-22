@@ -4,7 +4,8 @@
   "info": {
     "singularName": "project",
     "pluralName": "projects",
-    "displayName": "Project"
+    "displayName": "Project",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -18,22 +19,23 @@
       "type": "richtext"
     },
     "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "slug": {
       "type": "string"
     },
-    "tags": {
+    "services": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::tag.tag"
+      "target": "api::service.service"
     }
   }
 }

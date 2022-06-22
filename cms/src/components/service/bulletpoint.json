@@ -1,8 +1,8 @@
 {
   "collectionName": "components_service_bulletpoints",
   "info": {
-    "displayName": "bulletpoint",
-    "icon": "list",
+    "displayName": "Standard",
+    "icon": "file-image",
     "description": ""
   },
   "options": {},
@@ -11,17 +11,15 @@
       "type": "string"
     },
     "description": {
-      "type": "string"
+      "type": "text"
     },
     "image": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
       "type": "media",
-      "multiple": false
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

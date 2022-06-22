@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_service_sections",
+  "info": {
+    "displayName": "sections",
+    "icon": "align-center"
+  },
+  "options": {},
+  "attributes": {
+    "grid": {
+      "displayName": "Grid Section",
+      "type": "component",
+      "repeatable": false,
+      "component": "service.grid-section"
+    },
+    "standard": {
+      "type": "component",
+      "repeatable": false,
+      "component": "service.bulletpoint"
+    }
+  }
+}

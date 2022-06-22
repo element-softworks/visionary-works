@@ -37,10 +37,10 @@
     "slug": {
       "type": "string"
     },
-    "tags": {
+    "service": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::tag.tag"
+      "relation": "oneToOne",
+      "target": "api::service.service"
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_service_grid_items",
+  "info": {
+    "displayName": "Grid Item",
+    "icon": "water"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

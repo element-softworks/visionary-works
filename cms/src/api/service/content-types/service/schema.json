@@ -22,37 +22,6 @@
       "type": "uid",
       "targetField": "title"
     },
-    "coverImage": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
-    "tag": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::tag.tag"
-    },
-    "subtitle": {
-      "type": "text"
-    },
-    "contentTitle": {
-      "type": "string"
-    },
-    "bulletpointTitle": {
-      "type": "string"
-    },
-    "bulletpoint": {
-      "displayName": "bulletpoint",
-      "type": "component",
-      "repeatable": true,
-      "component": "service.bulletpoint"
-    },
     "faqTitle": {
       "type": "string"
     },
@@ -64,6 +33,23 @@
     },
     "icon": {
       "type": "string"
+    },
+    "article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::blog.blog"
+    },
+    "parentService": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::service.service"
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "service.bulletpoint",
+        "service.grid-section"
+      ]
     }
   }
 }

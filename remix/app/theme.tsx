@@ -14,7 +14,7 @@ let theme = createTheme({
 			main: '#4E4E4E',
 		},
 		background: {
-			paper: grey[100],
+			default: grey[200],
 		},
 		common: {
 			black: '#191919',
